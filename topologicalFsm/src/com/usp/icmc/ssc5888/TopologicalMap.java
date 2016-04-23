@@ -1,5 +1,15 @@
 package com.usp.icmc.ssc5888;
 
-public class TopologicalMap {
 
+import com.usp.icmc.labes.fsm.FsmModel;
+
+public class TopologicalMap extends FsmModel{
+	
+	public TopologicalMap() {
+		super("TopologicalMap");
+	}
+	
+	public TopologicalMap(String s) {
+		super(s);
+	}
 }

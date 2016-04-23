@@ -1,6 +1,6 @@
 package com.usp.icmc.labes.fsm;
 
-public class FsmTransition extends FsmElement{
+public class FsmTransition{
 
 	private FsmState from;
 
@@ -9,12 +9,9 @@ public class FsmTransition extends FsmElement{
 	
 	private FsmState to;
 	
-	public FsmTransition(){
-		super();
-	}
+	private FsmTransition(){ }
 	
 	public FsmTransition(FsmState f, String in, String out, FsmState t) {
-		this();
 		from = f;
 		to = t;
 		input = in;
@@ -23,11 +20,54 @@ public class FsmTransition extends FsmElement{
 		t.getIn().add(this);
 	}
 	
+	public FsmState getFrom() {
+		return from;
+	}
+	
+	public String getInput() {
+		return input;
+	}
+	
+	public String getOutput() {
+		return output;
+	}
+	
+	public FsmState getTo() {
+		return to;
+	}
+
+	public void setFrom(FsmState from) {
+		this.from = from;
+	}
+
+	public void setInput(String input) {
+		this.input = input;
+	}
+
+	public void setOutput(String output) {
+		this.output = output;
+	}
+
+	public void setTo(FsmState to) {
+		this.to = to;
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((from == null) ? 0 : from.hashCode());
+		result = prime * result + ((input == null) ? 0 : input.hashCode());
+		result = prime * result + ((output == null) ? 0 : output.hashCode());
+		result = prime * result + ((to == null) ? 0 : to.hashCode());
+		return result;
+	}
+
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
 			return true;
-		if (!super.equals(obj))
+		if (obj == null)
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
@@ -54,53 +94,10 @@ public class FsmTransition extends FsmElement{
 			return false;
 		return true;
 	}
-	
-	public FsmState getFrom() {
-		return from;
-	}
-	
-	public String getInput() {
-		return input;
-	}
-	
-	public String getOutput() {
-		return output;
-	}
-	
-	public FsmState getTo() {
-		return to;
-	}
-
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = super.hashCode();
-		result = prime * result + ((from == null) ? 0 : from.hashCode());
-		result = prime * result + ((input == null) ? 0 : input.hashCode());
-		result = prime * result + ((output == null) ? 0 : output.hashCode());
-		result = prime * result + ((to == null) ? 0 : to.hashCode());
-		return result;
-	}
-
-	public void setFrom(FsmState from) {
-		this.from = from;
-	}
-
-	public void setInput(String input) {
-		this.input = input;
-	}
-
-	public void setOutput(String output) {
-		this.output = output;
-	}
-
-	public void setTo(FsmState to) {
-		this.to = to;
-	}
 
 	@Override
 	public String toString() {
-		return from+" -- "+input+" / "+output+" -> "+to;
+		return from+"--"+input+"/"+output+"->"+to;
 	}
-
+	
 }

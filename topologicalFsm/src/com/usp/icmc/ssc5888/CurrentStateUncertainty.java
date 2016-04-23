@@ -9,14 +9,40 @@ public class CurrentStateUncertainty extends FsmState {
 	
 	private Set<FsmState> uncertaintySet;
 
-	public CurrentStateUncertainty(int id_num) {
-		super(id_num);
+	public CurrentStateUncertainty(String id) {
+		super(id);
 		uncertaintySet = new HashSet<>();
 	}
 	
 	
 	public Set<FsmState> getUncertaintySet() {
 		return uncertaintySet;
+	}
+
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = super.hashCode();
+		result = prime * result + ((uncertaintySet == null) ? 0 : uncertaintySet.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (!super.equals(obj))
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		CurrentStateUncertainty other = (CurrentStateUncertainty) obj;
+		if (uncertaintySet == null) {
+			if (other.uncertaintySet != null)
+				return false;
+		} else if (!uncertaintySet.equals(other.uncertaintySet))
+			return false;
+		return true;
 	}
 	
 

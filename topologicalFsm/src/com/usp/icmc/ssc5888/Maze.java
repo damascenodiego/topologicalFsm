@@ -1,5 +1,10 @@
 package com.usp.icmc.ssc5888;
 
+import com.usp.icmc.labes.fsm.FsmState;
+import com.usp.icmc.labes.fsm.FsmTransition;
+import com.usp.icmc.labes.fsm.RobotUtils;
+import com.usp.icmc.labes.fsm.testing.FsmSUT;
+
 import edu.princeton.cs.algs4.StdDraw;
 import edu.princeton.cs.algs4.StdRandom;
 
@@ -26,25 +31,38 @@ public class Maze {
 	private boolean[][] south;
 	private boolean[][] west;
 	private boolean[][] visited;
+	private int robotX;
+	private int robotY;
+	Robot robot;
+
 	private boolean done = false;
 	
-	int initial_x = 1;
-	int initial_y = 1;
-	
-	int current_x = 1;
-	int current_y = 1;
-	
+	private static final int initialX = 1;
+	private static final int initialY = 1;
+
 	public Maze(int N) {
 		this.N = N;
 		StdDraw.setXscale(0, N+2);
 		StdDraw.setYscale(0, N+2);
+		robot = new Robot();
+		robotX = initialX;
+		robotY = initialY;
 		init();
 		generate();
-		initial_x = 1;
-		initial_y = 1;
-		current_x = initial_x;
-		current_y = initial_y;
 
+	}
+	
+	public boolean checkNorth(int i,int j){
+		return north[i][j];
+	}
+	public boolean checkSouth(int i,int j){
+		return south[i][j];
+	}
+	public boolean checkWest(int i,int j){
+		return west[i][j];
+	}
+	public boolean checkEast(int i,int j){
+		return east[i][j];
 	}
 
 	private void init() {
@@ -76,6 +94,10 @@ public class Maze {
 	}
 
 
+	public Robot getRobot() {
+		return robot;
+	}
+	
 	// generate the maze
 	private void generate(int x, int y) {
 		visited[x][y] = true;
@@ -115,23 +137,14 @@ public class Maze {
 		}
 	}
 
-	public int getInitial_x() {
-		return initial_x;
-	}
-	
-	public int getInitial_y() {
-		return initial_y;
-	}
 	
 	// generate the maze starting from lower left
 	private void generate() {
-		generate(initial_x, initial_y);
+		generate(robotX, robotY);
 	}
 
-
-
 	// solve the maze using depth-first search
-	private void solve(int x, int y) {
+	private void solve(int x, int y, FsmSUT roboSut) {
 		if (x == 0 || y == 0 || x == N+1 || y == N+1) return;
 		if (done || visited[x][y]) return;
 		visited[x][y] = true;
@@ -143,10 +156,19 @@ public class Maze {
 		// reached middle
 		//if (x == N/2 && y == N/2) done = true;
 
-		if (!north[x][y]) solve(x, y + 1);
-		if (!east[x][y])  solve(x + 1, y);
-		if (!south[x][y]) solve(x, y - 1);
-		if (!west[x][y])  solve(x - 1, y);
+		if (!north[x][y]) {
+			solve(x, y + 1,roboSut);
+		}
+		if (!east[x][y])  {
+			solve(x + 1, y,roboSut);
+		}
+		if (!south[x][y]) {
+			solve(x, y - 1,roboSut);
+		}
+		if (!west[x][y])  {
+			solve(x - 1, y,roboSut);
+		
+		}
 
 		if (done) return;
 
@@ -161,12 +183,33 @@ public class Maze {
 			for (int y = 1; y <= N; y++)
 				visited[x][y] = false;
 		done = false;
-		solve(1, 1);
+		
+
+		int i = 1;
+		int j = 1;
+		
+		FsmState state = new FsmState(i+","+j);
+		robot.getTopoMap().addState(state);
+		state = robot.getTopoMap().getState(state);
+		if (checkNorth(i,j)){
+			robot.getTopoMap().addTransition(new FsmTransition(state, Robot.Commands.CHECK_NORTH.toString(), Boolean.TRUE.toString(), state));
+		}
+		if (checkEast(i,j)){
+			robot.getTopoMap().addTransition(new FsmTransition(state, Robot.Commands.CHECK_EAST.toString(), Boolean.TRUE.toString(), state));
+		}
+		if (checkSouth(i,j)) {
+			robot.getTopoMap().addTransition(new FsmTransition(state, Robot.Commands.CHECK_SOUTH.toString(), Boolean.TRUE.toString(), state));
+		}
+		if (checkWest(i,j)) {
+			robot.getTopoMap().addTransition(new FsmTransition(state, Robot.Commands.CHECK_WEST.toString(), Boolean.TRUE.toString(), state));
+		}
+		FsmSUT roboSut = new FsmSUT(robot.getTopoMap());
+		solve(1, 1,roboSut);
 	}
 
 	// draw the maze
 	public void draw() {
-		fillCurrent();
+		//fillCurrent();
 
 		StdDraw.setPenColor(StdDraw.BLACK);
 		for (int x = 1; x <= N; x++) {
@@ -184,13 +227,13 @@ public class Maze {
 
 	private void fillCurrent() {
 		StdDraw.setPenColor(StdDraw.RED);
-		StdDraw.text(current_x+.5,current_y+.5, "⟹",0);
+		StdDraw.text(robotX+.5,robotY+.5, "⟹",0);
 		//StdDraw.filledCircle(current_x+.5,current_y+.5, 0.375);
 		StdDraw.show(1000);
 	}
 	private void eraseCurrent() {
 		StdDraw.setPenColor(StdDraw.WHITE);
-		StdDraw.filledSquare(current_x+.5,current_y+.5, 0.45);
+		StdDraw.filledSquare(robotX+.5,robotY+.5, 0.45);
 		//StdDraw.filledCircle(current_x+.5,current_y+.5, 0.38);
 		StdDraw.show(1000);
 	}
@@ -205,8 +248,8 @@ public class Maze {
 		Maze maze = new Maze(N);
 		StdDraw.show(0);
 		maze.draw();
-		//maze.solve();
-		maze.eraseCurrent();
+		maze.solve();
+		//maze.eraseCurrent();
 		
 		
 	}
