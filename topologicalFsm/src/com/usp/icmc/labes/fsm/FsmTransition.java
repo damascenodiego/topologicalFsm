@@ -56,10 +56,10 @@ public class FsmTransition{
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((from == null) ? 0 : from.hashCode());
+		result = prime * result + ((from == null) ? 0 : from.getId().hashCode());
 		result = prime * result + ((input == null) ? 0 : input.hashCode());
 		result = prime * result + ((output == null) ? 0 : output.hashCode());
-		result = prime * result + ((to == null) ? 0 : to.hashCode());
+		result = prime * result + ((to == null) ? 0 : to.getId().hashCode());
 		return result;
 	}
 

@@ -1,5 +1,8 @@
 package com.usp.icmc.ssc5888;
 
+import java.awt.Font;
+import java.io.File;
+
 import com.usp.icmc.labes.fsm.FsmState;
 import com.usp.icmc.labes.fsm.FsmTransition;
 import com.usp.icmc.labes.fsm.RobotUtils;
@@ -36,11 +39,16 @@ public class Maze {
 	Robot robot;
 
 	private boolean done = false;
-	
+	private Font smallFont;
+	private Font defaultFont;
+
 	private static final int initialX = 1;
 	private static final int initialY = 1;
 
 	public Maze(int N) {
+		defaultFont = StdDraw.getFont();
+		smallFont = new Font("Arial", Font.PLAIN, 9);
+
 		this.N = N;
 		StdDraw.setXscale(0, N+2);
 		StdDraw.setYscale(0, N+2);
@@ -51,7 +59,7 @@ public class Maze {
 		generate();
 
 	}
-	
+
 	public boolean checkNorth(int i,int j){
 		return north[i][j];
 	}
@@ -97,7 +105,7 @@ public class Maze {
 	public Robot getRobot() {
 		return robot;
 	}
-	
+
 	// generate the maze
 	private void generate(int x, int y) {
 		visited[x][y] = true;
@@ -137,44 +145,53 @@ public class Maze {
 		}
 	}
 
-	
+
 	// generate the maze starting from lower left
 	private void generate() {
 		generate(robotX, robotY);
 	}
 
 	// solve the maze using depth-first search
-	private void solve(int x, int y, FsmSUT roboSut) {
+	private void solve(int x, int y, FsmState curr) {
 		if (x == 0 || y == 0 || x == N+1 || y == N+1) return;
 		if (done || visited[x][y]) return;
 		visited[x][y] = true;
 
-		StdDraw.setPenColor(StdDraw.BLUE);
-		StdDraw.filledCircle(x + 0.5, y + 0.5, 0.25);
-		StdDraw.show(30);
+		//StdDraw.setPenColor(StdDraw.BLUE);
+		//StdDraw.filledCircle(x + 0.5, y + 0.5, 0.25);
+		//StdDraw.show(30);
 
 		// reached middle
 		//if (x == N/2 && y == N/2) done = true;
 
+		FsmState next = null; 
+		FsmState currState = robot.getTopoMap().getState(curr);
 		if (!north[x][y]) {
-			solve(x, y + 1,roboSut);
+			next = RobotUtils.updateTopologicalMap(this, x, y+1,currState);
+			if(!currState.equals(next)) robot.getTopoMap().addTransition(new FsmTransition(currState, Robot.Commands.MOVE_NORTH.toString(), Boolean.FALSE.toString(), robot.getTopoMap().getState(next)));
+			solve(x, y + 1,next);
 		}
 		if (!east[x][y])  {
-			solve(x + 1, y,roboSut);
+			next = RobotUtils.updateTopologicalMap(this, x+1, y,currState);
+			if(!currState.equals(next)) robot.getTopoMap().addTransition(new FsmTransition(robot.getTopoMap().getState(curr), Robot.Commands.MOVE_EAST.toString(), Boolean.FALSE.toString(), robot.getTopoMap().getState(next)));
+			solve(x + 1, y,next);
 		}
 		if (!south[x][y]) {
-			solve(x, y - 1,roboSut);
+			next = RobotUtils.updateTopologicalMap(this, x, y-1,currState);
+			if(!currState.equals(next)) robot.getTopoMap().addTransition(new FsmTransition(robot.getTopoMap().getState(curr), Robot.Commands.MOVE_SOUTH.toString(), Boolean.FALSE.toString(), robot.getTopoMap().getState(next)));
+			solve(x, y - 1,next);
 		}
 		if (!west[x][y])  {
-			solve(x - 1, y,roboSut);
-		
+			next = RobotUtils.updateTopologicalMap(this, x-1, y,currState);
+			if(!currState.equals(next)) robot.getTopoMap().addTransition(new FsmTransition(robot.getTopoMap().getState(curr), Robot.Commands.MOVE_WEST.toString(), Boolean.FALSE.toString(), robot.getTopoMap().getState(next)));
+			solve(x - 1, y,next);
 		}
 
-		if (done) return;
+		//if (done) return;
 
-		StdDraw.setPenColor(StdDraw.GRAY);
-		StdDraw.filledCircle(x + 0.5, y + 0.5, 0.25);
-		StdDraw.show(30);
+		//StdDraw.setPenColor(StdDraw.GRAY);
+		//StdDraw.filledCircle(x + 0.5, y + 0.5, 0.25);
+		//StdDraw.show(30);
 	}
 
 	// solve the maze starting from the start state
@@ -183,28 +200,14 @@ public class Maze {
 			for (int y = 1; y <= N; y++)
 				visited[x][y] = false;
 		done = false;
-		
+
 
 		int i = 1;
 		int j = 1;
-		
-		FsmState state = new FsmState(i+","+j);
-		robot.getTopoMap().addState(state);
-		state = robot.getTopoMap().getState(state);
-		if (checkNorth(i,j)){
-			robot.getTopoMap().addTransition(new FsmTransition(state, Robot.Commands.CHECK_NORTH.toString(), Boolean.TRUE.toString(), state));
-		}
-		if (checkEast(i,j)){
-			robot.getTopoMap().addTransition(new FsmTransition(state, Robot.Commands.CHECK_EAST.toString(), Boolean.TRUE.toString(), state));
-		}
-		if (checkSouth(i,j)) {
-			robot.getTopoMap().addTransition(new FsmTransition(state, Robot.Commands.CHECK_SOUTH.toString(), Boolean.TRUE.toString(), state));
-		}
-		if (checkWest(i,j)) {
-			robot.getTopoMap().addTransition(new FsmTransition(state, Robot.Commands.CHECK_WEST.toString(), Boolean.TRUE.toString(), state));
-		}
-		FsmSUT roboSut = new FsmSUT(robot.getTopoMap());
-		solve(1, 1,roboSut);
+
+		FsmState state  = RobotUtils.updateTopologicalMap(this, i, j,null);
+
+		solve(i, j,state);
 	}
 
 	// draw the maze
@@ -218,6 +221,10 @@ public class Maze {
 				if (north[x][y]) StdDraw.line(x, y + 1, x + 1, y + 1);
 				if (west[x][y])  StdDraw.line(x, y, x, y + 1);
 				if (east[x][y])  StdDraw.line(x + 1, y, x + 1, y + 1);
+				StdDraw.setFont(smallFont);
+				StdDraw.text(x, y, x+","+y);
+				StdDraw.setFont(defaultFont);
+				
 			}
 		}
 		StdDraw.show(1000);
@@ -243,15 +250,22 @@ public class Maze {
 	// a test client
 	public static void main(String[] args) {
 		int N 
-			= 4; 
-			//= Integer.parseInt(args[0]);
+		= 10; 
+		//= Integer.parseInt(args[0]);
 		Maze maze = new Maze(N);
 		StdDraw.show(0);
 		maze.draw();
 		maze.solve();
 		//maze.eraseCurrent();
-		
-		
+
+		try {
+			File f = new File("test.jff");
+			StdDraw.save("test.png");
+			RobotUtils.saveTopoMap(maze.getRobot(), f);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 }
