@@ -10,24 +10,12 @@ import com.usp.icmc.labes.fsm.FsmTransition;
 public class SynchronizationTree extends FsmModel{
 	
 	
-	String name;
-	
-	List<FsmState> states;
-	FsmState initialState;
-	List<FsmTransition> transitions;
-	List<String> inputs;
-	List<String> outputs;
-
 	public SynchronizationTree() {
-		this.states = new ArrayList<FsmState>();
-		this.transitions = new ArrayList<FsmTransition>();
-		this.inputs = new ArrayList<String>();
-		this.outputs = new ArrayList<String>();
+		this(null);
 	}
 	
 	public SynchronizationTree(String n) {
-		this();
-		this.name=n;
+		super(n);
 	}
 
 

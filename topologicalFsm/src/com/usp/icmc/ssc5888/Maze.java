@@ -167,22 +167,22 @@ public class Maze {
 		FsmState next = null; 
 		FsmState currState = robot.getTopoMap().getState(curr);
 		if (!north[x][y]) {
-			next = RobotUtils.updateTopologicalMap(this, x, y+1,currState);
+			next = RobotUtils.getInstance().updateTopologicalMap(this, x, y+1,currState);
 			if(!currState.equals(next)) robot.getTopoMap().addTransition(new FsmTransition(currState, Robot.Commands.MOVE_NORTH.toString(), Boolean.FALSE.toString(), robot.getTopoMap().getState(next)));
 			solve(x, y + 1,next);
 		}
 		if (!east[x][y])  {
-			next = RobotUtils.updateTopologicalMap(this, x+1, y,currState);
+			next = RobotUtils.getInstance().updateTopologicalMap(this, x+1, y,currState);
 			if(!currState.equals(next)) robot.getTopoMap().addTransition(new FsmTransition(robot.getTopoMap().getState(curr), Robot.Commands.MOVE_EAST.toString(), Boolean.FALSE.toString(), robot.getTopoMap().getState(next)));
 			solve(x + 1, y,next);
 		}
 		if (!south[x][y]) {
-			next = RobotUtils.updateTopologicalMap(this, x, y-1,currState);
+			next = RobotUtils.getInstance().updateTopologicalMap(this, x, y-1,currState);
 			if(!currState.equals(next)) robot.getTopoMap().addTransition(new FsmTransition(robot.getTopoMap().getState(curr), Robot.Commands.MOVE_SOUTH.toString(), Boolean.FALSE.toString(), robot.getTopoMap().getState(next)));
 			solve(x, y - 1,next);
 		}
 		if (!west[x][y])  {
-			next = RobotUtils.updateTopologicalMap(this, x-1, y,currState);
+			next = RobotUtils.getInstance().updateTopologicalMap(this, x-1, y,currState);
 			if(!currState.equals(next)) robot.getTopoMap().addTransition(new FsmTransition(robot.getTopoMap().getState(curr), Robot.Commands.MOVE_WEST.toString(), Boolean.FALSE.toString(), robot.getTopoMap().getState(next)));
 			solve(x - 1, y,next);
 		}
@@ -205,7 +205,7 @@ public class Maze {
 		int i = 1;
 		int j = 1;
 
-		FsmState state  = RobotUtils.updateTopologicalMap(this, i, j,null);
+		FsmState state  = RobotUtils.getInstance().updateTopologicalMap(this, i, j,null);
 
 		solve(i, j,state);
 	}
@@ -234,7 +234,7 @@ public class Maze {
 
 	private void fillCurrent() {
 		StdDraw.setPenColor(StdDraw.RED);
-		StdDraw.text(robotX+.5,robotY+.5, "⟹",0);
+		StdDraw.text(robotX+.5,robotY+.5, "x",0);
 		//StdDraw.filledCircle(current_x+.5,current_y+.5, 0.375);
 		StdDraw.show(1000);
 	}
@@ -250,18 +250,19 @@ public class Maze {
 	// a test client
 	public static void main(String[] args) {
 		int N 
-		= 10; 
+		= 2; 
 		//= Integer.parseInt(args[0]);
 		Maze maze = new Maze(N);
 		StdDraw.show(0);
 		maze.draw();
 		maze.solve();
-		//maze.eraseCurrent();
 
 		try {
-			File f = new File("test.jff");
-			StdDraw.save("test.png");
-			RobotUtils.saveTopoMap(maze.getRobot(), f);
+			String fname = "test";
+			StdDraw.save(fname+".png");
+			RobotUtils.getInstance().saveTopoMap(maze.getRobot(), new File(fname+"_topomap.jff"));
+			RobotUtils.getInstance().createSynchronizingTree(maze.getRobot());
+			RobotUtils.getInstance().saveSyncTree(maze.getRobot(), new File(fname+"_syncTree.jff"));
 
 		} catch (Exception e) {
 			e.printStackTrace();

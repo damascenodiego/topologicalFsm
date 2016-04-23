@@ -1,21 +1,28 @@
 package com.usp.icmc.ssc5888;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import com.usp.icmc.labes.fsm.FsmState;
 
 public class CurrentStateUncertainty extends FsmState {
 	
-	private Set<FsmState> uncertaintySet;
+	private List<FsmState> uncertaintySet;
 
 	public CurrentStateUncertainty(String id) {
 		super(id);
-		uncertaintySet = new HashSet<>();
+		uncertaintySet = new ArrayList<>();
 	}
 	
 	
-	public Set<FsmState> getUncertaintySet() {
+	public CurrentStateUncertainty() {
+		this(null);
+	}
+
+
+	public List<FsmState> getUncertaintySet() {
 		return uncertaintySet;
 	}
 
@@ -27,6 +34,7 @@ public class CurrentStateUncertainty extends FsmState {
 		result = prime * result + ((uncertaintySet == null) ? 0 : uncertaintySet.hashCode());
 		return result;
 	}
+
 
 	@Override
 	public boolean equals(Object obj) {
@@ -44,6 +52,9 @@ public class CurrentStateUncertainty extends FsmState {
 			return false;
 		return true;
 	}
+
+
+
 	
 
 }
