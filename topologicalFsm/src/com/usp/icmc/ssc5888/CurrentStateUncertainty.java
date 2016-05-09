@@ -9,11 +9,11 @@ import com.usp.icmc.labes.fsm.FsmState;
 
 public class CurrentStateUncertainty extends FsmState {
 	
-	private List<FsmState> uncertaintySet;
+	private Set<FsmState> uncertaintySet;
 
 	public CurrentStateUncertainty(String id) {
 		super(id);
-		uncertaintySet = new ArrayList<>();
+		uncertaintySet = new HashSet<>();
 	}
 	
 	
@@ -22,7 +22,7 @@ public class CurrentStateUncertainty extends FsmState {
 	}
 
 
-	public List<FsmState> getUncertaintySet() {
+	public Set<FsmState> getUncertaintySet() {
 		return uncertaintySet;
 	}
 
@@ -31,7 +31,7 @@ public class CurrentStateUncertainty extends FsmState {
 	public int hashCode() {
 		final int prime = 31;
 		int result = super.hashCode();
-		result = prime * result + ((uncertaintySet == null) ? 0 : uncertaintySet.hashCode());
+		//result = prime * result + ((uncertaintySet == null) ? 0 : uncertaintySet.hashCode());
 		return result;
 	}
 
@@ -40,8 +40,8 @@ public class CurrentStateUncertainty extends FsmState {
 	public boolean equals(Object obj) {
 		if (this == obj)
 			return true;
-		if (!super.equals(obj))
-			return false;
+		//if (!super.equals(obj))
+		//	return false;
 		if (getClass() != obj.getClass())
 			return false;
 		CurrentStateUncertainty other = (CurrentStateUncertainty) obj;

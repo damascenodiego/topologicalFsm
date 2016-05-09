@@ -9,6 +9,7 @@ import com.usp.icmc.labes.fsm.FsmTransition;
 
 public class SynchronizationTree extends FsmModel{
 	
+	CurrentStateUncertainty singletonNodes;
 	
 	public SynchronizationTree() {
 		this(null);
@@ -17,6 +18,8 @@ public class SynchronizationTree extends FsmModel{
 	public SynchronizationTree(String n) {
 		super(n);
 	}
+	
+	
 
 
 }

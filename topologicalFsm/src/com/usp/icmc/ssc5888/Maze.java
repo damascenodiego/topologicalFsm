@@ -249,6 +249,7 @@ public class Maze {
 
 	// a test client
 	public static void main(String[] args) {
+		StdRandom.setSeed(1000);
 		int N 
 		= 2; 
 		//= Integer.parseInt(args[0]);
@@ -262,7 +263,8 @@ public class Maze {
 			StdDraw.save(fname+".png");
 			RobotUtils.getInstance().saveTopoMap(maze.getRobot(), new File(fname+"_topomap.jff"));
 			RobotUtils.getInstance().createSynchronizingTree(maze.getRobot());
-			RobotUtils.getInstance().saveSyncTree(maze.getRobot(), new File(fname+"_syncTree.jff"));
+			//RobotUtils.getInstance().saveSyncTree(maze.getRobot(), new File(fname+"_syncTree.jff"));
+			RobotUtils.getInstance().saveSyncTreeAsDot(maze.getRobot(), new File(fname+"_syncTree.dot"));
 
 		} catch (Exception e) {
 			e.printStackTrace();

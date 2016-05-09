@@ -5,6 +5,7 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -13,6 +14,8 @@ import java.util.Map;
 import java.util.Queue;
 import java.util.Set;
 import java.util.concurrent.LinkedBlockingQueue;
+
+import org.omg.CORBA.Current;
 
 import com.usp.icmc.ssc5888.CurrentStateUncertainty;
 import com.usp.icmc.ssc5888.Maze;
@@ -136,6 +139,7 @@ public class RobotUtils {
 		bw.write("		<!--The list of transitions.-->");bw.write("\n");
 
 		for (FsmTransition tr: r.getTopoMap().getTransitions()) {
+//			if(tr.getFrom().getId().equals(tr.getTo().getId())) continue;
 			bw.write("		<transition>");bw.write("\n");
 			bw.write("			<from>"+tr.getFrom().hashCode()+"</from>");bw.write("\n");
 			bw.write("			<to>"+tr.getTo().hashCode()+"</to>");bw.write("\n");
@@ -163,7 +167,7 @@ public class RobotUtils {
 
 
 		for (FsmState s: r.getSyncTree().getStates()) {
-			bw.write("		<state id=\""+s.getId().hashCode()+"\" name=\""+s.getId()+"\">");bw.write("\n");
+			bw.write("		<state id=\""+s.getId()+"\" name=\""+((CurrentStateUncertainty)s).getUncertaintySet().toString()+"\">");bw.write("\n");
 			bw.write("			<x>"+(0)+"</x>"); bw.write("\n");
 			bw.write("			<y>"+(0)+"</y>"); bw.write("\n");
 			if(s.equals(r.getSyncTree().getInitialState())) {
@@ -177,8 +181,8 @@ public class RobotUtils {
 
 		for (FsmTransition tr: r.getSyncTree().getTransitions()) {
 			bw.write("		<transition>");bw.write("\n");
-			bw.write("			<from>"+tr.getFrom().getId().hashCode()+"</from>");bw.write("\n");
-			bw.write("			<to>"+tr.getTo().getId().hashCode()+"</to>");bw.write("\n");
+			bw.write("			<from>"+tr.getFrom().getId()+"</from>");bw.write("\n");
+			bw.write("			<to>"+tr.getTo().getId()+"</to>");bw.write("\n");
 			bw.write("			<read>"+tr.getInput()+"</read>");bw.write("\n");
 			bw.write("			<transout>"+tr.getOutput()+"</transout>");bw.write("\n");
 			bw.write("		</transition>");bw.write("\n");
@@ -191,17 +195,33 @@ public class RobotUtils {
 		bw.close();
 
 	}
+	
+	
+	public void saveSyncTreeAsDot(Robot r, File f) throws IOException{
+		PrintWriter pw = new PrintWriter(f);
 
-	public void createSynchronizingTree(Robot robot) {
-		List<FsmState> currUncert = new ArrayList<>();
-		CurrentStateUncertainty uncert = new CurrentStateUncertainty();
-		for (FsmState s : robot.getTopoMap().getStates()) {
-			uncert.getUncertaintySet().add(s);
-			
+		pw.println("digraph rbac2Fsm {");
+		List<FsmTransition> transit = r.getSyncTree().getTransitions();
+		for (FsmTransition tr : transit) {
+			if(tr.getOutput().equals("deny")) continue;
+			pw.println("  "+
+					tr.getFrom().getId()
+					+" -> "
+					+tr.getTo().getId()
+					+" [ label =\""+tr.getInput()+"/"+tr.getOutput()+"\"];");
 		}
 		
-		uncert.setId(uncert.getUncertaintySet().toString());
+		for (FsmState st : r.getSyncTree().getStates()) {
+			pw.println("  "+st.getId()+" [label=\""+((CurrentStateUncertainty)st).getUncertaintySet().toString()+"\"];");
+		}
+		pw.println("}");
+		pw.close();
+	}
 
+	public void createSynchronizingTree(Robot robot) {
+		CurrentStateUncertainty uncert = new CurrentStateUncertainty("0");
+		for (FsmState s : robot.getTopoMap().getStates())  uncert.getUncertaintySet().add(s);
+			
 		robot.getSyncTree().addState(uncert);
 
 		createSynchronizingTree(robot.getSyncTree());
@@ -209,13 +229,15 @@ public class RobotUtils {
 
 	private void createSynchronizingTree(SynchronizationTree syncTree) {
 
-		List<CurrentStateUncertainty> aboveLevel = new ArrayList<CurrentStateUncertainty>(); 
-		aboveLevel.add((CurrentStateUncertainty) syncTree.getInitialState());
+		List<Set<FsmState>> aboveLevel = new ArrayList<Set<FsmState>>(); 
+		aboveLevel.add(((CurrentStateUncertainty) syncTree.getInitialState()).getUncertaintySet());
 
 		Queue<CurrentStateUncertainty> uncertLst = new LinkedBlockingQueue<CurrentStateUncertainty>();
 
 		uncertLst.add((CurrentStateUncertainty) syncTree.getInitialState());
 
+		int id = 0;
+		Map<String, CurrentStateUncertainty> allCurr = new HashMap<String, CurrentStateUncertainty>();
 		while (!uncertLst.isEmpty()) {
 			CurrentStateUncertainty state = uncertLst.remove();
 			FsmTransition tr = null;
@@ -224,10 +246,10 @@ public class RobotUtils {
 				for (FsmState s : state.getUncertaintySet()) {
 					tr = getTransition(s, in);
 					String io = tr.getInput()+tr.getOutput();
-					io_tr.putIfAbsent(io,  new CurrentStateUncertainty(""));
+					io_tr.putIfAbsent(io,  new CurrentStateUncertainty(Integer.toString(++id)));
 					CurrentStateUncertainty stUncert = io_tr.get(io);
-					if(stUncert.getUncertaintySet().contains(tr.getTo())) 
-						stUncert.getUncertaintySet().add((CurrentStateUncertainty) tr.getTo());
+					allCurr.put(stUncert.getId(), stUncert);
+					stUncert.getUncertaintySet().add(tr.getTo());
 				}
 			}
 
@@ -236,18 +258,38 @@ public class RobotUtils {
 					tr = getTransition(s, in);
 					String io = tr.getInput()+tr.getOutput();
 					CurrentStateUncertainty stUncert = io_tr.get(io);
-					stUncert.setId(stUncert.getUncertaintySet().toString());
 					FsmTransition trUncert = new FsmTransition(state, tr.getInput(), tr.getOutput(), stUncert);
-					syncTree.getTransitions().add(trUncert);
-					syncTree.getStates().add(stUncert);
-					if(!aboveLevel.contains(stUncert)) {
-						aboveLevel.add(stUncert);
+					//syncTree.getTransitions().add(trUncert);
+					if(!criteria3bSyncTree(aboveLevel,stUncert)) {
+						aboveLevel.add(stUncert.getUncertaintySet());
 						if(stUncert.getUncertaintySet().size()>1) uncertLst.add(stUncert);
 					}
 				}
-
-
 			}
 		}
+		for (String curId : allCurr.keySet()) {
+			if(allCurr.get(curId).getUncertaintySet().size()==1) addState(syncTree,allCurr.get(curId));
+//			syncTree.getStates().add(allCurr.get(curId));
+		}
+	}
+
+	private boolean criteria3bSyncTree(List<Set<FsmState>> aboveLevel, CurrentStateUncertainty stUncert) {
+		return aboveLevel.contains(stUncert.getUncertaintySet());
+	}
+	
+	private boolean criteria3bHomingTree(List<Set<FsmState>> aboveLevel, CurrentStateUncertainty stUncert) {
+		for (Set<FsmState> set : aboveLevel) {
+			if(stUncert.getUncertaintySet().containsAll(set)) return true;
+		}
+		return false;
+	}
+
+	private void addState(SynchronizationTree syncTree, FsmState fsmState) {
+		syncTree.getStates().add(fsmState);
+		for (FsmTransition tr : fsmState.getIn()) {
+			if(!syncTree.getTransitions().contains(tr)) syncTree.getTransitions().add(tr);
+			if(!syncTree.getStates().contains(tr.getFrom())) addState(syncTree, tr.getFrom());
+		}
+		
 	}
 }
