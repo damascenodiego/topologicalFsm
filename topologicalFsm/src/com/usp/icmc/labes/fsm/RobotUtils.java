@@ -218,59 +218,85 @@ public class RobotUtils {
 		pw.close();
 	}
 
-	public void createSynchronizingTree(Robot robot) {
+	public void createSynchronizingTree(Robot robot, TreeType tt) {
 		CurrentStateUncertainty uncert = new CurrentStateUncertainty("0");
 		for (FsmState s : robot.getTopoMap().getStates())  uncert.getUncertaintySet().add(s);
 			
 		robot.getSyncTree().addState(uncert);
 
-		createSynchronizingTree(robot.getSyncTree());
+		createSynchronizingTree(robot.getSyncTree(),tt);
 	}
+	
 
-	private void createSynchronizingTree(SynchronizationTree syncTree) {
+	public enum TreeType {
+		SYNCHRONIZING_TREE,
+		HOMING_TREE
+		};
+
+		private void createSynchronizingTree(SynchronizationTree syncTree, TreeType tt) {
 
 		List<Set<FsmState>> aboveLevel = new ArrayList<Set<FsmState>>(); 
-		aboveLevel.add(((CurrentStateUncertainty) syncTree.getInitialState()).getUncertaintySet());
-
 		Queue<CurrentStateUncertainty> uncertLst = new LinkedBlockingQueue<CurrentStateUncertainty>();
 
 		uncertLst.add((CurrentStateUncertainty) syncTree.getInitialState());
 
 		int id = 0;
 		Map<String, CurrentStateUncertainty> allCurr = new HashMap<String, CurrentStateUncertainty>();
+		Map<String, CurrentStateUncertainty> allSingletonCurr = new HashMap<String, CurrentStateUncertainty>();
+		Set<FsmTransition> allTr = new HashSet<FsmTransition>();
+		Map<String, CurrentStateUncertainty> io_tr = new HashMap<String, CurrentStateUncertainty>();
+		
+		CurrentStateUncertainty stUncert = null;
+		CurrentStateUncertainty state = null;
+		FsmTransition tr = null;
+		String io = null;
+		boolean isSingleton,criteria3b;
+		
 		while (!uncertLst.isEmpty()) {
-			CurrentStateUncertainty state = uncertLst.remove();
-			FsmTransition tr = null;
-			Map<String, CurrentStateUncertainty> io_tr = new HashMap<String, CurrentStateUncertainty>();
+			state = uncertLst.remove();
+			if(aboveLevel.contains(state.getUncertaintySet())) continue;
+			aboveLevel.add(state.getUncertaintySet());
+			
+			io_tr.clear();
+			
 			for (String in : syncTree.getInputs()) {
 				for (FsmState s : state.getUncertaintySet()) {
 					tr = getTransition(s, in);
-					String io = tr.getInput()+tr.getOutput();
-					io_tr.putIfAbsent(io,  new CurrentStateUncertainty(Integer.toString(++id)));
-					CurrentStateUncertainty stUncert = io_tr.get(io);
-					allCurr.put(stUncert.getId(), stUncert);
+					io = tr.getInput()+tr.getOutput();
+					if(!io_tr.containsKey(io)){
+						io_tr.putIfAbsent(io,  new CurrentStateUncertainty(Integer.toString(++id)));
+					}
+					stUncert = io_tr.get(io);
+					allCurr.putIfAbsent(stUncert.getId(), stUncert);
 					stUncert.getUncertaintySet().add(tr.getTo());
 				}
 			}
 
+//			System.out.println(io_tr.toString());
 			for (String in : syncTree.getInputs()) {
 				for (FsmState s : state.getUncertaintySet()) {
 					tr = getTransition(s, in);
-					String io = tr.getInput()+tr.getOutput();
-					CurrentStateUncertainty stUncert = io_tr.get(io);
+					io = tr.getInput()+tr.getOutput();
+					stUncert = io_tr.get(io);
 					FsmTransition trUncert = new FsmTransition(state, tr.getInput(), tr.getOutput(), stUncert);
-					//syncTree.getTransitions().add(trUncert);
-					if(!criteria3bSyncTree(aboveLevel,stUncert)) {
-						aboveLevel.add(stUncert.getUncertaintySet());
-						if(stUncert.getUncertaintySet().size()>1) uncertLst.add(stUncert);
+					allTr.add(trUncert);
+					isSingleton = stUncert.getUncertaintySet().size()==1;
+					criteria3b = criteria3bSyncTree(aboveLevel,stUncert);
+					if(tt.equals(TreeType.SYNCHRONIZING_TREE)) criteria3b = criteria3bSyncTree(aboveLevel,stUncert);
+					else criteria3b = criteria3bHomingTree(aboveLevel,stUncert);
+					if(!(isSingleton || criteria3b)) {
+						uncertLst.add(stUncert);
 					}
+					
+					if(isSingleton) allSingletonCurr.putIfAbsent(stUncert.getId(), stUncert);
 				}
 			}
 		}
-		for (String curId : allCurr.keySet()) {
-			if(allCurr.get(curId).getUncertaintySet().size()==1) addState(syncTree,allCurr.get(curId));
-//			syncTree.getStates().add(allCurr.get(curId));
-		}
+		//System.out.println(allCurr); System.out.println(allTr);
+		
+		for (String curId : allSingletonCurr.keySet()) addState(syncTree,allCurr.get(curId));
+		
+		//for (String curId : allCurr.keySet()) syncTree.getStates().add(allCurr.get(curId)); syncTree.getTransitions().addAll(allTr);
 	}
 
 	private boolean criteria3bSyncTree(List<Set<FsmState>> aboveLevel, CurrentStateUncertainty stUncert) {

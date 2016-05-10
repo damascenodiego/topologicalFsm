@@ -6,7 +6,6 @@ import java.io.File;
 import com.usp.icmc.labes.fsm.FsmState;
 import com.usp.icmc.labes.fsm.FsmTransition;
 import com.usp.icmc.labes.fsm.RobotUtils;
-import com.usp.icmc.labes.fsm.testing.FsmSUT;
 
 import edu.princeton.cs.algs4.StdDraw;
 import edu.princeton.cs.algs4.StdRandom;
@@ -249,10 +248,15 @@ public class Maze {
 
 	// a test client
 	public static void main(String[] args) {
-		StdRandom.setSeed(1000);
-		int N 
-		= 2; 
-		//= Integer.parseInt(args[0]);
+		int N = 5;
+		int SEED = 1000;
+		if(args.length==1) N = Integer.parseInt(args[0]);
+		if(args.length==2){
+			N = Integer.parseInt(args[0]);
+			SEED = Integer.parseInt(args[1]);
+		}
+		
+		StdRandom.setSeed(SEED);
 		Maze maze = new Maze(N);
 		StdDraw.show(0);
 		maze.draw();
@@ -263,6 +267,7 @@ public class Maze {
 			StdDraw.save(fname+".png");
 			RobotUtils.getInstance().saveTopoMap(maze.getRobot(), new File(fname+"_topomap.jff"));
 			RobotUtils.getInstance().createSynchronizingTree(maze.getRobot());
+			RobotUtils.getInstance().createHomingTree(maze.getRobot());
 			//RobotUtils.getInstance().saveSyncTree(maze.getRobot(), new File(fname+"_syncTree.jff"));
 			RobotUtils.getInstance().saveSyncTreeAsDot(maze.getRobot(), new File(fname+"_syncTree.dot"));
 
