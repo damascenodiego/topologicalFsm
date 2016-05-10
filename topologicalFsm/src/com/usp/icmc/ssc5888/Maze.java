@@ -266,8 +266,7 @@ public class Maze {
 			String fname = "test";
 			StdDraw.save(fname+".png");
 			RobotUtils.getInstance().saveTopoMap(maze.getRobot(), new File(fname+"_topomap.jff"));
-			RobotUtils.getInstance().createSynchronizingTree(maze.getRobot());
-			RobotUtils.getInstance().createHomingTree(maze.getRobot());
+			RobotUtils.getInstance().createSynchronizingTree(maze.getRobot(),RobotUtils.TreeType.SYNCHRONIZING_TREE);
 			//RobotUtils.getInstance().saveSyncTree(maze.getRobot(), new File(fname+"_syncTree.jff"));
 			RobotUtils.getInstance().saveSyncTreeAsDot(maze.getRobot(), new File(fname+"_syncTree.dot"));
 
