@@ -7,15 +7,15 @@ import com.usp.icmc.labes.fsm.FsmModel;
 import com.usp.icmc.labes.fsm.FsmState;
 import com.usp.icmc.labes.fsm.FsmTransition;
 
-public class SynchronizationTree extends FsmModel{
+public class TopologicalLocationTree extends FsmModel{
 	
 	CurrentStateUncertainty singletonNodes;
 	
-	public SynchronizationTree() {
+	public TopologicalLocationTree() {
 		this(null);
 	}
 	
-	public SynchronizationTree(String n) {
+	public TopologicalLocationTree(String n) {
 		super(n);
 	}
 	

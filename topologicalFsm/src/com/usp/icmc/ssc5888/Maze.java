@@ -45,12 +45,12 @@ public class Maze {
 	private static final int initialY = 1;
 
 	public Maze(int N) {
-		defaultFont = StdDraw.getFont();
+		//defaultFont = StdDraw.getFont();
 		smallFont = new Font("Arial", Font.PLAIN, 9);
 
 		this.N = N;
-		StdDraw.setXscale(0, N+2);
-		StdDraw.setYscale(0, N+2);
+	//	StdDraw.setXscale(0, N+2);
+	//	StdDraw.setYscale(0, N+2);
 		robot = new Robot();
 		robotX = initialX;
 		robotY = initialY;
@@ -256,22 +256,23 @@ public class Maze {
 			SEED = Integer.parseInt(args[1]);
 		}
 		
-		StdRandom.setSeed(SEED);
+		//StdRandom.setSeed(SEED);
 		Maze maze = new Maze(N);
-		StdDraw.show(0);
-		maze.draw();
+		//StdDraw.show(0);
+		//maze.draw();
 		maze.solve();
 
 		try {
 			String fname = "test";
-			StdDraw.save(fname+".png");
+			//StdDraw.save(fname+".png");
 			RobotUtils.getInstance().saveTopoMap(maze.getRobot(), new File(fname+"_topomap.jff"));
-			RobotUtils.getInstance().createSynchronizingTree(maze.getRobot(),RobotUtils.TreeType.SYNCHRONIZING_TREE);
+			RobotUtils.getInstance().createHomingTree(maze.getRobot());
 			//RobotUtils.getInstance().saveSyncTree(maze.getRobot(), new File(fname+"_syncTree.jff"));
 			RobotUtils.getInstance().saveSyncTreeAsDot(maze.getRobot(), new File(fname+"_syncTree.dot"));
-
+			System.exit(0);
 		} catch (Exception e) {
 			e.printStackTrace();
+			System.exit(1);
 		}
 	}
 

@@ -21,7 +21,7 @@ import com.usp.icmc.ssc5888.CurrentStateUncertainty;
 import com.usp.icmc.ssc5888.Maze;
 import com.usp.icmc.ssc5888.Robot;
 import com.usp.icmc.ssc5888.Robot.Commands;
-import com.usp.icmc.ssc5888.SynchronizationTree;
+import com.usp.icmc.ssc5888.TopologicalLocationTree;
 
 public class RobotUtils {
 
@@ -139,7 +139,7 @@ public class RobotUtils {
 		bw.write("		<!--The list of transitions.-->");bw.write("\n");
 
 		for (FsmTransition tr: r.getTopoMap().getTransitions()) {
-//			if(tr.getFrom().getId().equals(tr.getTo().getId())) continue;
+			//			if(tr.getFrom().getId().equals(tr.getTo().getId())) continue;
 			bw.write("		<transition>");bw.write("\n");
 			bw.write("			<from>"+tr.getFrom().hashCode()+"</from>");bw.write("\n");
 			bw.write("			<to>"+tr.getTo().hashCode()+"</to>");bw.write("\n");
@@ -195,8 +195,8 @@ public class RobotUtils {
 		bw.close();
 
 	}
-	
-	
+
+
 	public void saveSyncTreeAsDot(Robot r, File f) throws IOException{
 		PrintWriter pw = new PrintWriter(f);
 
@@ -210,7 +210,7 @@ public class RobotUtils {
 					+tr.getTo().getId()
 					+" [ label =\""+tr.getInput()+"/"+tr.getOutput()+"\"];");
 		}
-		
+
 		for (FsmState st : r.getSyncTree().getStates()) {
 			pw.println("  "+st.getId()+" [label=\""+((CurrentStateUncertainty)st).getUncertaintySet().toString()+"\"];");
 		}
@@ -218,22 +218,29 @@ public class RobotUtils {
 		pw.close();
 	}
 
-	public void createSynchronizingTree(Robot robot, TreeType tt) {
-		CurrentStateUncertainty uncert = new CurrentStateUncertainty("0");
-		for (FsmState s : robot.getTopoMap().getStates())  uncert.getUncertaintySet().add(s);
-			
-		robot.getSyncTree().addState(uncert);
-
-		createSynchronizingTree(robot.getSyncTree(),tt);
+	public void createSynchronizingTree(Robot robot) {
+		createTree(robot, TreeType.SYNCHRONIZING_TREE);
+	}
+	public void createHomingTree(Robot robot) {
+		createTree(robot, TreeType.HOMING_TREE);
 	}
 	
+	public void createTree(Robot robot, TreeType tt) {
+		CurrentStateUncertainty uncert = new CurrentStateUncertainty("0");
+		for (FsmState s : robot.getTopoMap().getStates())  uncert.getUncertaintySet().add(s);
 
-	public enum TreeType {
+		robot.getSyncTree().addState(uncert);
+
+		createTree(robot.getSyncTree(),tt);
+	}
+
+
+	private enum TreeType {
 		SYNCHRONIZING_TREE,
 		HOMING_TREE
-		};
+	};
 
-		private void createSynchronizingTree(SynchronizationTree syncTree, TreeType tt) {
+	private void createTree(TopologicalLocationTree syncTree, TreeType tt) {
 
 		List<Set<FsmState>> aboveLevel = new ArrayList<Set<FsmState>>(); 
 		Queue<CurrentStateUncertainty> uncertLst = new LinkedBlockingQueue<CurrentStateUncertainty>();
@@ -242,23 +249,25 @@ public class RobotUtils {
 
 		int id = 0;
 		Map<String, CurrentStateUncertainty> allCurr = new HashMap<String, CurrentStateUncertainty>();
+		Set<Set<FsmState>> accessedUncert = new HashSet<Set<FsmState>>();
 		Map<String, CurrentStateUncertainty> allSingletonCurr = new HashMap<String, CurrentStateUncertainty>();
 		Set<FsmTransition> allTr = new HashSet<FsmTransition>();
 		Map<String, CurrentStateUncertainty> io_tr = new HashMap<String, CurrentStateUncertainty>();
-		
+
 		CurrentStateUncertainty stUncert = null;
 		CurrentStateUncertainty state = null;
 		FsmTransition tr = null;
 		String io = null;
 		boolean isSingleton,criteria3b;
+
 		
 		while (!uncertLst.isEmpty()) {
 			state = uncertLst.remove();
 			if(aboveLevel.contains(state.getUncertaintySet())) continue;
 			aboveLevel.add(state.getUncertaintySet());
-			
+
 			io_tr.clear();
-			
+
 			for (String in : syncTree.getInputs()) {
 				for (FsmState s : state.getUncertaintySet()) {
 					tr = getTransition(s, in);
@@ -272,7 +281,7 @@ public class RobotUtils {
 				}
 			}
 
-//			System.out.println(io_tr.toString());
+			//			System.out.println(io_tr.toString());
 			for (String in : syncTree.getInputs()) {
 				for (FsmState s : state.getUncertaintySet()) {
 					tr = getTransition(s, in);
@@ -284,25 +293,26 @@ public class RobotUtils {
 					criteria3b = criteria3bSyncTree(aboveLevel,stUncert);
 					if(tt.equals(TreeType.SYNCHRONIZING_TREE)) criteria3b = criteria3bSyncTree(aboveLevel,stUncert);
 					else criteria3b = criteria3bHomingTree(aboveLevel,stUncert);
-					if(!(isSingleton || criteria3b)) {
+					if(!(isSingleton || criteria3b) && !accessedUncert.contains(stUncert.getUncertaintySet())) {
 						uncertLst.add(stUncert);
+						accessedUncert.add(stUncert.getUncertaintySet());
 					}
-					
+
 					if(isSingleton) allSingletonCurr.putIfAbsent(stUncert.getId(), stUncert);
 				}
 			}
 		}
 		//System.out.println(allCurr); System.out.println(allTr);
-		
+
 		for (String curId : allSingletonCurr.keySet()) addState(syncTree,allCurr.get(curId));
-		
+
 		//for (String curId : allCurr.keySet()) syncTree.getStates().add(allCurr.get(curId)); syncTree.getTransitions().addAll(allTr);
 	}
 
 	private boolean criteria3bSyncTree(List<Set<FsmState>> aboveLevel, CurrentStateUncertainty stUncert) {
 		return aboveLevel.contains(stUncert.getUncertaintySet());
 	}
-	
+
 	private boolean criteria3bHomingTree(List<Set<FsmState>> aboveLevel, CurrentStateUncertainty stUncert) {
 		for (Set<FsmState> set : aboveLevel) {
 			if(stUncert.getUncertaintySet().containsAll(set)) return true;
@@ -310,12 +320,12 @@ public class RobotUtils {
 		return false;
 	}
 
-	private void addState(SynchronizationTree syncTree, FsmState fsmState) {
+	private void addState(TopologicalLocationTree syncTree, FsmState fsmState) {
 		syncTree.getStates().add(fsmState);
 		for (FsmTransition tr : fsmState.getIn()) {
 			if(!syncTree.getTransitions().contains(tr)) syncTree.getTransitions().add(tr);
 			if(!syncTree.getStates().contains(tr.getFrom())) addState(syncTree, tr.getFrom());
 		}
-		
+
 	}
 }
