@@ -45,12 +45,12 @@ public class Maze {
 	private static final int initialY = 1;
 
 	public Maze(int N) {
-		//defaultFont = StdDraw.getFont();
+		defaultFont = StdDraw.getFont();
 		smallFont = new Font("Arial", Font.PLAIN, 9);
 
 		this.N = N;
-	//	StdDraw.setXscale(0, N+2);
-	//	StdDraw.setYscale(0, N+2);
+		StdDraw.setXscale(0, N+2);
+		StdDraw.setYscale(0, N+2);
 		robot = new Robot();
 		robotX = initialX;
 		robotY = initialY;

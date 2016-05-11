@@ -4,7 +4,7 @@ public class Robot {
 	
 	private String name;
 	
-	private SynchronizationTree syncTree;
+	private TopologicalLocationTree topoTree;
 
 	private TopologicalMap topoMap;
 	
@@ -27,7 +27,7 @@ public class Robot {
 	}
 	
 	private void topoMapTree() {
-		topoMap  = new TopologicalMap(getName()+"_SynchronizationTopologicalMap");
+		topoMap  = new TopologicalMap(getName()+"_TopologicalMap");
 		
 		for (Commands c : Commands.values()) {
 			topoMap.addInput(c.toString());
@@ -39,14 +39,14 @@ public class Robot {
 	}
 
 	private void setupsyncTree() {
-		syncTree = new SynchronizationTree(getName()+"_SynchronizationTree");
+		topoTree = new TopologicalLocationTree(getName()+"_LocationTree");
 		
 		for (Commands c : Commands.values()) {
-			syncTree.addInput(c.toString());
+			topoTree.addInput(c.toString());
 		}
 		
-		syncTree.addOutputs(Boolean.TRUE.toString());
-		syncTree.addOutputs(Boolean.FALSE.toString());
+		topoTree.addOutputs(Boolean.TRUE.toString());
+		topoTree.addOutputs(Boolean.FALSE.toString());
 		
 	}
 
@@ -54,8 +54,8 @@ public class Robot {
 		return name;
 	}
 	
-	public SynchronizationTree getSyncTree() {
-		return syncTree;
+	public TopologicalLocationTree getSyncTree() {
+		return topoTree;
 	}
 	
 	public TopologicalMap getTopoMap() {
