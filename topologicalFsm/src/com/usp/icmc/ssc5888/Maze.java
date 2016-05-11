@@ -44,7 +44,10 @@ public class Maze {
 	private static final int initialX = 1;
 	private static final int initialY = 1;
 
-	public Maze(int N) {
+	
+	long seed;
+	
+	public Maze(int N, int x, int y) {
 		defaultFont = StdDraw.getFont();
 		smallFont = new Font("Arial", Font.PLAIN, 9);
 
@@ -52,11 +55,15 @@ public class Maze {
 		StdDraw.setXscale(0, N+2);
 		StdDraw.setYscale(0, N+2);
 		robot = new Robot();
-		robotX = initialX;
-		robotY = initialY;
+		robotX = x;
+		robotY = y;
 		init();
 		generate();
 
+	}
+	
+	public Maze(int N) {
+		this(N, initialX, initialY);
 	}
 
 	public boolean checkNorth(int i,int j){
@@ -105,8 +112,14 @@ public class Maze {
 		return robot;
 	}
 
+	
+	public long getSeed() {
+		return seed;
+	}
+	
 	// generate the maze
 	private void generate(int x, int y) {
+		seed = StdRandom.getSeed();
 		visited[x][y] = true;
 
 		// while there is an unvisited neighbor
@@ -211,8 +224,8 @@ public class Maze {
 
 	// draw the maze
 	public void draw() {
-		//fillCurrent();
-
+		fillCurrent();
+		
 		StdDraw.setPenColor(StdDraw.BLACK);
 		for (int x = 1; x <= N; x++) {
 			for (int y = 1; y <= N; y++) {
@@ -223,19 +236,17 @@ public class Maze {
 				StdDraw.setFont(smallFont);
 				StdDraw.text(x, y, x+","+y);
 				StdDraw.setFont(defaultFont);
-				
 			}
 		}
 		StdDraw.show(1000);
 	}
 
 
-
 	private void fillCurrent() {
 		StdDraw.setPenColor(StdDraw.RED);
 		StdDraw.text(robotX+.5,robotY+.5, "x",0);
 		//StdDraw.filledCircle(current_x+.5,current_y+.5, 0.375);
-		StdDraw.show(1000);
+//		StdDraw.show(1000);
 	}
 	private void eraseCurrent() {
 		StdDraw.setPenColor(StdDraw.WHITE);
@@ -245,35 +256,54 @@ public class Maze {
 	}
 
 
-
-	// a test client
-	public static void main(String[] args) {
-		int N = 5;
-		int SEED = 1000;
-		if(args.length==1) N = Integer.parseInt(args[0]);
-		if(args.length==2){
-			N = Integer.parseInt(args[0]);
-			SEED = Integer.parseInt(args[1]);
-		}
-		
-		//StdRandom.setSeed(SEED);
-		Maze maze = new Maze(N);
-		//StdDraw.show(0);
-		//maze.draw();
-		maze.solve();
-
-		try {
-			String fname = "test";
-			//StdDraw.save(fname+".png");
-			RobotUtils.getInstance().saveTopoMap(maze.getRobot(), new File(fname+"_topomap.jff"));
-			RobotUtils.getInstance().createHomingTree(maze.getRobot());
-			//RobotUtils.getInstance().saveSyncTree(maze.getRobot(), new File(fname+"_syncTree.jff"));
-			RobotUtils.getInstance().saveSyncTreeAsDot(maze.getRobot(), new File(fname+"_syncTree.dot"));
-			System.exit(0);
-		} catch (Exception e) {
-			e.printStackTrace();
-			System.exit(1);
-		}
+//	// a test client
+//	public static void main(String[] args) {
+//		int N = 5;
+//		int SEED = 1000;
+//		if(args.length==1) N = Integer.parseInt(args[0]);
+//		if(args.length==2){
+//			N = Integer.parseInt(args[0]);
+//			SEED = Integer.parseInt(args[1]);
+//		}
+//		
+//		//StdRandom.setSeed(SEED);
+//		Maze maze = new Maze(N);
+//		//StdDraw.show(0);
+//		//maze.draw();
+//		maze.solve();
+//
+//		try {
+//			String fname = "test";
+//			//StdDraw.save(fname+".png");
+//			RobotUtils.getInstance().saveTopoMap(maze.getRobot(), new File(fname+"_topomap.jff"));
+//			RobotUtils.getInstance().createHomingTree(maze.getRobot());
+//			//RobotUtils.getInstance().saveSyncTree(maze.getRobot(), new File(fname+"_syncTree.jff"));
+//			RobotUtils.getInstance().saveSyncTreeAsDot(maze.getRobot(), new File(fname+"_syncTree.dot"));
+//			System.exit(0);
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//			System.exit(1);
+//		}
+//	}
+	
+	public boolean[][] getNorth() {
+		return north;
+	}
+	
+	public boolean[][] getSouth() {
+		return south;
+	}
+	
+	public boolean[][] getWest() {
+		return west;
+	}
+	
+	public boolean[][] getEast() {
+		return east;
+	}
+	
+	public int getN() {
+		return N;
 	}
 
 }

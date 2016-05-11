@@ -103,7 +103,9 @@ public class RobotUtils {
 		return null;
 	}
 
-	public void saveTopoMap(Robot r, File f) throws IOException{
+	public void saveTopoMap(Maze mz, File f) throws IOException{
+		Robot r = mz.getRobot();
+		
 		BufferedWriter bw = new BufferedWriter(new FileWriter(f));
 
 		bw.write("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?><!--Created with JFLAP 6.4.--><structure>"); bw.write("\n");
@@ -149,6 +151,12 @@ public class RobotUtils {
 
 		}
 
+		bw.write("		<note>");bw.write("\n");
+		bw.write("			<text>"+"seed="+mz.getSeed()+"';"+"N="+mz.getN()+"</text>");bw.write("\n");
+		bw.write("			<x>"+(0)+"</x>"); bw.write("\n");
+		bw.write("			<y>"+(0)+"</y>"); bw.write("\n");
+		bw.write("		</note>");bw.write("\n");
+ 		
 		bw.write("	</automaton>");bw.write("\n");
 		bw.write("</structure>");
 
@@ -156,7 +164,8 @@ public class RobotUtils {
 
 	}
 
-	public void saveSyncTree(Robot r, File f) throws IOException{
+	public void saveLocationTree(Maze mz, File f) throws IOException{
+		Robot r = mz.getRobot();
 		BufferedWriter bw = new BufferedWriter(new FileWriter(f));
 
 		bw.write("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?><!--Created with JFLAP 6.4.--><structure>"); bw.write("\n");
@@ -189,6 +198,11 @@ public class RobotUtils {
 
 		}
 
+		bw.write("		<note>");bw.write("\n");
+		bw.write("			<text>"+mz.getRobot().getSyncTree().getName()+"</text>");bw.write("\n");
+		bw.write("			<x>"+(0)+"</x>"); bw.write("\n");
+		bw.write("			<y>"+(0)+"</y>"); bw.write("\n");
+		bw.write("		</note>");bw.write("\n");
 		bw.write("	</automaton>");bw.write("\n");
 		bw.write("</structure>");
 
@@ -197,7 +211,8 @@ public class RobotUtils {
 	}
 
 
-	public void saveSyncTreeAsDot(Robot r, File f) throws IOException{
+	public void saveLocationTreeAsDot(Maze mz, File f) throws IOException{
+		Robot r = mz.getRobot();
 		PrintWriter pw = new PrintWriter(f);
 
 		pw.println("digraph rbac2Fsm {");
@@ -218,20 +233,37 @@ public class RobotUtils {
 		pw.close();
 	}
 
-	public void createSynchronizingTree(Robot robot) {
-		createTree(robot, TreeType.SYNCHRONIZING_TREE);
+	public void createSynchronizingTree(Maze mz) {
+		createTree(mz, TreeType.SYNCHRONIZING_TREE);
 	}
-	public void createHomingTree(Robot robot) {
-		createTree(robot, TreeType.HOMING_TREE);
+	public void createHomingTree(Maze mz) {
+		createTree(mz, TreeType.HOMING_TREE);
 	}
 	
-	public void createTree(Robot robot, TreeType tt) {
+	public void createTree(Maze mz, TreeType tt) {
 		CurrentStateUncertainty uncert = new CurrentStateUncertainty("0");
-		for (FsmState s : robot.getTopoMap().getStates())  uncert.getUncertaintySet().add(s);
+		for (FsmState s : mz.getRobot().getTopoMap().getStates())  uncert.getUncertaintySet().add(s);
 
-		robot.getSyncTree().addState(uncert);
+		mz.getRobot().getSyncTree().addState(uncert);
 
-		createTree(robot.getSyncTree(),tt);
+		createTree(mz.getRobot().getSyncTree(),tt);
+		
+		int closestLeaf = depthClosestSingleton(mz.getRobot().getSyncTree());
+		int farestLeaf  = depthFarestSingleton(mz.getRobot().getSyncTree());
+		
+		mz.getRobot().getSyncTree().setName("LocationTree='"+tt.name()+"';"+"seed="+mz.getSeed()+"';"+"N="+mz.getN());
+		
+	}
+
+
+	private int depthClosestSingleton(TopologicalLocationTree tree) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	private int depthFarestSingleton(TopologicalLocationTree tree) {
+		// TODO Auto-generated method stub
+		return 0;
 	}
 
 
