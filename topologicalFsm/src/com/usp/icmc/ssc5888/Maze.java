@@ -248,18 +248,18 @@ public class Maze {
 		StdDraw.show(1000);
 	}
 
-	public void writeText(double x, double y, String txt,Font f){
+	public void writeText(double x, double y, String txt,Color col,Font f){
 		if(!DrawUtils.getInstance().getShowWindow()) return;
-		StdDraw.setPenColor(StdDraw.MAGENTA);
+		StdDraw.setPenColor(col);
 		StdDraw.setFont(f);
 		StdDraw.text(x, y, txt);
 		StdDraw.setFont(defaultFont);
 //		StdDraw.show(1000);
 	}
 	
-	public void writeText(double x, double y, String txt, Color col){
+	public void writeText(double x, double y, String txt){
 		if(!DrawUtils.getInstance().getShowWindow()) return;
-		StdDraw.setPenColor(col);
+		StdDraw.setPenColor(StdDraw.MAGENTA);
 		StdDraw.setFont(smallFont);
 		StdDraw.text(x, y, txt);
 		StdDraw.setFont(defaultFont);

@@ -126,13 +126,13 @@ public class TopologicalFsm {
 						csu = (CurrentStateUncertainty) tr.getFrom();
 						StdDraw.clear();
 						maze.fillCurrent(csu);
-						maze.writeText(((maze.getN()+2)/2), 0.5, tr.getInput() + " / " + tr.getOutput());
+						maze.writeText(((maze.getN()+2)/2.0), 0.5, tr.getInput() + " / " + tr.getOutput());
 						maze.draw();
 						StdDraw.save(new File(folder,fname+"_step_"+(++count)+".png").getAbsolutePath());
 						csu = (CurrentStateUncertainty) tr.getTo();
 						StdDraw.clear();
 						maze.fillCurrent(csu);
-						maze.writeText(((maze.getN()+2)/2), 0.5, tr.getInput() + " / " + tr.getOutput());
+						maze.writeText(((maze.getN()+2)/2.0), 0.5, tr.getInput() + " / " + tr.getOutput());
 						maze.draw();
 						StdDraw.save(new File(folder,fname+"_step_"+(++count)+".png").getAbsolutePath());
 						
