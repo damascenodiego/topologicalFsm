@@ -68,8 +68,8 @@ public class TopologicalFsm {
 			File folder = new File(fname+"/");
 			folder.mkdirs();
 			StdDraw.save(fname+"/"+fname+".png");
-			RobotUtils.getInstance().saveTopoMap(maze, new File(folder,fname+".jff"));
 			RobotUtils.getInstance().createHomingTree(maze);
+			RobotUtils.getInstance().saveTopoMap(maze, new File(folder,fname+".jff"));
 			RobotUtils.getInstance().saveLocationTree(maze, new File(folder,fname+"_homingTree.jff"));
 			RobotUtils.getInstance().saveLocationTreeAsDot(maze, new File(folder,fname+"_locationTree.dot"));
 			//MazeUtils.getInstance().saveMaze(new File(folder,fname+"topomap.txt"), maze);
