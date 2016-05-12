@@ -1,6 +1,7 @@
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
+import java.util.Date;
 
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.DefaultParser;
@@ -71,10 +72,13 @@ public class TopologicalFsm {
 			maze.solve();
 
 			String fname = "topoMap_SEED_"+SEED+"_N_"+N;
+			
+			Date di = new Date();
 			RobotUtils.getInstance().createHomingTree(maze);
-
+			Date df = new Date();
 			System.out.println("ClosestSingleton:\t"+maze.getRobot().getLocationTree().getClosestSingleton().size());
 			System.out.println("FarestSingleton:\t"+maze.getRobot().getLocationTree().getFarestSingleton().size());
+			System.out.println("Time:\t"+(df.getTime()-di.getTime()));
 
 			if(cmd.hasOption(SAVE_PARAMETER)){
 				File folder = new File(new File("topologicalFsm"),fname+"/");
