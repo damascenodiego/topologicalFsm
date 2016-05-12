@@ -72,7 +72,7 @@ public class TopologicalFsm {
 			System.out.println("FarestSingleton:\t"+maze.getRobot().getLocationTree().getFarestSingleton().size());
 
 			if(cmd.hasOption(SAVE_PARAMETER)){
-				File folder = new File(fname+"/");
+				File folder = new File(new File("topologicalFsm"),fname+"/");
 				folder.mkdirs();
 				if(DrawUtils.getInstance().getShowWindow()) {
 					StdDraw.save(fname+"/"+fname+".png");
