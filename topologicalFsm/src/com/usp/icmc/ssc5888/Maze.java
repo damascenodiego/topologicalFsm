@@ -1,5 +1,6 @@
 package com.usp.icmc.ssc5888;
 
+import java.awt.Color;
 import java.awt.Font;
 
 import com.usp.icmc.labes.fsm.DrawUtils;
@@ -39,6 +40,7 @@ public class Maze {
 
 	private boolean done = false;
 	private Font smallFont;
+	private Font tinyFont;
 	private Font defaultFont;
 
 	private static final int initialX = 1;
@@ -53,6 +55,7 @@ public class Maze {
 		if(DrawUtils.getInstance().getShowWindow()){
 			defaultFont = StdDraw.getFont();
 			smallFont = new Font("Arial", Font.PLAIN, 9);
+			tinyFont = new Font("Arial", Font.PLAIN, 7);
 
 			StdDraw.setXscale(0, N+2);
 			StdDraw.setYscale(0, N+2);
@@ -228,7 +231,7 @@ public class Maze {
 	// draw the maze
 	public void draw() {
 		if(!DrawUtils.getInstance().getShowWindow()) return;
-		fillCurrent();
+		//fillCurrent();
 
 		StdDraw.setPenColor(StdDraw.BLACK);
 		for (int x = 1; x <= N; x++) {
@@ -251,25 +254,43 @@ public class Maze {
 		StdDraw.setFont(smallFont);
 		StdDraw.text(x, y, txt);
 		StdDraw.setFont(defaultFont);
-		StdDraw.show(1000);
+//		StdDraw.show(1000);
+	}
+	
+	public void writeText(double x, double y, String txt, Color col){
+		if(!DrawUtils.getInstance().getShowWindow()) return;
+		StdDraw.setPenColor(col);
+		StdDraw.setFont(smallFont);
+		StdDraw.text(x, y, txt);
+		StdDraw.setFont(defaultFont);
+		//StdDraw.show(1000);
 	}
 
-	private void fillCurrent() {
+	public void fillCurrent(CurrentStateUncertainty csu) {
 		if(!DrawUtils.getInstance().getShowWindow()) return;
 
-		StdDraw.setPenColor(StdDraw.RED);
-		StdDraw.text(robotX+.5,robotY+.5, "x",0);
-		//StdDraw.filledCircle(current_x+.5,current_y+.5, 0.375);
-		//		StdDraw.show(1000);
+		for (FsmState un : csu.getUncertaintySet()) {
+			StdDraw.setPenColor(StdDraw.RED);
+			String coords[] = un.getId().split(",");
+			int x = Integer.valueOf(coords[0]); 
+			int y = Integer.valueOf(coords[1]);
+			//StdDraw.filledCircle(x+.5,y+.5, 0.375);
+			StdDraw.text(x+.5,y+.5, "x",0);
+		}
+		//StdDraw.show(1000);
 	}
-	//	private void eraseCurrent() {
-	//		if(!DrawUtils.getInstance().getShowWindow()) return;
-	//
-	//		StdDraw.setPenColor(StdDraw.WHITE);
-	//		StdDraw.filledSquare(robotX+.5,robotY+.5, 0.45);
-	//		//StdDraw.filledCircle(current_x+.5,current_y+.5, 0.38);
-	//		StdDraw.show(1000);
-	//	}
+	public void eraseCurrent(CurrentStateUncertainty csu) {
+		if(!DrawUtils.getInstance().getShowWindow()) return;
+
+		for (FsmState un : csu.getUncertaintySet()) {
+			StdDraw.setPenColor(StdDraw.WHITE);
+			String coords[] = un.getId().split(",");
+			int x = Integer.valueOf(coords[0]); 
+			int y = Integer.valueOf(coords[1]);
+			StdDraw.filledCircle(x+.5,y+.5, 0.45);
+		}
+		//StdDraw.show(1000);
+	}
 
 
 	//	// a test client

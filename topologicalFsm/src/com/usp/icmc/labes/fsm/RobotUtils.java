@@ -259,7 +259,7 @@ public class RobotUtils {
 
 	}
 
-	List<FsmTransition> getPath(FsmState state){
+	public List<FsmTransition> getPath(FsmState state){
 		List<FsmTransition> path = new LinkedList<FsmTransition>();
 		while (!state.getIn().isEmpty()) {
 			((LinkedList<FsmTransition>) path).push(state.getIn().get(0));
