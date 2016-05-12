@@ -99,8 +99,8 @@ public class TopologicalFsm {
 		Option nOption		 	= new Option(N_PARAMETER, 			true,	"size of the map. The map is squared.");
 		Option seedOption 		= new Option(SEED_PARAMETER, 		true, 	"Custom seed. Random seed set as default.");
 		Option posOption 		= new Option(POS_PARAMETER, 		true, 	"Robot custom position. Random position set as default.");
-		Option saveDataOption 	= new Option(SAVE_PARAMETER, 		true, 	"Saves data generated.");
-		Option showWindowOption = new Option(SHOW_WINDOW_PARAMETER, true, 	"Show window.");
+		Option saveDataOption 	= new Option(SAVE_PARAMETER, 		false, 	"Saves data generated.");
+		Option showWindowOption = new Option(SHOW_WINDOW_PARAMETER, false, 	"Show window.");
 		
 
 		options.addOption(nOption);
