@@ -74,8 +74,6 @@ public class TopologicalFsm {
 			RobotUtils.getInstance().saveLocationTreeAsDot(maze, new File(folder,fname+"_locationTree.dot"));
 			//MazeUtils.getInstance().saveMaze(new File(folder,fname+"topomap.txt"), maze);
 			
-			StdDraw.text(0.5, 0.5, "TESTE!");
-			
 		} catch (Exception e1) {
 			e1.printStackTrace();
 		}

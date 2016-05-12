@@ -9,8 +9,10 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.PriorityQueue;
 import java.util.Queue;
 import java.util.Set;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -105,7 +107,7 @@ public class RobotUtils {
 
 	public void saveTopoMap(Maze mz, File f) throws IOException{
 		Robot r = mz.getRobot();
-		
+
 		BufferedWriter bw = new BufferedWriter(new FileWriter(f));
 
 		bw.write("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?><!--Created with JFLAP 6.4.--><structure>"); bw.write("\n");
@@ -156,7 +158,7 @@ public class RobotUtils {
 		bw.write("			<x>"+(0)+"</x>"); bw.write("\n");
 		bw.write("			<y>"+(0)+"</y>"); bw.write("\n");
 		bw.write("		</note>");bw.write("\n");
- 		
+
 		bw.write("	</automaton>");bw.write("\n");
 		bw.write("</structure>");
 
@@ -239,7 +241,7 @@ public class RobotUtils {
 	public void createHomingTree(Maze mz) {
 		createTree(mz, TreeType.HOMING_TREE);
 	}
-	
+
 	public void createTree(Maze mz, TreeType tt) {
 		CurrentStateUncertainty uncert = new CurrentStateUncertainty("0");
 		for (FsmState s : mz.getRobot().getTopoMap().getStates())  uncert.getUncertaintySet().add(s);
@@ -247,25 +249,70 @@ public class RobotUtils {
 		mz.getRobot().getSyncTree().addState(uncert);
 
 		createTree(mz.getRobot().getSyncTree(),tt);
+
+		FsmState closestLeaf = depthClosestSingleton(mz.getRobot().getSyncTree());
+		FsmState farestLeaf  = depthFarestSingleton(mz.getRobot().getSyncTree());
+
+		mz.getRobot().getSyncTree().setClosestSingleton(getPath(closestLeaf));
+		mz.getRobot().getSyncTree().setFarestSingleton(getPath(farestLeaf));
 		
-		int closestLeaf = depthClosestSingleton(mz.getRobot().getSyncTree());
-		int farestLeaf  = depthFarestSingleton(mz.getRobot().getSyncTree());
+		System.out.println(mz.getRobot().getSyncTree().getClosestSingleton());
+		System.out.println(mz.getRobot().getSyncTree().getFarestSingleton());
 		
 		mz.getRobot().getSyncTree().setName("LocationTree='"+tt.name()+"';"+"seed="+mz.getSeed()+"';"+"N="+mz.getN());
-		
+
 	}
 
-
-	private int depthClosestSingleton(TopologicalLocationTree tree) {
-		// TODO Auto-generated method stub
-		return 0;
+	List<FsmTransition> getPath(FsmState state){
+		List<FsmTransition> path = new LinkedList<FsmTransition>();
+		while (!state.getIn().isEmpty()) {
+			((LinkedList) path).push(state.getIn().get(0));
+			state = state.getIn().get(0).getFrom();
+		}
+		return path;
 	}
 
-	private int depthFarestSingleton(TopologicalLocationTree tree) {
-		// TODO Auto-generated method stub
-		return 0;
+	private FsmState depthClosestSingleton(TopologicalLocationTree tree) {
+		int depth = Integer.MAX_VALUE;
+		FsmState stateToReturn = null;
+
+		for (FsmState state : tree.getStates()) {
+			FsmState temp = state;
+			if(((CurrentStateUncertainty)state).getUncertaintySet().size()==1){
+				int counter = 0;
+				while (!state.getIn().isEmpty()) {
+					state = state.getIn().get(0).getFrom();
+					counter++;
+				}
+				if(depth>counter) {
+					depth = counter;
+					stateToReturn = temp;
+				}
+			}
+		}
+		return stateToReturn;
 	}
 
+	private FsmState depthFarestSingleton(TopologicalLocationTree tree) {
+		int depth = 0;
+		FsmState stateToReturn = null;
+
+		for (FsmState state : tree.getStates()) {
+			FsmState temp = state;
+			if(((CurrentStateUncertainty)state).getUncertaintySet().size()==1){
+				int counter = 0;
+				while (!state.getIn().isEmpty()) {
+					state = state.getIn().get(0).getFrom();
+					counter++;
+				}
+				if(depth<counter) {
+					depth = counter;
+					stateToReturn = temp;
+				}
+			}
+		}
+		return stateToReturn;
+	}
 
 	private enum TreeType {
 		SYNCHRONIZING_TREE,
@@ -292,7 +339,7 @@ public class RobotUtils {
 		String io = null;
 		boolean isSingleton,criteria3b;
 
-		
+
 		while (!uncertLst.isEmpty()) {
 			state = uncertLst.remove();
 			if(aboveLevel.contains(state.getUncertaintySet())) continue;

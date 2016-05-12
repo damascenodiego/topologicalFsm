@@ -241,6 +241,13 @@ public class Maze {
 		StdDraw.show(1000);
 	}
 
+	public void writeText(double x, double y, String txt){
+		StdDraw.setPenColor(StdDraw.MAGENTA);
+		StdDraw.setFont(smallFont);
+		StdDraw.text(x, y, txt);
+		StdDraw.setFont(defaultFont);
+		StdDraw.show(1000);
+	}
 
 	private void fillCurrent() {
 		StdDraw.setPenColor(StdDraw.RED);
