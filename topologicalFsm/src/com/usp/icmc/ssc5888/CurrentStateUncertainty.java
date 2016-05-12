@@ -1,8 +1,6 @@
 package com.usp.icmc.ssc5888;
 
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import com.usp.icmc.labes.fsm.FsmState;
@@ -29,7 +27,7 @@ public class CurrentStateUncertainty extends FsmState {
 
 	@Override
 	public int hashCode() {
-		final int prime = 31;
+		//final int prime = 31;
 		int result = super.hashCode();
 		//result = prime * result + ((uncertaintySet == null) ? 0 : uncertaintySet.hashCode());
 		return result;

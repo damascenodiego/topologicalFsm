@@ -4,7 +4,7 @@ public class Robot {
 	
 	private String name;
 	
-	private TopologicalLocationTree topoTree;
+	private TopologicalLocationTree locationTree;
 
 	private TopologicalMap topoMap;
 	
@@ -39,14 +39,14 @@ public class Robot {
 	}
 
 	private void setupsyncTree() {
-		topoTree = new TopologicalLocationTree(getName()+"_LocationTree");
+		locationTree = new TopologicalLocationTree(getName()+"_LocationTree");
 		
 		for (Commands c : Commands.values()) {
-			topoTree.addInput(c.toString());
+			locationTree.addInput(c.toString());
 		}
 		
-		topoTree.addOutputs(Boolean.TRUE.toString());
-		topoTree.addOutputs(Boolean.FALSE.toString());
+		locationTree.addOutputs(Boolean.TRUE.toString());
+		locationTree.addOutputs(Boolean.FALSE.toString());
 		
 	}
 
@@ -54,8 +54,8 @@ public class Robot {
 		return name;
 	}
 	
-	public TopologicalLocationTree getSyncTree() {
-		return topoTree;
+	public TopologicalLocationTree getLocationTree() {
+		return locationTree;
 	}
 	
 	public TopologicalMap getTopoMap() {

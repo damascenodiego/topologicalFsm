@@ -9,7 +9,7 @@ public class FsmTransition{
 	
 	private FsmState to;
 	
-	private FsmTransition(){ }
+	public FsmTransition(){ }
 	
 	public FsmTransition(FsmState f, String in, String out, FsmState t) {
 		from = f;

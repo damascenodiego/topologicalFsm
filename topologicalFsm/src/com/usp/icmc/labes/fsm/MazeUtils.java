@@ -7,8 +7,6 @@ import java.io.IOException;
 
 import com.usp.icmc.ssc5888.Maze;
 
-import edu.princeton.cs.algs4.StdDraw;
-
 public class MazeUtils {
 
 	private static MazeUtils instance;

@@ -1,6 +1,5 @@
 package com.usp.icmc.labes.fsm;
 
-import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
@@ -12,12 +11,9 @@ import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.PriorityQueue;
 import java.util.Queue;
 import java.util.Set;
 import java.util.concurrent.LinkedBlockingQueue;
-
-import org.omg.CORBA.Current;
 
 import com.usp.icmc.ssc5888.CurrentStateUncertainty;
 import com.usp.icmc.ssc5888.Maze;
@@ -177,11 +173,11 @@ public class RobotUtils {
 
 
 
-		for (FsmState s: r.getSyncTree().getStates()) {
+		for (FsmState s: r.getLocationTree().getStates()) {
 			bw.write("		<state id=\""+s.getId()+"\" name=\""+((CurrentStateUncertainty)s).getUncertaintySet().toString()+"\">");bw.write("\n");
 			bw.write("			<x>"+(0)+"</x>"); bw.write("\n");
 			bw.write("			<y>"+(0)+"</y>"); bw.write("\n");
-			if(s.equals(r.getSyncTree().getInitialState())) {
+			if(s.equals(r.getLocationTree().getInitialState())) {
 				bw.write("			<initial/>");bw.write("\n");
 			}
 			bw.write("		</state>");bw.write("\n");
@@ -190,7 +186,7 @@ public class RobotUtils {
 
 		bw.write("		<!--The list of transitions.-->");bw.write("\n");
 
-		for (FsmTransition tr: r.getSyncTree().getTransitions()) {
+		for (FsmTransition tr: r.getLocationTree().getTransitions()) {
 			bw.write("		<transition>");bw.write("\n");
 			bw.write("			<from>"+tr.getFrom().getId()+"</from>");bw.write("\n");
 			bw.write("			<to>"+tr.getTo().getId()+"</to>");bw.write("\n");
@@ -201,7 +197,7 @@ public class RobotUtils {
 		}
 
 		bw.write("		<note>");bw.write("\n");
-		bw.write("			<text>"+mz.getRobot().getSyncTree().getName()+"</text>");bw.write("\n");
+		bw.write("			<text>"+mz.getRobot().getLocationTree().getName()+"</text>");bw.write("\n");
 		bw.write("			<x>"+(0)+"</x>"); bw.write("\n");
 		bw.write("			<y>"+(0)+"</y>"); bw.write("\n");
 		bw.write("		</note>");bw.write("\n");
@@ -218,7 +214,7 @@ public class RobotUtils {
 		PrintWriter pw = new PrintWriter(f);
 
 		pw.println("digraph rbac2Fsm {");
-		List<FsmTransition> transit = r.getSyncTree().getTransitions();
+		List<FsmTransition> transit = r.getLocationTree().getTransitions();
 		for (FsmTransition tr : transit) {
 			if(tr.getOutput().equals("deny")) continue;
 			pw.println("  "+
@@ -228,7 +224,7 @@ public class RobotUtils {
 					+" [ label =\""+tr.getInput()+"/"+tr.getOutput()+"\"];");
 		}
 
-		for (FsmState st : r.getSyncTree().getStates()) {
+		for (FsmState st : r.getLocationTree().getStates()) {
 			pw.println("  "+st.getId()+" [label=\""+((CurrentStateUncertainty)st).getUncertaintySet().toString()+"\"];");
 		}
 		pw.println("}");
@@ -246,27 +242,27 @@ public class RobotUtils {
 		CurrentStateUncertainty uncert = new CurrentStateUncertainty("0");
 		for (FsmState s : mz.getRobot().getTopoMap().getStates())  uncert.getUncertaintySet().add(s);
 
-		mz.getRobot().getSyncTree().addState(uncert);
+		mz.getRobot().getLocationTree().addState(uncert);
 
-		createTree(mz.getRobot().getSyncTree(),tt);
+		createTree(mz.getRobot().getLocationTree(),tt);
 
-		FsmState closestLeaf = depthClosestSingleton(mz.getRobot().getSyncTree());
-		FsmState farestLeaf  = depthFarestSingleton(mz.getRobot().getSyncTree());
+		FsmState closestLeaf = depthClosestSingleton(mz.getRobot().getLocationTree());
+		FsmState farestLeaf  = depthFarestSingleton(mz.getRobot().getLocationTree());
 
-		mz.getRobot().getSyncTree().setClosestSingleton(getPath(closestLeaf));
-		mz.getRobot().getSyncTree().setFarestSingleton(getPath(farestLeaf));
+		mz.getRobot().getLocationTree().setClosestSingleton(getPath(closestLeaf));
+		mz.getRobot().getLocationTree().setFarestSingleton(getPath(farestLeaf));
 		
-		System.out.println(mz.getRobot().getSyncTree().getClosestSingleton());
-		System.out.println(mz.getRobot().getSyncTree().getFarestSingleton());
+//		System.out.println(mz.getRobot().getLocationTree().getClosestSingleton());
+//		System.out.println(mz.getRobot().getLocationTree().getFarestSingleton());
 		
-		mz.getRobot().getSyncTree().setName("LocationTree='"+tt.name()+"';"+"seed="+mz.getSeed()+"';"+"N="+mz.getN());
+		mz.getRobot().getLocationTree().setName("LocationTree='"+tt.name()+"';"+"seed="+mz.getSeed()+"';"+"N="+mz.getN());
 
 	}
 
 	List<FsmTransition> getPath(FsmState state){
 		List<FsmTransition> path = new LinkedList<FsmTransition>();
 		while (!state.getIn().isEmpty()) {
-			((LinkedList) path).push(state.getIn().get(0));
+			((LinkedList<FsmTransition>) path).push(state.getIn().get(0));
 			state = state.getIn().get(0).getFrom();
 		}
 		return path;
