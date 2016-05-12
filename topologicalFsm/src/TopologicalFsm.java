@@ -83,8 +83,6 @@ public class TopologicalFsm {
 				//MazeUtils.getInstance().saveMaze(new File(folder,fname+"topomap.txt"), maze);
 			}
 			
-			System.exit(0);
-			
 		} catch (Exception e1) {
 			e1.printStackTrace();
 			System.exit(1);
