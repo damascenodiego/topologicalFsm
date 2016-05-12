@@ -26,6 +26,8 @@ public class TopologicalFsm {
 	private static final String 	POS_PARAMETER 			= "pos";
 	private static final String 	SAVE_PARAMETER 			= "save";
 	private static final String 	SHOW_WINDOW_PARAMETER	= "window";
+	private static final String 	CLOSE_PARAMETER			= "close";
+	
 
 
 	public static void main(String[] args) {
@@ -139,7 +141,7 @@ public class TopologicalFsm {
 					}
 				}
 			}
-
+			if(cmd.hasOption(CLOSE_PARAMETER)) System.exit(0);
 		} catch (Exception e1) {
 			e1.printStackTrace();
 			System.exit(1);
@@ -156,6 +158,7 @@ public class TopologicalFsm {
 		Option posOption 		= new Option(POS_PARAMETER, 		true, 	"Robot custom position. Random position set as default.");
 		Option saveDataOption 	= new Option(SAVE_PARAMETER, 		false, 	"Saves data generated.");
 		Option showWindowOption = new Option(SHOW_WINDOW_PARAMETER, false, 	"Show window.");
+		Option windowCloseOption = new Option(CLOSE_PARAMETER, false, 	"Close window.");
 
 
 		options.addOption(nOption);
@@ -163,6 +166,7 @@ public class TopologicalFsm {
 		options.addOption(posOption);
 		options.addOption(saveDataOption);
 		options.addOption(showWindowOption);
+		options.addOption(windowCloseOption);
 
 	}
 
