@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
-import com.usp.icmc.ssc5888.CurrentStateUncertainty;
-
 public class HomingTree extends FsmModel{
 	
 	CurrentStateUncertaintyHomingTree singletonNodes;

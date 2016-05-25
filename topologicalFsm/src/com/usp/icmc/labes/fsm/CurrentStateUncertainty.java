@@ -5,7 +5,7 @@ import java.util.Set;
 
 import com.usp.icmc.labes.fsm.FsmState;
 
-public class CurrentStateUncertainty extends FsmState {
+public class CurrentStateUncertainty extends FsmState implements ICurrentStateUncertainty {
 	
 	private Set<FsmState> uncertaintySet;
 
@@ -52,7 +52,8 @@ public class CurrentStateUncertainty extends FsmState {
 	}
 
 
-
-	
-
+	@Override
+	public String toString() {
+		return uncertaintySet.toString();
+	}
 }

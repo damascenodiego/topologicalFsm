@@ -3,6 +3,7 @@ package com.usp.icmc.ssc5888;
 import java.util.Collections;
 
 import com.usp.icmc.labes.fsm.FsmModel;
+import com.usp.icmc.labes.fsm.HomingTree;
 
 public class Robot {
 	
@@ -43,7 +44,7 @@ public class Robot {
 	}
 
 	private void setupsyncTree() {
-		locationTree = new TopologicalLocationTree(getName()+"_LocationTree");
+		locationTree = new HomingTree(getName()+"_HomingTree");
 		
 		for (Commands c : Commands.values()) {
 			locationTree.addInput(c.toString());

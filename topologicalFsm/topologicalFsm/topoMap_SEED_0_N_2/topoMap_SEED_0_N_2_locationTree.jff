@@ -2,168 +2,168 @@
 	<type>mealy</type>
 	<automaton>
 		<!--The list of states.-->
-		<state id="0" name="[2,1, 2,2, 1,1, 1,2]_{EMPTY} ">
+		<state id="0" name="[2,1, 2,2, 1,1, 1,2]">
 			<x>0</x>
 			<y>0</y>
 			<initial/>
 		</state>
-		<state id="1" name="[2,2, 1,2]_{EMPTY,true} [2,1, 1,1]_{EMPTY,false} ">
+		<state id="1" name="[2,1, 2,2, 1,1, 1,2]">
 			<x>200</x>
 			<y>100</y>
 		</state>
-		<state id="2" name="[2,1, 1,1]_{EMPTY,true} [2,2, 1,2]_{EMPTY,false} ">
+		<state id="2" name="[2,1, 2,2, 1,1, 1,2]">
 			<x>300</x>
 			<y>100</y>
 		</state>
-		<state id="3" name="[2,1, 1,1, 1,2]_{EMPTY,true} [2,2]_{EMPTY,false} ">
+		<state id="3" name="[2,1, 2,2, 1,1, 1,2]">
 			<x>400</x>
 			<y>100</y>
 		</state>
-		<state id="4" name="[2,1, 2,2, 1,1]_{EMPTY,true} [1,2]_{EMPTY,false} ">
+		<state id="4" name="[2,1, 2,2, 1,1, 1,2]">
 			<x>500</x>
 			<y>100</y>
 		</state>
-		<state id="5" name="[2,2, 1,2]_{EMPTY,true} [2,2, 1,2]_{EMPTY,false} ">
+		<state id="5" name="[2,2, 1,2]">
 			<x>600</x>
 			<y>100</y>
 		</state>
-		<state id="6" name="[2,1, 1,1]_{EMPTY,true} [2,1, 1,1]_{EMPTY,false} ">
+		<state id="6" name="[2,1, 1,1]">
 			<x>700</x>
 			<y>100</y>
 		</state>
-		<state id="7" name="[2,1, 1,1, 1,2]_{EMPTY,true} [1,2]_{EMPTY,false} ">
+		<state id="7" name="[2,1, 1,1, 1,2]">
 			<x>800</x>
 			<y>100</y>
 		</state>
-		<state id="8" name="[2,1, 2,2, 1,1]_{EMPTY,true} [2,2]_{EMPTY,false} ">
+		<state id="8" name="[2,1, 2,2, 1,1]">
 			<x>900</x>
 			<y>100</y>
 		</state>
-		<state id="9" name="[2,2, 1,2]_{EMPTY,false,true} [2,2, 1,2]_{EMPTY,true,true} ">
+		<state id="9" name="[2,2, 1,2]">
 			<x>200</x>
 			<y>600</y>
 		</state>
-		<state id="10" name="[2,2, 1,2]_{EMPTY,true,false} [2,2, 1,2]_{EMPTY,false,false} ">
+		<state id="10" name="[2,2, 1,2]">
 			<x>300</x>
 			<y>600</y>
 		</state>
-		<state id="11" name="[1,2]_{EMPTY,false,true} [1,2]_{EMPTY,true,true} [2,2]_{EMPTY,true,false} [2,2]_{EMPTY,false,false} ">
+		<state id="11" name="[2,2, 1,2]">
 			<x>400</x>
 			<y>600</y>
 		</state>
-		<state id="12" name="[2,2]_{EMPTY,false,true} [2,2]_{EMPTY,true,true} [1,2]_{EMPTY,true,false} [1,2]_{EMPTY,false,false} ">
+		<state id="12" name="[2,2, 1,2]">
 			<x>500</x>
 			<y>600</y>
 		</state>
-		<state id="13" name="[2,2, 1,2]_{EMPTY,false,true} [2,2, 1,2]_{EMPTY,true,true} ">
+		<state id="13" name="[2,2, 1,2]">
 			<x>600</x>
 			<y>600</y>
 		</state>
-		<state id="14" name="[2,1, 1,1]_{EMPTY,true,false} [2,1, 1,1]_{EMPTY,false,false} ">
+		<state id="14" name="[2,1, 1,1]">
 			<x>700</x>
 			<y>600</y>
 		</state>
-		<state id="15" name="[1,2]_{EMPTY,false,true} [1,2]_{EMPTY,true,true} [1,2]_{EMPTY,true,false} [1,2]_{EMPTY,false,false} ">
+		<state id="15" name="[1,2]">
 			<x>800</x>
 			<y>600</y>
 		</state>
-		<state id="16" name="[2,2]_{EMPTY,false,true} [2,2]_{EMPTY,true,true} [2,2]_{EMPTY,true,false} [2,2]_{EMPTY,false,false} ">
+		<state id="16" name="[2,2]">
 			<x>900</x>
 			<y>600</y>
 		</state>
-		<state id="17" name="[2,1, 1,1]_{EMPTY,true,false} [2,1, 1,1]_{EMPTY,false,false} ">
+		<state id="17" name="[2,1, 1,1]">
 			<x>200</x>
 			<y>700</y>
 		</state>
-		<state id="18" name="[2,1, 1,1]_{EMPTY,false,true} [2,1, 1,1]_{EMPTY,true,true} ">
+		<state id="18" name="[2,1, 1,1]">
 			<x>300</x>
 			<y>700</y>
 		</state>
-		<state id="19" name="[2,1, 1,1]_{EMPTY,false,true} [2,1, 1,1]_{EMPTY,true,true} ">
+		<state id="19" name="[2,1, 1,1]">
 			<x>400</x>
 			<y>700</y>
 		</state>
-		<state id="20" name="[2,1, 1,1]_{EMPTY,false,true} [2,1, 1,1]_{EMPTY,true,true} ">
+		<state id="20" name="[2,1, 1,1]">
 			<x>500</x>
 			<y>700</y>
 		</state>
-		<state id="21" name="[2,2, 1,2]_{EMPTY,true,false} [2,2, 1,2]_{EMPTY,false,false} ">
+		<state id="21" name="[2,2, 1,2]">
 			<x>600</x>
 			<y>700</y>
 		</state>
-		<state id="22" name="[2,1, 1,1]_{EMPTY,false,true} [2,1, 1,1]_{EMPTY,true,true} ">
+		<state id="22" name="[2,1, 1,1]">
 			<x>700</x>
 			<y>700</y>
 		</state>
-		<state id="23" name="[2,1, 1,1]_{EMPTY,false,true} [2,1, 1,1]_{EMPTY,true,true} ">
+		<state id="23" name="[2,1, 1,1]">
 			<x>800</x>
 			<y>700</y>
 		</state>
-		<state id="24" name="[2,1, 1,1]_{EMPTY,false,true} [2,1, 1,1]_{EMPTY,true,true} ">
+		<state id="24" name="[2,1, 1,1]">
 			<x>900</x>
 			<y>700</y>
 		</state>
-		<state id="25" name="[1,2]_{EMPTY,false,true} [1,2]_{EMPTY,true,true} [2,1, 1,1]_{EMPTY,true,false} ">
+		<state id="25" name="[2,1, 1,1, 1,2]">
 			<x>200</x>
 			<y>800</y>
 		</state>
-		<state id="26" name="[2,1, 1,1]_{EMPTY,true,true} [1,2]_{EMPTY,true,false} [1,2]_{EMPTY,false,false} ">
+		<state id="26" name="[2,1, 1,1, 1,2]">
 			<x>300</x>
 			<y>800</y>
 		</state>
-		<state id="27" name="[1,2]_{EMPTY,false,true} [2,1, 1,1, 1,2]_{EMPTY,true,true} ">
+		<state id="27" name="[2,1, 1,1, 1,2]">
 			<x>400</x>
 			<y>800</y>
 		</state>
-		<state id="28" name="[2,1, 1,1]_{EMPTY,true,true} [1,2]_{EMPTY,true,false} [1,2]_{EMPTY,false,false} ">
+		<state id="28" name="[2,1, 1,1, 1,2]">
 			<x>500</x>
 			<y>800</y>
 		</state>
-		<state id="29" name="[1,2]_{EMPTY,false,true} [1,2]_{EMPTY,true,true} [2,2, 1,2]_{EMPTY,true,false} ">
+		<state id="29" name="[2,2, 1,2]">
 			<x>600</x>
 			<y>800</y>
 		</state>
-		<state id="30" name="[2,1, 1,1]_{EMPTY,true,true} [1,1]_{EMPTY,true,false} [1,1]_{EMPTY,false,false} ">
+		<state id="30" name="[2,1, 1,1]">
 			<x>700</x>
 			<y>800</y>
 		</state>
-		<state id="31" name="[1,2]_{EMPTY,false,true} [2,1, 1,1, 1,2]_{EMPTY,true,true} ">
+		<state id="31" name="[2,1, 1,1, 1,2]">
 			<x>800</x>
 			<y>800</y>
 		</state>
-		<state id="32" name="[2,1, 1,1]_{EMPTY,true,true} [2,2]_{EMPTY,true,false} [2,2]_{EMPTY,false,false} ">
+		<state id="32" name="[2,1, 2,2, 1,1]">
 			<x>900</x>
 			<y>800</y>
 		</state>
-		<state id="33" name="[2,2]_{EMPTY,false,true} [2,2]_{EMPTY,true,true} [2,1, 1,1]_{EMPTY,true,false} ">
+		<state id="33" name="[2,1, 2,2, 1,1]">
 			<x>200</x>
 			<y>900</y>
 		</state>
-		<state id="34" name="[2,1, 1,1]_{EMPTY,true,true} [2,2]_{EMPTY,true,false} [2,2]_{EMPTY,false,false} ">
+		<state id="34" name="[2,1, 2,2, 1,1]">
 			<x>300</x>
 			<y>900</y>
 		</state>
-		<state id="35" name="[2,1, 1,1]_{EMPTY,true,true} [2,2]_{EMPTY,true,false} [2,2]_{EMPTY,false,false} ">
+		<state id="35" name="[2,1, 2,2, 1,1]">
 			<x>400</x>
 			<y>900</y>
 		</state>
-		<state id="36" name="[2,2]_{EMPTY,false,true} [2,1, 2,2, 1,1]_{EMPTY,true,true} ">
+		<state id="36" name="[2,1, 2,2, 1,1]">
 			<x>500</x>
 			<y>900</y>
 		</state>
-		<state id="37" name="[2,2]_{EMPTY,false,true} [2,2]_{EMPTY,true,true} [2,2, 1,2]_{EMPTY,true,false} ">
+		<state id="37" name="[2,2, 1,2]">
 			<x>600</x>
 			<y>900</y>
 		</state>
-		<state id="38" name="[2,1, 1,1]_{EMPTY,true,true} [2,1]_{EMPTY,true,false} [2,1]_{EMPTY,false,false} ">
+		<state id="38" name="[2,1, 1,1]">
 			<x>700</x>
 			<y>900</y>
 		</state>
-		<state id="39" name="[2,1, 1,1]_{EMPTY,true,true} [1,2]_{EMPTY,true,false} [1,2]_{EMPTY,false,false} ">
+		<state id="39" name="[2,1, 1,1, 1,2]">
 			<x>800</x>
 			<y>900</y>
 		</state>
-		<state id="40" name="[2,2]_{EMPTY,false,true} [2,1, 2,2, 1,1]_{EMPTY,true,true} ">
+		<state id="40" name="[2,1, 2,2, 1,1]">
 			<x>900</x>
 			<y>900</y>
 		</state>

@@ -14,7 +14,7 @@ import com.usp.icmc.labes.fsm.FsmTransition;
 import com.usp.icmc.labes.fsm.HomingTree;
 import com.usp.icmc.labes.fsm.MazeUtils;
 import com.usp.icmc.labes.fsm.RobotUtils;
-import com.usp.icmc.ssc5888.CurrentStateUncertainty;
+import com.usp.icmc.labes.fsm.SynchronizingTree;
 import com.usp.icmc.ssc5888.Maze;
 
 import edu.princeton.cs.algs4.StdDraw;
@@ -80,9 +80,9 @@ public class TopologicalFsm {
 			maze.draw();
 
 			Date di = new Date();
-			RobotUtils.getInstance().createHomingTree(maze);
+			RobotUtils.getInstance().createSynchronizingTree(maze);
 			Date df = new Date();
-			HomingTree ht = (HomingTree) maze.getRobot().getLocationTree();
+			SynchronizingTree ht = (SynchronizingTree) maze.getRobot().getLocationTree();
 
 //			System.out.println("ClosestSingleton:\t"+ht.getClosestSingleton().size());
 //			System.out.println("FarestSingleton:\t"+ht.getFarestSingleton().size());
