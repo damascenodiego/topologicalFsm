@@ -6,6 +6,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 
 import com.usp.icmc.ssc5888.Maze;
+import com.usp.icmc.ssc5888.TopologicalMap;
 
 public class MazeUtils {
 
@@ -20,7 +21,7 @@ public class MazeUtils {
 
 	public FsmModel extractTopologicalMap(Maze maze){
 
-		FsmModel topoMap = new FsmModel();
+		FsmModel topoMap = new TopologicalMap();
 
 		return topoMap;
 	}

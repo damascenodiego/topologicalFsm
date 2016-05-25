@@ -12,4 +12,16 @@ public class TopologicalMap extends FsmModel{
 	public TopologicalMap(String s) {
 		super(s);
 	}
+
+	@Override
+	public int hashCode() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		// TODO Auto-generated method stub
+		return false;
+	}
 }

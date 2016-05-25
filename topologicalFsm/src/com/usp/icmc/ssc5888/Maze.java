@@ -3,6 +3,7 @@ package com.usp.icmc.ssc5888;
 import java.awt.Color;
 import java.awt.Font;
 
+import com.usp.icmc.labes.fsm.CurrentStateUncertaintyHomingTree;
 import com.usp.icmc.labes.fsm.DrawUtils;
 import com.usp.icmc.labes.fsm.FsmState;
 import com.usp.icmc.labes.fsm.FsmTransition;
@@ -266,7 +267,7 @@ public class Maze {
 		//StdDraw.show(1000);
 	}
 
-	public void fillCurrent(CurrentStateUncertainty csu) {
+	public void fillCurrent(CurrentStateUncertaintyHomingTree csu) {
 		if(!DrawUtils.getInstance().getShowWindow()) return;
 
 		for (FsmState un : csu.getUncertaintySet()) {

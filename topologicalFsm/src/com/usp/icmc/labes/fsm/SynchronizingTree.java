@@ -1,23 +1,25 @@
-package com.usp.icmc.ssc5888;
+package com.usp.icmc.labes.fsm;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
-import com.usp.icmc.labes.fsm.FsmModel;
-import com.usp.icmc.labes.fsm.FsmTransition;
+import com.usp.icmc.ssc5888.CurrentStateUncertainty;
 
-public class TopologicalLocationTree extends FsmModel{
+public class SynchronizingTree extends FsmModel{
 	
 	CurrentStateUncertainty singletonNodes;
 	
 	List<FsmTransition> closestSingleton;
 	List<FsmTransition> farestSingleton;
 	
-	public TopologicalLocationTree() {
-		this(null);
+	public SynchronizingTree() {
+		super();
+		closestSingleton = new LinkedList<FsmTransition>();
+		farestSingleton = new LinkedList<FsmTransition>();
 	}
 	
-	public TopologicalLocationTree(String n) {
+	public SynchronizingTree(String n) {
 		super(n);
 		closestSingleton = new LinkedList<FsmTransition>();
 		farestSingleton = new LinkedList<FsmTransition>();
@@ -40,16 +42,17 @@ public class TopologicalLocationTree extends FsmModel{
 		this.farestSingleton = farestSingleton;
 	}
 
+
 	@Override
 	public int hashCode() {
-		// TODO Auto-generated method stub
-		return 0;
+		int result = 1;
+		return result;
 	}
-
 	@Override
 	public boolean equals(Object obj) {
-		// TODO Auto-generated method stub
-		return false;
+		return true;
 	}
-
+	
+	
+	
 }

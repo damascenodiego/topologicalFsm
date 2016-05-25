@@ -1,10 +1,14 @@
 package com.usp.icmc.ssc5888;
 
+import java.util.Collections;
+
+import com.usp.icmc.labes.fsm.FsmModel;
+
 public class Robot {
 	
 	private String name;
 	
-	private TopologicalLocationTree locationTree;
+	private FsmModel locationTree;
 
 	private TopologicalMap topoMap;
 	
@@ -14,8 +18,8 @@ public class Robot {
 	
 	
 	public enum Commands {
-		MOVE_NORTH,		MOVE_SOUTH,		MOVE_WEST,	MOVE_EAST,
-		CHECK_NORTH,	CHECK_SOUTH,	CHECK_WEST,	CHECK_EAST};
+		CHECK_NORTH,	CHECK_SOUTH,	CHECK_WEST,	CHECK_EAST,
+		MOVE_NORTH,		MOVE_SOUTH,		MOVE_WEST,	MOVE_EAST,};
 	
 	
 	public Robot(String name){
@@ -32,7 +36,7 @@ public class Robot {
 		for (Commands c : Commands.values()) {
 			topoMap.addInput(c.toString());
 		}
-		
+		Collections.sort(topoMap.getInputs());
 		topoMap.addOutputs(Boolean.TRUE.toString());
 		topoMap.addOutputs(Boolean.FALSE.toString());
 		
@@ -54,8 +58,12 @@ public class Robot {
 		return name;
 	}
 	
-	public TopologicalLocationTree getLocationTree() {
+	public FsmModel getLocationTree() {
 		return locationTree;
+	}
+	
+	public void setLocationTree(FsmModel locationTree) {
+		this.locationTree = locationTree;
 	}
 	
 	public TopologicalMap getTopoMap() {

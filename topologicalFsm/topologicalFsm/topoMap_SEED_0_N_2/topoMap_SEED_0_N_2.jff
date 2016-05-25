@@ -212,5 +212,10 @@
 			<read>MOVE_SOUTH</read>
 			<transout>false</transout>
 		</transition>
+		<note>
+			<text>seed=0';N=2</text>
+			<x>0</x>
+			<y>0</y>
+		</note>
 	</automaton>
 </structure>
