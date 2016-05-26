@@ -289,7 +289,6 @@ public class RobotUtils {
 					allSingletonCurr.putIfAbsent(stUncert.getId(), stUncert);
 				}
 			}
-
 			if(uncertLst.isEmpty()) {
 				aboveLevel.addAll(nextAboveLevel);
 				uncertLst.addAll(next);
@@ -297,7 +296,10 @@ public class RobotUtils {
 				nextAboveLevel.clear();
 			}
 		}
+		//System.out.println(allCurr); System.out.println(allTr);
 
+		//		for (String curId : allSingletonCurr.keySet()) addState(syncTree,allCurr.get(curId));
+		//
 		Set<FsmTransition> allSingletonTr = new HashSet<FsmTransition>();
 		Map<String,FsmState> allSingletonStates = new HashMap<>();
 		for (String curId : allSingletonCurr.keySet()) {
@@ -316,9 +318,9 @@ public class RobotUtils {
 		//		for (String curId : allCurr.keySet()) syncTree.getStates().add(allCurr.get(curId)); 
 		//		syncTree.getTransitions().addAll(allTr);
 		//
-		FsmState closestLeaf = depthClosestSingleton(mz.getRobot().getLocationTree());
-		FsmState farestLeaf  = depthFarestSingleton(mz.getRobot().getLocationTree());
-		//
+		FsmState closestLeaf = depthClosestSingleton(tree);
+		FsmState farestLeaf  = depthFarestSingleton(tree);
+
 		tree.setClosestSingleton(getPath(closestLeaf));
 		tree.setFarestSingleton(getPath(farestLeaf));
 
@@ -395,7 +397,7 @@ public class RobotUtils {
 					next.add(stUncert);
 				}
 
-				if(anySingleton(stUncert)) {
+				if(criteria3a) {
 					allSingletonCurr.putIfAbsent(stUncert.getId(), stUncert);
 				}
 			}
@@ -411,23 +413,26 @@ public class RobotUtils {
 		//		for (String curId : allSingletonCurr.keySet()) addState(syncTree,allCurr.get(curId));
 		//
 		Set<FsmTransition> allSingletonTr = new HashSet<FsmTransition>();
-		Set<FsmState> allSingletonStatesSet = new HashSet<FsmState>();
+		Map<String,FsmState> allSingletonStates = new HashMap<>();
 		for (String curId : allSingletonCurr.keySet()) {
 			FsmState s = allSingletonCurr.get(curId);
-			allSingletonStatesSet.add(s);
+			allSingletonStates.putIfAbsent(s.getId(),s);
 			while (s.getIn().size()!=0) {
 				allSingletonTr.add(s.getIn().get(0));
 				s = s.getIn().get(0).getFrom();
-				allSingletonStatesSet.add(s);
+				allSingletonStates.putIfAbsent(s.getId(),s);
 			}
 		}
 		tree.getTransitions().addAll(allSingletonTr);
-		tree.getStates().addAll(allSingletonStatesSet);
-
+		tree.getStates().clear();
+		tree.getStates().addAll(allSingletonStates.values());
+		//
+		//		for (String curId : allCurr.keySet()) syncTree.getStates().add(allCurr.get(curId)); 
+		//		syncTree.getTransitions().addAll(allTr);
 		//
 		FsmState closestLeaf = depthClosestSingleton(tree);
 		FsmState farestLeaf  = depthFarestSingleton(tree);
-		//
+
 		tree.setClosestSingleton(getPath(closestLeaf));
 		tree.setFarestSingleton(getPath(farestLeaf));
 
@@ -452,8 +457,8 @@ public class RobotUtils {
 		FsmState stateToReturn = null;
 
 		for (FsmState state : fsmModel.getStates()) {
-			CurrentStateUncertainty temp = (CurrentStateUncertainty) state;
-			if(criteria3a(temp)){
+			FsmState temp = state;
+			if(anySingleton(temp)){
 				int counter = 0;
 				while (!state.getIn().isEmpty()) {
 					state = state.getIn().get(0).getFrom();
@@ -473,8 +478,8 @@ public class RobotUtils {
 		FsmState stateToReturn = null;
 
 		for (FsmState state : tree.getStates()) {
-			CurrentStateUncertainty temp = (CurrentStateUncertainty) state;
-			if(criteria3a(temp)){
+			FsmState temp = state;
+			if(anySingleton(temp)){
 				int counter = 0;
 				while (!state.getIn().isEmpty()) {
 					state = state.getIn().get(0).getFrom();
@@ -494,15 +499,16 @@ public class RobotUtils {
 		HOMING_TREE
 	};
 
-	private boolean anySingleton(CurrentStateUncertaintyHomingTree stUncert) {
-		for (String k : stUncert.getUncertaintyMap().keySet()) {
-			if(stUncert.getUncertaintyMap().get(k).size()==1) return true;
+	private boolean anySingleton(FsmState state) {
+		if(state instanceof CurrentStateUncertaintyHomingTree){
+			CurrentStateUncertaintyHomingTree stUncert  = (CurrentStateUncertaintyHomingTree) state;
+			for (String k : stUncert.getUncertaintyMap().keySet()) {
+				if(stUncert.getUncertaintyMap().get(k).size()==1) return true;
+			}
+		}else if(state instanceof CurrentStateUncertainty){
+			CurrentStateUncertainty stUncert  = (CurrentStateUncertainty) state;
+			if(stUncert.getUncertaintySet().size()==1) return true;
 		}
-		return false;
-	}
-	
-	private boolean anySingleton(CurrentStateUncertainty stUncert) {
-		if(stUncert.getUncertaintySet().size()==1) return true;
 		return false;
 	}
 
