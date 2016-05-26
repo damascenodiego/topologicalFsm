@@ -12,6 +12,8 @@ import com.usp.icmc.labes.fsm.CurrentStateUncertaintyHomingTree;
 import com.usp.icmc.labes.fsm.DrawUtils;
 import com.usp.icmc.labes.fsm.FsmTransition;
 import com.usp.icmc.labes.fsm.HomingTree;
+import com.usp.icmc.labes.fsm.ICurrentStateUncertainty;
+import com.usp.icmc.labes.fsm.ICurrentStateUncertaintyTree;
 import com.usp.icmc.labes.fsm.MazeUtils;
 import com.usp.icmc.labes.fsm.RobotUtils;
 import com.usp.icmc.labes.fsm.SynchronizingTree;
@@ -76,16 +78,13 @@ public class TopologicalFsm {
 
 			String fname = "topoMap_SEED_"+SEED+"_N_"+N;
 			
-			StdDraw.show(0);
-			maze.draw();
-
 			Date di = new Date();
 			RobotUtils.getInstance().createSynchronizingTree(maze);
 			Date df = new Date();
-			SynchronizingTree ht = (SynchronizingTree) maze.getRobot().getLocationTree();
+			ICurrentStateUncertaintyTree ht = (ICurrentStateUncertaintyTree) maze.getRobot().getLocationTree();
 
-//			System.out.println("ClosestSingleton:\t"+ht.getClosestSingleton().size());
-//			System.out.println("FarestSingleton:\t"+ht.getFarestSingleton().size());
+			System.out.println("ClosestSingleton:\t"+ht.getClosestSingleton().size());
+			System.out.println("FarestSingleton:\t"+ht.getFarestSingleton().size());
 			System.out.println("Time:\t"+(df.getTime()-di.getTime()));
 
 			if(cmd.hasOption(SAVE_PARAMETER)){
@@ -97,8 +96,8 @@ public class TopologicalFsm {
 					StdDraw.save(new File(folder,fname+".png").getAbsolutePath());
 				}
 				RobotUtils.getInstance().saveTopoMap(maze, new File(folder,fname+".jff"));
-				RobotUtils.getInstance().saveLocationTree(maze, new File(folder,fname+"_locationTree.jff"));
-				RobotUtils.getInstance().saveLocationTreeAsDot(maze, new File(folder,fname+"_locationTree.dot"));
+				RobotUtils.getInstance().saveLocationTree(maze, new File(folder,fname+"_"+ht.getClass().getSimpleName()+".jff"));
+				RobotUtils.getInstance().saveLocationTreeAsDot(maze, new File(folder,fname+"_"+ht.getClass().getSimpleName()+".dot"));
 				MazeUtils.getInstance().saveMaze(new File(folder,fname+"topomap.txt"), maze);
 				BufferedWriter bw = new BufferedWriter(new FileWriter(new File(folder,"singletons.txt")));
 
@@ -135,15 +134,15 @@ public class TopologicalFsm {
 				
 				if(DrawUtils.getInstance().getShowWindow()) {
 					int count = -1;
-					CurrentStateUncertaintyHomingTree csu = null;
+					ICurrentStateUncertainty csu = null;
 					for (FsmTransition tr : ht.getClosestSingleton()) {
-						csu = (CurrentStateUncertaintyHomingTree) tr.getFrom();
+						csu = (ICurrentStateUncertainty) tr.getFrom();
 						StdDraw.clear();
 						maze.fillCurrent(csu);
 						maze.writeText(((maze.getN()+2)/2.0), 0.5, tr.getInput() + " / " + tr.getOutput());
 						maze.draw();
 						StdDraw.save(new File(folder,fname+"_step_"+(++count)+".png").getAbsolutePath());
-						csu = (CurrentStateUncertaintyHomingTree) tr.getTo();
+						csu = (ICurrentStateUncertainty) tr.getTo();
 						StdDraw.clear();
 						maze.fillCurrent(csu);
 						maze.writeText(((maze.getN()+2)/2.0), 0.5, tr.getInput() + " / " + tr.getOutput());

@@ -1,10 +1,9 @@
 package com.usp.icmc.labes.fsm;
 
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
-public class SynchronizingTree extends FsmModel{
+public class SynchronizingTree extends FsmModel implements ICurrentStateUncertaintyTree{
 	
 	CurrentStateUncertainty singletonNodes;
 	

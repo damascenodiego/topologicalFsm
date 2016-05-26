@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
-public class HomingTree extends FsmModel{
+public class HomingTree extends FsmModel implements ICurrentStateUncertaintyTree{
 	
 	CurrentStateUncertaintyHomingTree singletonNodes;
 	

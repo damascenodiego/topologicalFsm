@@ -239,7 +239,8 @@ public class RobotUtils {
 					tr.getFrom().getId()
 					+" -> "
 					+tr.getTo().getId()
-					+" [ label =\""+tr.getInput()+"/"+tr.getOutput()+"\"];");
+					//+" [ label =\""+tr.getInput()+"/"+tr.getOutput()+"\"];");
+					+" [ label =\""+tr.getInput()+"\"];");
 		}
 
 		for (FsmState st : r.getLocationTree().getStates()) {
@@ -257,82 +258,94 @@ public class RobotUtils {
 			uncert.getUncertaintySet().add(s);
 		}
 
-		SynchronizingTree syncTree = new SynchronizingTree(rbt.getName()+"_SynchronizingTree");
-		syncTree.getInputs().addAll(rbt.getLocationTree().getInputs());
-		syncTree.getOutputs().addAll(rbt.getLocationTree().getOutputs());
-		rbt.setLocationTree(syncTree);
+		SynchronizingTree tree = new SynchronizingTree(rbt.getName()+"_SynchronizingTree");
+		tree.getInputs().addAll(rbt.getLocationTree().getInputs());
+		tree.getOutputs().addAll(rbt.getLocationTree().getOutputs());
+		rbt.setLocationTree(tree);
 
-		syncTree.addState(uncert);
-		syncTree.setInitialState(uncert);
+		tree.addState(uncert);
+		tree.setInitialState(uncert);
 
 
-		Set<Set<FsmState>> aboveLevel = new HashSet<Set<FsmState>>(); 
+		Set<Set<FsmState>> aboveLevel = new HashSet<Set<FsmState>>();
+		Set<Set<FsmState>> nextAboveLevel = new HashSet<Set<FsmState>>();
 		Queue<CurrentStateUncertainty> uncertLst = new LinkedBlockingQueue<CurrentStateUncertainty>();
-		uncertLst.add((CurrentStateUncertainty) syncTree.getInitialState());
+		List<CurrentStateUncertainty> next = new ArrayList<CurrentStateUncertainty>();
+		uncertLst.add((CurrentStateUncertainty) tree.getInitialState());
 
 		int id = 0;
-		Map<String, FsmState> allCurr = new HashMap<String, FsmState>();
-		Set<FsmTransition> allTr = new HashSet<FsmTransition>();
-		//Set<Set<FsmState>> accessedUncert = new HashSet<Set<FsmState>>();
 		Map<String, CurrentStateUncertainty> allSingletonCurr = new HashMap<String, CurrentStateUncertainty>();
 		Map<String, CurrentStateUncertainty> io_tr = new HashMap<String, CurrentStateUncertainty>();
 
 		CurrentStateUncertainty stUncert = null;
 		CurrentStateUncertainty state = null;
 		FsmTransition tr = null;
-		String output = null;
 		boolean criteria3a,criteria3b;
 
 
 		while (!uncertLst.isEmpty()) {
 			state = ((CurrentStateUncertainty)uncertLst.remove());
 
-			if(aboveLevel.contains(state.getUncertaintySet())) continue;
-			aboveLevel.add(state.getUncertaintySet());
+			nextAboveLevel.add(state.getUncertaintySet());
 
 			io_tr.clear();
 
-			for (String in : syncTree.getInputs()) {
+			for (String in : tree.getInputs()) {
 				if(!io_tr.containsKey(in)){
 					io_tr.putIfAbsent(in,  new CurrentStateUncertainty(Integer.toString(++id)));
 				}
 				stUncert = io_tr.get(in);
 				for (FsmState s : state.getUncertaintySet()) {
 					tr = getTransition(s, in);
-					output = tr.getOutput();
 					stUncert.getUncertaintySet().add(tr.getTo());
 				}
 				FsmTransition trUncert = new FsmTransition(state, in, "", stUncert);
-				criteria3a = criteria3aSyncTree(stUncert);
+				criteria3a = criteria3a(stUncert);
 				criteria3b = criteria3bSyncTree(aboveLevel,stUncert);
 				if(!(criteria3a || criteria3b)) {
-					uncertLst.add(stUncert);
+					next.add(stUncert);
 				}
 
-				allCurr.putIfAbsent(stUncert.getId(), stUncert);
-				allTr.add(trUncert);
 				if(criteria3a) {
 					allSingletonCurr.putIfAbsent(stUncert.getId(), stUncert);
 				}
 			}
-		}
-		//System.out.println(allCurr); System.out.println(allTr);
 
-		//		for (String curId : allSingletonCurr.keySet()) addState(syncTree,allCurr.get(curId));
+			if(uncertLst.isEmpty()) {
+				aboveLevel.addAll(nextAboveLevel);
+				uncertLst.addAll(next);
+				next.clear();
+				nextAboveLevel.clear();
+			}
+		}
+
+		Set<FsmTransition> allSingletonTr = new HashSet<FsmTransition>();
+		Set<FsmState> allSingletonStatesSet = new HashSet<FsmState>();
+		for (String curId : allSingletonCurr.keySet()) {
+			FsmState s = allSingletonCurr.get(curId);
+			allSingletonStatesSet.add(s);
+			while (s.getIn().size()!=0) {
+				allSingletonTr.add(s.getIn().get(0));
+				s = s.getIn().get(0).getFrom();
+				allSingletonStatesSet.add(s);
+			}
+		}
+		tree.getTransitions().addAll(allSingletonTr);
+		tree.getStates().addAll(allSingletonStatesSet);
 		//
-		for (String curId : allCurr.keySet()) syncTree.getStates().add(allCurr.get(curId)); 
-		syncTree.getTransitions().addAll(allTr);
+		//		for (String curId : allCurr.keySet()) syncTree.getStates().add(allCurr.get(curId)); 
+		//		syncTree.getTransitions().addAll(allTr);
 		//
-//		FsmState closestLeaf = depthClosestSingleton(mz.getRobot().getLocationTree());
-//		FsmState farestLeaf  = depthFarestSingleton(mz.getRobot().getLocationTree());
+		FsmState closestLeaf = depthClosestSingleton(mz.getRobot().getLocationTree());
+		FsmState farestLeaf  = depthFarestSingleton(mz.getRobot().getLocationTree());
 		//
-		//					homingTree.setClosestSingleton(getPath(closestLeaf));
-		//					homingTree.setFarestSingleton(getPath(farestLeaf));
+		tree.setClosestSingleton(getPath(closestLeaf));
+		tree.setFarestSingleton(getPath(farestLeaf));
 
 		//		System.out.println(mz.getRobot().getLocationTree().getClosestSingleton());
 		//		System.out.println(mz.getRobot().getLocationTree().getFarestSingleton());
 
-		mz.getRobot().getLocationTree().setName("HomingTree;"+"seed="+mz.getSeed()+"';"+"N="+mz.getN());
+		mz.getRobot().getLocationTree().setName(tree.getClass().getSimpleName()+";"+"seed="+mz.getSeed()+"';"+"N="+mz.getN());
 
 	}
 
@@ -346,25 +359,25 @@ public class RobotUtils {
 			uncert.getUncertaintySet().add(s);
 		}
 
-		HomingTree homingTree = new HomingTree(rbt.getName()+"_HomingTree");
-		homingTree.getInputs().addAll(rbt.getLocationTree().getInputs());
-		homingTree.getOutputs().addAll(rbt.getLocationTree().getOutputs());
-		rbt.setLocationTree(homingTree);
+		HomingTree tree = new HomingTree(rbt.getName()+"_HomingTree");
+		tree.getInputs().addAll(rbt.getLocationTree().getInputs());
+		tree.getOutputs().addAll(rbt.getLocationTree().getOutputs());
+		rbt.setLocationTree(tree);
 
-		homingTree.addState(uncert);
-		homingTree.setInitialState(uncert);
+		tree.addState(uncert);
+		tree.setInitialState(uncert);
 
 
-		Set<Set<FsmState>> aboveLevel = new HashSet<Set<FsmState>>(); 
-		Queue<CurrentStateUncertaintyHomingTree> uncertLst = new LinkedBlockingQueue<CurrentStateUncertaintyHomingTree>();
-		uncertLst.add((CurrentStateUncertaintyHomingTree) homingTree.getInitialState());
+		Set<Set<FsmState>> aboveLevel = new HashSet<Set<FsmState>>();
+		Set<Set<FsmState>> nextAboveLevel = new HashSet<Set<FsmState>>();
+		Queue<CurrentStateUncertaintyHomingTree> uncertLst = new LinkedBlockingQueue<>();
+		List<CurrentStateUncertaintyHomingTree> next = new ArrayList<>();
+		uncertLst.add((CurrentStateUncertaintyHomingTree) tree.getInitialState());
 
 		int id = 0;
-		Map<String, FsmState> allCurr = new HashMap<String, FsmState>();
-		Set<FsmTransition> allTr = new HashSet<FsmTransition>();
-		//Set<Set<FsmState>> accessedUncert = new HashSet<Set<FsmState>>();
-		Map<String, CurrentStateUncertaintyHomingTree> allSingletonCurr = new HashMap<String, CurrentStateUncertaintyHomingTree>();
-		Map<String, CurrentStateUncertaintyHomingTree> io_tr = new HashMap<String, CurrentStateUncertaintyHomingTree>();
+		Map<String, CurrentStateUncertaintyHomingTree> allSingletonCurr = new HashMap<>();
+		Map<String, CurrentStateUncertaintyHomingTree> io_tr = new HashMap<>();
+
 
 		CurrentStateUncertaintyHomingTree stUncert = null;
 		CurrentStateUncertaintyHomingTree state = null;
@@ -376,12 +389,11 @@ public class RobotUtils {
 		while (!uncertLst.isEmpty()) {
 			state = ((CurrentStateUncertaintyHomingTree)uncertLst.remove());
 
-			if(aboveLevel.contains(state.getUncertaintySet())) continue;
-			aboveLevel.add(state.getUncertaintySet());
+			nextAboveLevel.add(state.getUncertaintySet());
 
 			io_tr.clear();
 
-			for (String in : homingTree.getInputs()) {
+			for (String in : tree.getInputs()) {
 				if(!io_tr.containsKey(in)){
 					io_tr.putIfAbsent(in,  new CurrentStateUncertaintyHomingTree(Integer.toString(++id)));
 				}
@@ -397,25 +409,41 @@ public class RobotUtils {
 					}
 				}
 				FsmTransition trUncert = new FsmTransition(state, in, "", stUncert);
-				criteria3a = criteria3aHomingTree(stUncert);
+				criteria3a = criteria3a(stUncert);
 				criteria3b = criteria3bHomingTree(aboveLevel,stUncert);
 				if(!(criteria3a || criteria3b)) {
-					uncertLst.add(stUncert);
+					next.add(stUncert);
 				}
 
-				allCurr.putIfAbsent(stUncert.getId(), stUncert);
-				allTr.add(trUncert);
-				if(criteria3a) {
+				if(anySingleton(stUncert)) {
 					allSingletonCurr.putIfAbsent(stUncert.getId(), stUncert);
 				}
+			}
+			if(uncertLst.isEmpty()) {
+				aboveLevel.addAll(nextAboveLevel);
+				uncertLst.addAll(next);
+				next.clear();
+				nextAboveLevel.clear();
 			}
 		}
 		//System.out.println(allCurr); System.out.println(allTr);
 
 		//		for (String curId : allSingletonCurr.keySet()) addState(syncTree,allCurr.get(curId));
 		//
-		for (String curId : allCurr.keySet()) homingTree.getStates().add(allCurr.get(curId)); 
-		homingTree.getTransitions().addAll(allTr);
+		Set<FsmTransition> allSingletonTr = new HashSet<FsmTransition>();
+		Set<FsmState> allSingletonStatesSet = new HashSet<FsmState>();
+		for (String curId : allSingletonCurr.keySet()) {
+			FsmState s = allSingletonCurr.get(curId);
+			allSingletonStatesSet.add(s);
+			while (s.getIn().size()!=0) {
+				allSingletonTr.add(s.getIn().get(0));
+				s = s.getIn().get(0).getFrom();
+				allSingletonStatesSet.add(s);
+			}
+		}
+		tree.getTransitions().addAll(allSingletonTr);
+		tree.getStates().addAll(allSingletonStatesSet);
+
 		//
 		FsmState closestLeaf = depthClosestSingleton(mz.getRobot().getLocationTree());
 		FsmState farestLeaf  = depthFarestSingleton(mz.getRobot().getLocationTree());
@@ -426,7 +454,7 @@ public class RobotUtils {
 		//		System.out.println(mz.getRobot().getLocationTree().getClosestSingleton());
 		//		System.out.println(mz.getRobot().getLocationTree().getFarestSingleton());
 
-		mz.getRobot().getLocationTree().setName("HomingTree;"+"seed="+mz.getSeed()+"';"+"N="+mz.getN());
+		mz.getRobot().getLocationTree().setName(tree.getClass().getSimpleName()+";"+"seed="+mz.getSeed()+"';"+"N="+mz.getN());
 
 	}
 
@@ -445,7 +473,7 @@ public class RobotUtils {
 
 		for (FsmState state : fsmModel.getStates()) {
 			FsmState temp = state;
-			if(anySingleton((CurrentStateUncertaintyHomingTree) state)){
+			if(criteria3a((CurrentStateUncertainty)state)){
 				int counter = 0;
 				while (!state.getIn().isEmpty()) {
 					state = state.getIn().get(0).getFrom();
@@ -466,7 +494,7 @@ public class RobotUtils {
 
 		for (FsmState state : tree.getStates()) {
 			FsmState temp = state;
-			if(anySingleton((CurrentStateUncertaintyHomingTree) state)){
+			if(criteria3a((CurrentStateUncertainty)state)){
 				int counter = 0;
 				while (!state.getIn().isEmpty()) {
 					state = state.getIn().get(0).getFrom();
@@ -493,7 +521,7 @@ public class RobotUtils {
 		return false;
 	}
 
-	private boolean criteria3aHomingTree(CurrentStateUncertaintyHomingTree stUncert) {
+	private boolean criteria3a(CurrentStateUncertaintyHomingTree stUncert) {
 		for (String k : stUncert.getUncertaintyMap().keySet()) {
 			if(stUncert.getUncertaintyMap().get(k).size()!=1) return false;
 		}
@@ -507,8 +535,8 @@ public class RobotUtils {
 		return false;
 	}
 
-	
-	private boolean criteria3aSyncTree(CurrentStateUncertainty stUncert) {
+
+	private boolean criteria3a(CurrentStateUncertainty stUncert) {
 		if(stUncert.getUncertaintySet().size()!=1) return false;
 		return true;
 	}
