@@ -8,4 +8,8 @@ public interface ICurrentStateUncertaintyTree {
 
 	public List<FsmTransition> getFarestSingleton();
 	
+	public List<FsmTransition> getClosestAllSingleton();
+
+	public List<FsmTransition> getFarestAllSingleton();
+	
 }

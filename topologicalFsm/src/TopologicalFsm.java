@@ -6,6 +6,7 @@ import java.util.Date;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.DefaultParser;
 import org.apache.commons.cli.Option;
+import org.apache.commons.cli.OptionGroup;
 import org.apache.commons.cli.Options;
 
 import com.usp.icmc.labes.fsm.CurrentStateUncertaintyHomingTree;
@@ -31,7 +32,9 @@ public class TopologicalFsm {
 	private static final String 	SAVE_PARAMETER 			= "save";
 	private static final String 	SHOW_WINDOW_PARAMETER	= "window";
 	private static final String 	CLOSE_PARAMETER			= "close";
-	
+	private static final String 	HOMING_PARAMETER 		= "homing";
+	private static final String 	SYNCHRONIZING_PARAMETER = "synchronizing";
+
 
 
 	public static void main(String[] args) {
@@ -75,14 +78,20 @@ public class TopologicalFsm {
 			maze.solve();
 
 			String fname = "topoMap_SEED_"+SEED+"_N_"+N;
-			
+
 			Date di = new Date();
-			RobotUtils.getInstance().createSynchronizingTree(maze);
+			if(cmd.hasOption(HOMING_PARAMETER)){
+				RobotUtils.getInstance().createHomingTree(maze);
+			}else {
+				RobotUtils.getInstance().createSynchronizingTree(maze);
+			}
 			Date df = new Date();
 			ICurrentStateUncertaintyTree ht = (ICurrentStateUncertaintyTree) maze.getRobot().getLocationTree();
 
 			System.out.println("ClosestSingleton:\t"+ht.getClosestSingleton().size());
 			System.out.println("FarestSingleton:\t"+ht.getFarestSingleton().size());
+			System.out.println("ClosestAllSingleton:\t"+ht.getClosestAllSingleton().size());
+			System.out.println("FarestAllSingleton:\t"+ht.getFarestAllSingleton().size());
 			System.out.println("Time:\t"+(df.getTime()-di.getTime()));
 
 			if(cmd.hasOption(SAVE_PARAMETER)){
@@ -96,40 +105,75 @@ public class TopologicalFsm {
 				RobotUtils.getInstance().saveTopoMap(maze, new File(folder,fname+".jff"));
 				RobotUtils.getInstance().saveLocationTree(maze, new File(folder,fname+"_"+ht.getClass().getSimpleName()+".jff"));
 				RobotUtils.getInstance().saveLocationTreeAsDot(maze, new File(folder,fname+"_"+ht.getClass().getSimpleName()+".dot"));
-				MazeUtils.getInstance().saveMaze(new File(folder,fname+"topomap.txt"), maze);
-				BufferedWriter bw = new BufferedWriter(new FileWriter(new File(folder,"singletons.txt")));
+				MazeUtils.getInstance().saveMaze(new File(folder,fname+"_"+ht.getClass().getSimpleName()+".topomap.txt"), maze);
+				BufferedWriter bw = new BufferedWriter(new FileWriter(new File(folder,fname+"_"+ht.getClass().getSimpleName()+".singletons.txt")));
 
 				bw.write("ClosestSingleton:\n");
+				bw.write( "\t" +
+						(ht.getClosestSingleton().get(0).getFrom()) +
+						"\n"
+						);
 				for (FsmTransition tr : ht.getClosestSingleton()) {
 					bw.write( "\t" +
-							//							((CurrentStateUncertainty)tr.getFrom()).getUncertaintySet() +
-							//						 	 " -- "+
+//							(tr.getFrom()) + " -- "+
 							tr.getInput() +
-							" / " +
-							tr.getOutput()+
-							//						    " -> " +
-							//						 	((CurrentStateUncertainty)tr.getTo()).getUncertaintySet() +
+//							" / " + tr.getOutput()+
+							" -> " +
+							(tr.getTo()) +
 							"\n"
 							);
-					//bw.write("ClosestSingleton:\n");
 				}
 
 				bw.write("FarestSingleton:\n");
+				bw.write( "\t" +
+						(ht.getFarestSingleton().get(0).getFrom()) +
+						"\n"
+						);
 				for (FsmTransition tr : ht.getFarestSingleton()) {
 					bw.write( "\t" +
-							//							((CurrentStateUncertainty)tr.getFrom()).getUncertaintySet() +
-							//						 	 " -- "+
+//							(tr.getFrom()) + " -- "+
 							tr.getInput() +
-							" / " +
-							tr.getOutput()+
-							//						    " -> " +
-							//						 	((CurrentStateUncertainty)tr.getTo()).getUncertaintySet() +
+//							" / " + tr.getOutput()+
+							" -> " +
+							(tr.getTo()) +
 							"\n"
 							);
-					//bw.write("ClosestSingleton:\n");
 				}
-				bw.close();
 				
+				bw.write("ClosestAllSingleton:\n");
+				bw.write( "\t" +
+						(ht.getClosestAllSingleton().get(0).getFrom()) +
+						"\n"
+						);
+				for (FsmTransition tr : ht.getClosestAllSingleton()) {
+					bw.write( "\t" +
+//							(tr.getFrom()) + " -- "+
+							tr.getInput() +
+//							" / " + tr.getOutput()+
+							" -> " +
+							(tr.getTo()) +
+							"\n"
+							);
+				}
+
+				bw.write("FarestAllSingleton:\n");
+				bw.write( "\t" +
+						(ht.getFarestAllSingleton().get(0).getFrom()) +
+						"\n"
+						);
+				for (FsmTransition tr : ht.getFarestAllSingleton()) {
+					bw.write( "\t" +
+//							(tr.getFrom()) + " -- "+
+							tr.getInput() +
+//							" / " + tr.getOutput()+
+							" -> " +
+							(tr.getTo()) +
+							"\n"
+							);
+				}
+				
+				bw.close();
+
 				if(DrawUtils.getInstance().getShowWindow()) {
 					int count = -1;
 					ICurrentStateUncertainty csu = null;
@@ -138,14 +182,14 @@ public class TopologicalFsm {
 						csu = (ICurrentStateUncertainty) tr.getFrom();
 						StdDraw.clear();
 						maze.fillCurrent(csu);
-//						maze.writeText(((maze.getN()+2)/2.0), 0.5, tr.getInput() + " / " + tr.getOutput());
+						//						maze.writeText(((maze.getN()+2)/2.0), 0.5, tr.getInput() + " / " + tr.getOutput());
 						maze.writeText(((maze.getN()+2)/2.0), 0.5, stepNo+") "+tr.getInput());
 						maze.draw();
 						StdDraw.save(new File(folder,fname+"_"+ht.getClass().getSimpleName()+"_step_"+(++count)+".png").getAbsolutePath());
 						csu = (ICurrentStateUncertainty) tr.getTo();
 						StdDraw.clear();
 						maze.fillCurrent(csu);
-//						maze.writeText(((maze.getN()+2)/2.0), 0.5, tr.getInput() + " / " + tr.getOutput());
+						//						maze.writeText(((maze.getN()+2)/2.0), 0.5, tr.getInput() + " / " + tr.getOutput());
 						maze.writeText(((maze.getN()+2)/2.0), 0.5, stepNo+") "+tr.getInput());
 						maze.draw();
 						StdDraw.save(new File(folder,fname+"_"+ht.getClass().getSimpleName()+"_step_"+(++count)+".png").getAbsolutePath());
@@ -172,6 +216,10 @@ public class TopologicalFsm {
 		Option showWindowOption = new Option(SHOW_WINDOW_PARAMETER, false, 	"Show window.");
 		Option windowCloseOption = new Option(CLOSE_PARAMETER, false, 	"Close window.");
 
+		OptionGroup og = new OptionGroup();
+		
+		og.addOption(new Option(HOMING_PARAMETER, "Generate homing tree"));
+		og.addOption(new Option(SYNCHRONIZING_PARAMETER, "Generate synchronizing tree"));
 
 		options.addOption(nOption);
 		options.addOption(seedOption);
@@ -179,6 +227,7 @@ public class TopologicalFsm {
 		options.addOption(saveDataOption);
 		options.addOption(showWindowOption);
 		options.addOption(windowCloseOption);
+		options.addOptionGroup(og);
 
 	}
 

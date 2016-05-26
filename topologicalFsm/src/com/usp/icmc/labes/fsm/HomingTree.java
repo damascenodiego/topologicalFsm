@@ -11,6 +11,9 @@ public class HomingTree extends FsmModel implements ICurrentStateUncertaintyTree
 	List<FsmTransition> closestSingleton;
 	List<FsmTransition> farestSingleton;
 	
+	List<FsmTransition> closestAllSingleton;
+	List<FsmTransition> farestAllSingleton;
+	
 	public HomingTree() {
 		super();
 		closestSingleton = new LinkedList<FsmTransition>();
@@ -40,7 +43,23 @@ public class HomingTree extends FsmModel implements ICurrentStateUncertaintyTree
 		this.farestSingleton = farestSingleton;
 	}
 
+	
+	public List<FsmTransition> getClosestAllSingleton() {
+		return closestAllSingleton;
+	}
+	
+	public List<FsmTransition> getFarestAllSingleton() {
+		return farestAllSingleton;
+	}
 
+	public void setClosestAllSingleton(List<FsmTransition> closestAllSingleton) {
+		this.closestAllSingleton = closestAllSingleton;
+	}
+	
+	public void setFarestAllSingleton(List<FsmTransition> farestAllSingleton) {
+		this.farestAllSingleton = farestAllSingleton;
+	}
+	
 	@Override
 	public int hashCode() {
 		int result = 1;
