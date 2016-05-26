@@ -11,12 +11,10 @@ import org.apache.commons.cli.Options;
 import com.usp.icmc.labes.fsm.CurrentStateUncertaintyHomingTree;
 import com.usp.icmc.labes.fsm.DrawUtils;
 import com.usp.icmc.labes.fsm.FsmTransition;
-import com.usp.icmc.labes.fsm.HomingTree;
 import com.usp.icmc.labes.fsm.ICurrentStateUncertainty;
 import com.usp.icmc.labes.fsm.ICurrentStateUncertaintyTree;
 import com.usp.icmc.labes.fsm.MazeUtils;
 import com.usp.icmc.labes.fsm.RobotUtils;
-import com.usp.icmc.labes.fsm.SynchronizingTree;
 import com.usp.icmc.ssc5888.Maze;
 
 import edu.princeton.cs.algs4.StdDraw;
@@ -135,20 +133,23 @@ public class TopologicalFsm {
 				if(DrawUtils.getInstance().getShowWindow()) {
 					int count = -1;
 					ICurrentStateUncertainty csu = null;
+					int stepNo = 0;
 					for (FsmTransition tr : ht.getClosestSingleton()) {
 						csu = (ICurrentStateUncertainty) tr.getFrom();
 						StdDraw.clear();
 						maze.fillCurrent(csu);
-						maze.writeText(((maze.getN()+2)/2.0), 0.5, tr.getInput() + " / " + tr.getOutput());
+//						maze.writeText(((maze.getN()+2)/2.0), 0.5, tr.getInput() + " / " + tr.getOutput());
+						maze.writeText(((maze.getN()+2)/2.0), 0.5, stepNo+") "+tr.getInput());
 						maze.draw();
-						StdDraw.save(new File(folder,fname+"_step_"+(++count)+".png").getAbsolutePath());
+						StdDraw.save(new File(folder,fname+"_"+ht.getClass().getSimpleName()+"_step_"+(++count)+".png").getAbsolutePath());
 						csu = (ICurrentStateUncertainty) tr.getTo();
 						StdDraw.clear();
 						maze.fillCurrent(csu);
-						maze.writeText(((maze.getN()+2)/2.0), 0.5, tr.getInput() + " / " + tr.getOutput());
+//						maze.writeText(((maze.getN()+2)/2.0), 0.5, tr.getInput() + " / " + tr.getOutput());
+						maze.writeText(((maze.getN()+2)/2.0), 0.5, stepNo+") "+tr.getInput());
 						maze.draw();
-						StdDraw.save(new File(folder,fname+"_step_"+(++count)+".png").getAbsolutePath());
-						
+						StdDraw.save(new File(folder,fname+"_"+ht.getClass().getSimpleName()+"_step_"+(++count)+".png").getAbsolutePath());
+						stepNo++;
 					}
 				}
 			}

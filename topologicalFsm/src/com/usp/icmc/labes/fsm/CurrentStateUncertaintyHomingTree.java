@@ -7,15 +7,13 @@ import java.util.Set;
 
 import com.usp.icmc.labes.fsm.FsmState;
 
-public class CurrentStateUncertaintyHomingTree extends FsmState implements ICurrentStateUncertainty {
+public class CurrentStateUncertaintyHomingTree extends CurrentStateUncertainty{
 	
-	private Set<FsmState> uncertaintySet;
 	private Map<String,Set<FsmState>> uncertaintyMap;
 
 	public CurrentStateUncertaintyHomingTree(String id) {
 		super(id);
 		uncertaintyMap = new HashMap<String,Set<FsmState>>();
-		uncertaintySet = new HashSet<FsmState>();
 	}
 	
 	
@@ -26,10 +24,6 @@ public class CurrentStateUncertaintyHomingTree extends FsmState implements ICurr
 
 	public Map<String,Set<FsmState>> getUncertaintyMap() {
 		return uncertaintyMap;
-	}
-
-	public Set<FsmState> getUncertaintySet() {
-		return uncertaintySet;
 	}
 
 
@@ -49,12 +43,6 @@ public class CurrentStateUncertaintyHomingTree extends FsmState implements ICurr
 		//if (!super.equals(obj))
 		//	return false;
 		if (getClass() != obj.getClass())
-			return false;
-		CurrentStateUncertaintyHomingTree other = (CurrentStateUncertaintyHomingTree) obj;
-		if (uncertaintySet == null) {
-			if (other.uncertaintySet != null)
-				return false;
-		} else if (!uncertaintySet.equals(other.uncertaintySet))
 			return false;
 		return true;
 	}
