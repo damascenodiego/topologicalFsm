@@ -56,7 +56,7 @@ public class TopologicalFsm {
 			setupCliOptions();
 
 			cmd = parser.parse( options, args);
-			
+
 			if(cmd.hasOption(HELP_PARAMETER) || cmd.hasOption(HELP_PARAMETER_SHORT)){
 				HelpFormatter formatter = new HelpFormatter();
 				formatter.printHelp("topologicalFsm", options);
@@ -124,9 +124,9 @@ public class TopologicalFsm {
 						);
 				for (FsmTransition tr : ht.getClosestSingleton()) {
 					bw.write( "\t" +
-//							(tr.getFrom()) + " -- "+
+							//							(tr.getFrom()) + " -- "+
 							tr.getInput() +
-//							" / " + tr.getOutput()+
+							//							" / " + tr.getOutput()+
 							" -> " +
 							(tr.getTo()) +
 							"\n"
@@ -140,15 +140,15 @@ public class TopologicalFsm {
 						);
 				for (FsmTransition tr : ht.getFarestSingleton()) {
 					bw.write( "\t" +
-//							(tr.getFrom()) + " -- "+
+							//							(tr.getFrom()) + " -- "+
 							tr.getInput() +
-//							" / " + tr.getOutput()+
+							//							" / " + tr.getOutput()+
 							" -> " +
 							(tr.getTo()) +
 							"\n"
 							);
 				}
-				
+
 				bw.write("ClosestAllSingleton:\n");
 				bw.write( "\t" +
 						(ht.getClosestAllSingleton().get(0).getFrom()) +
@@ -156,9 +156,9 @@ public class TopologicalFsm {
 						);
 				for (FsmTransition tr : ht.getClosestAllSingleton()) {
 					bw.write( "\t" +
-//							(tr.getFrom()) + " -- "+
+							//							(tr.getFrom()) + " -- "+
 							tr.getInput() +
-//							" / " + tr.getOutput()+
+							//							" / " + tr.getOutput()+
 							" -> " +
 							(tr.getTo()) +
 							"\n"
@@ -172,15 +172,15 @@ public class TopologicalFsm {
 						);
 				for (FsmTransition tr : ht.getFarestAllSingleton()) {
 					bw.write( "\t" +
-//							(tr.getFrom()) + " -- "+
+							//							(tr.getFrom()) + " -- "+
 							tr.getInput() +
-//							" / " + tr.getOutput()+
+							//							" / " + tr.getOutput()+
 							" -> " +
 							(tr.getTo()) +
 							"\n"
 							);
 				}
-				
+
 				bw.close();
 
 				if(DrawUtils.getInstance().getShowWindow()) {
@@ -226,7 +226,7 @@ public class TopologicalFsm {
 		Option windowCloseOption = new Option(CLOSE_PARAMETER, false, 	"Close window.");
 
 		OptionGroup og = new OptionGroup();
-		
+
 		og.addOption(new Option(HOMING_PARAMETER, "Generate homing tree. Synchronizing tree by default"));
 		og.addOption(new Option(SYNCHRONIZING_PARAMETER, "Generate synchronizing tree"));
 

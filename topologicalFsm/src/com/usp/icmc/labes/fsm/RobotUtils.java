@@ -252,6 +252,10 @@ public class RobotUtils {
 		List<CurrentStateUncertainty> next = new ArrayList<CurrentStateUncertainty>();
 		uncertLst.add((CurrentStateUncertainty) tree.getInitialState());
 
+		Map<String, FsmState> 	allStates 		= new HashMap<>();
+		Set<FsmTransition> 		allTransitions 	= new HashSet<>();
+		allStates.put(uncert.getId(),uncert);
+
 		int id = 0;
 		Map<String, CurrentStateUncertainty> allSingletonCurr = new HashMap<String, CurrentStateUncertainty>();
 		Map<String, CurrentStateUncertainty> io_tr = new HashMap<String, CurrentStateUncertainty>();
@@ -274,11 +278,13 @@ public class RobotUtils {
 					io_tr.putIfAbsent(in,  new CurrentStateUncertainty(Integer.toString(++id)));
 				}
 				stUncert = io_tr.get(in);
+				allStates.put(stUncert.getId(), stUncert);
 				for (FsmState s : state.getUncertaintySet()) {
 					tr = getTransition(s, in);
 					stUncert.getUncertaintySet().add(tr.getTo());
 				}
 				FsmTransition trUncert = new FsmTransition(state, in, "", stUncert);
+				allTransitions.add(trUncert);
 				criteria3a = criteria3a(stUncert);
 				criteria3b = criteria3bSyncTree(aboveLevel,stUncert);
 				if(!(criteria3a || criteria3b)) {
@@ -296,28 +302,27 @@ public class RobotUtils {
 				nextAboveLevel.clear();
 			}
 		}
-		//System.out.println(allCurr); System.out.println(allTr);
-
-		//		for (String curId : allSingletonCurr.keySet()) addState(syncTree,allCurr.get(curId));
-		//
-		Set<FsmTransition> allSingletonTr = new HashSet<FsmTransition>();
-		Map<String,FsmState> allSingletonStates = new HashMap<>();
-		for (String curId : allSingletonCurr.keySet()) {
-			FsmState s = allSingletonCurr.get(curId);
-			allSingletonStates.putIfAbsent(s.getId(),s);
-			while (s.getIn().size()!=0) {
-				allSingletonTr.add(s.getIn().get(0));
-				s = s.getIn().get(0).getFrom();
+		boolean onlySingletons = false;
+		if(onlySingletons){
+			Set<FsmTransition> allSingletonTr = new HashSet<FsmTransition>();
+			Map<String,FsmState> allSingletonStates = new HashMap<>();
+			for (String curId : allSingletonCurr.keySet()) {
+				FsmState s = allSingletonCurr.get(curId);
 				allSingletonStates.putIfAbsent(s.getId(),s);
+				while (s.getIn().size()!=0) {
+					allSingletonTr.add(s.getIn().get(0));
+					s = s.getIn().get(0).getFrom();
+					allSingletonStates.putIfAbsent(s.getId(),s);
+				}
 			}
+			tree.getTransitions().addAll(allSingletonTr);
+			tree.getStates().clear();
+			tree.getStates().addAll(allSingletonStates.values());
+		}else{
+			tree.getTransitions().addAll(allTransitions);
+			tree.getStates().clear();
+			tree.getStates().addAll(allStates.values());
 		}
-		tree.getTransitions().addAll(allSingletonTr);
-		tree.getStates().clear();
-		tree.getStates().addAll(allSingletonStates.values());
-		//
-		//		for (String curId : allCurr.keySet()) syncTree.getStates().add(allCurr.get(curId)); 
-		//		syncTree.getTransitions().addAll(allTr);
-		//
 
 		tree.setClosestSingleton(getPath(depthClosestSingleton(tree)));
 		tree.setFarestSingleton(getPath(depthFarestSingleton(tree)));
@@ -357,10 +362,13 @@ public class RobotUtils {
 		List<CurrentStateUncertaintyHomingTree> next = new ArrayList<>();
 		uncertLst.add((CurrentStateUncertaintyHomingTree) tree.getInitialState());
 
+		Map<String, FsmState> 	allStates 		= new HashMap<>();
+		Set<FsmTransition> 		allTransitions 	= new HashSet<>();
+		allStates.put(uncert.getId(),uncert);
+		
 		int id = 0;
 		Map<String, CurrentStateUncertaintyHomingTree> allSingletonCurr = new HashMap<>();
 		Map<String, CurrentStateUncertaintyHomingTree> io_tr = new HashMap<>();
-
 
 		CurrentStateUncertaintyHomingTree stUncert = null;
 		CurrentStateUncertaintyHomingTree state = null;
@@ -381,6 +389,7 @@ public class RobotUtils {
 					io_tr.putIfAbsent(in,  new CurrentStateUncertaintyHomingTree(Integer.toString(++id)));
 				}
 				stUncert = io_tr.get(in);
+				allStates.put(stUncert.getId(), stUncert);
 				for(String key : state.getUncertaintyMap().keySet()){
 					for (FsmState s : state.getUncertaintyMap().get(key)) {
 						tr = getTransition(s, in);
@@ -392,6 +401,7 @@ public class RobotUtils {
 					}
 				}
 				FsmTransition trUncert = new FsmTransition(state, in, "", stUncert);
+				allTransitions.add(trUncert);
 				criteria3a = criteria3a(stUncert);
 				criteria3b = criteria3bHomingTree(aboveLevel,stUncert);
 				if(!(criteria3a || criteria3b)) {
@@ -409,28 +419,28 @@ public class RobotUtils {
 				nextAboveLevel.clear();
 			}
 		}
-		//System.out.println(allCurr); System.out.println(allTr);
-
-		//		for (String curId : allSingletonCurr.keySet()) addState(syncTree,allCurr.get(curId));
-		//
-		Set<FsmTransition> allSingletonTr = new HashSet<FsmTransition>();
-		Map<String,FsmState> allSingletonStates = new HashMap<>();
-		for (String curId : allSingletonCurr.keySet()) {
-			FsmState s = allSingletonCurr.get(curId);
-			allSingletonStates.putIfAbsent(s.getId(),s);
-			while (s.getIn().size()!=0) {
-				allSingletonTr.add(s.getIn().get(0));
-				s = s.getIn().get(0).getFrom();
+		
+		boolean onlySingletons = false;
+		if(onlySingletons){
+			Set<FsmTransition> allSingletonTr = new HashSet<FsmTransition>();
+			Map<String,FsmState> allSingletonStates = new HashMap<>();
+			for (String curId : allSingletonCurr.keySet()) {
+				FsmState s = allSingletonCurr.get(curId);
 				allSingletonStates.putIfAbsent(s.getId(),s);
+				while (s.getIn().size()!=0) {
+					allSingletonTr.add(s.getIn().get(0));
+					s = s.getIn().get(0).getFrom();
+					allSingletonStates.putIfAbsent(s.getId(),s);
+				}
 			}
+			tree.getTransitions().addAll(allSingletonTr);
+			tree.getStates().clear();
+			tree.getStates().addAll(allSingletonStates.values());
+		}else{
+			tree.getTransitions().addAll(allTransitions);
+			tree.getStates().clear();
+			tree.getStates().addAll(allStates.values());
 		}
-		tree.getTransitions().addAll(allSingletonTr);
-		tree.getStates().clear();
-		tree.getStates().addAll(allSingletonStates.values());
-		//
-		//		for (String curId : allCurr.keySet()) syncTree.getStates().add(allCurr.get(curId)); 
-		//		syncTree.getTransitions().addAll(allTr);
-		//
 
 		tree.setClosestSingleton(getPath(depthClosestSingleton(tree)));
 		tree.setFarestSingleton(getPath(depthFarestSingleton(tree)));
