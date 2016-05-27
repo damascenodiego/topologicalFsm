@@ -5,6 +5,7 @@ import java.util.Date;
 
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.DefaultParser;
+import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.OptionGroup;
 import org.apache.commons.cli.Options;
@@ -34,6 +35,8 @@ public class TopologicalFsm {
 	private static final String 	CLOSE_PARAMETER			= "close";
 	private static final String 	HOMING_PARAMETER 		= "homing";
 	private static final String 	SYNCHRONIZING_PARAMETER = "synchronizing";
+	private static final String 	HELP_PARAMETER 			= "help";
+	private static final String 	HELP_PARAMETER_SHORT 	= "h";
 
 
 
@@ -53,6 +56,12 @@ public class TopologicalFsm {
 			setupCliOptions();
 
 			cmd = parser.parse( options, args);
+			
+			if(cmd.hasOption(HELP_PARAMETER) || cmd.hasOption(HELP_PARAMETER_SHORT)){
+				HelpFormatter formatter = new HelpFormatter();
+				formatter.printHelp("topologicalFsm", options);
+				System.exit(0);
+			}
 			if(cmd.hasOption(N_PARAMETER)) {
 				N = Integer.valueOf(cmd.getOptionValue(N_PARAMETER));
 			}
@@ -218,7 +227,7 @@ public class TopologicalFsm {
 
 		OptionGroup og = new OptionGroup();
 		
-		og.addOption(new Option(HOMING_PARAMETER, "Generate homing tree"));
+		og.addOption(new Option(HOMING_PARAMETER, "Generate homing tree. Synchronizing tree by default"));
 		og.addOption(new Option(SYNCHRONIZING_PARAMETER, "Generate synchronizing tree"));
 
 		options.addOption(nOption);
@@ -228,6 +237,7 @@ public class TopologicalFsm {
 		options.addOption(showWindowOption);
 		options.addOption(windowCloseOption);
 		options.addOptionGroup(og);
+		options.addOption(new Option(HELP_PARAMETER_SHORT,HELP_PARAMETER, false, 	"Help menu."));
 
 	}
 
