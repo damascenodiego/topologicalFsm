@@ -118,7 +118,7 @@ public class TopologicalFsm {
 
 			if(cmd.hasOption(SAVE_PARAMETER)){
 				String tStamp = new SimpleDateFormat("yyyyMMddhhmm").format(new Date());
-				File folder = new File(new File("topologicalFsm"),"topoMap_"+"_N_"+N+"/");
+				File folder = new File(new File("topologicalFsm"),"topoMap"+"_N_"+N+"/");
 				folder.mkdirs();
 				String fname = "topoMap"+"_N_"+N+"_"+tStamp+"_SEED_"+SEED;
 				if(DrawUtils.getInstance().getShowWindow()) {
