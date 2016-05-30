@@ -52,7 +52,7 @@ public class CurrentStateUncertaintyHomingTree extends CurrentStateUncertainty{
 		StringBuffer sb = new StringBuffer();
 		for (String k : uncertaintyMap.keySet()) {
 			sb.append(uncertaintyMap.get(k));
-			sb.append("_{"+k+"} ");
+			sb.append("_{"+k+"}\\n");
 		}
 		return sb.toString();
 	}
