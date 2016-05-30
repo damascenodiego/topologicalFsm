@@ -3,11 +3,13 @@ package com.usp.icmc.ssc5888;
 import java.awt.Color;
 import java.awt.Font;
 
+import com.usp.icmc.labes.fsm.CurrentStateUncertainty;
+import com.usp.icmc.labes.fsm.CurrentStateUncertaintyHomingTree;
 import com.usp.icmc.labes.fsm.DrawUtils;
 import com.usp.icmc.labes.fsm.FsmState;
 import com.usp.icmc.labes.fsm.FsmTransition;
 import com.usp.icmc.labes.fsm.ICurrentStateUncertainty;
-import com.usp.icmc.labes.fsm.RobotUtils;
+import com.usp.icmc.ssc5888.Robot.Commands;
 
 import edu.princeton.cs.algs4.StdDraw;
 import edu.princeton.cs.algs4.StdRandom;
@@ -232,8 +234,8 @@ public class Maze {
 	// draw the maze
 	public void draw() {
 		if(!DrawUtils.getInstance().getShowWindow()) return;
-		//fillCurrent();
-
+		fillCurrent();
+		
 		StdDraw.setPenColor(StdDraw.BLACK);
 		for (int x = 1; x <= N; x++) {
 			for (int y = 1; y <= N; y++) {
@@ -246,7 +248,17 @@ public class Maze {
 				StdDraw.setFont(defaultFont);
 			}
 		}
-		StdDraw.show(1000);
+//		StdDraw.show(1000);
+	}
+
+	public void fillCurrent() {
+		if(!DrawUtils.getInstance().getShowWindow()) return;
+
+		StdDraw.setPenColor(StdDraw.BLUE);
+		int x = getRobotX(); 
+		int y = getRobotY();
+		StdDraw.filledCircle(x+.5,y+.5, 0.275);
+//		StdDraw.show(1000);
 	}
 
 	public void writeText(double x, double y, String txt,Color col,Font f){
@@ -264,21 +276,20 @@ public class Maze {
 		StdDraw.setFont(smallFont);
 		StdDraw.text(x, y, txt);
 		StdDraw.setFont(defaultFont);
-		//StdDraw.show(1000);
+//		StdDraw.show(1000);
 	}
 
+	
 	public void fillCurrent(ICurrentStateUncertainty csu) {
 		if(!DrawUtils.getInstance().getShowWindow()) return;
-
 		for (FsmState un : csu.getUncertaintySet()) {
 			StdDraw.setPenColor(StdDraw.RED);
 			String coords[] = un.getId().split(",");
 			int x = Integer.valueOf(coords[0]); 
 			int y = Integer.valueOf(coords[1]);
-			//StdDraw.filledCircle(x+.5,y+.5, 0.375);
-			StdDraw.text(x+.5,y+.5, "x",0);
+			StdDraw.filledCircle(x+.5,y+.5, 0.375);
 		}
-		//StdDraw.show(1000);
+//		StdDraw.show(1000);
 	}
 	public void eraseCurrent(ICurrentStateUncertainty csu) {
 		if(!DrawUtils.getInstance().getShowWindow()) return;
@@ -290,39 +301,111 @@ public class Maze {
 			int y = Integer.valueOf(coords[1]);
 			StdDraw.filledCircle(x+.5,y+.5, 0.45);
 		}
-		//StdDraw.show(1000);
+//		StdDraw.show(1000);
+	}
+	
+	public void fillCurrent(CurrentStateUncertaintyHomingTree csu, String key) {
+		if(!DrawUtils.getInstance().getShowWindow()) return;
+		for (FsmState un : csu.getUncertaintyMap().get(key)) {
+			StdDraw.setPenColor(StdDraw.RED);
+			String coords[] = un.getId().split(",");
+			int x = Integer.valueOf(coords[0]); 
+			int y = Integer.valueOf(coords[1]);
+			StdDraw.filledCircle(x+.5,y+.5, 0.375);
+		}
+//		StdDraw.show(1000);
+	}
+	
+	public void eraseCurrent(CurrentStateUncertaintyHomingTree csu, String key) {
+		if(!DrawUtils.getInstance().getShowWindow()) return;
+
+		for (FsmState un : csu.getUncertaintyMap().get(key)) {
+			StdDraw.setPenColor(StdDraw.WHITE);
+			String coords[] = un.getId().split(",");
+			int x = Integer.valueOf(coords[0]); 
+			int y = Integer.valueOf(coords[1]);
+			StdDraw.filledCircle(x+.5,y+.5, 0.45);
+		}
+//		StdDraw.show(1000);
+	}
+	
+	private int getRobotX() {
+		return robotX;
+	}
+	private int getRobotY() {
+		return robotY;
+	}
+	
+	private boolean setRobotXY(int x, int y) {
+		if (x == 0 || y == 0 || x == N+1 || y == N+1) {
+			return true;
+		}
+		
+		this.robotX = x;
+		this.robotY = y;
+		
+		return false;
 	}
 
+	public boolean moveRobotNorth(){
+		int x = getRobotX();
+		int y = getRobotY()+1;
+		if (!checkRobotNorth()) {
+			return setRobotXY(x,y);
+		}
+		return true;
+	}
+	
+	public boolean moveRobotEast(){
+		int x = getRobotX()+1;
+		int y = getRobotY();
+		if (!checkRobotEast())  {
+			return setRobotXY(x,y);
+		}
+		return true;
+	}
+	
+	public boolean moveRobotSouth(){
+		int x = getRobotX();
+		int y = getRobotY()-1;
+		if (!checkRobotSouth()) {
+			return setRobotXY(x,y);
+		}
+		return true;
+	}
+	
+	public boolean moveRobotWest(){
+		int x = getRobotX()-1;
+		int y = getRobotY();
+		if (!checkRobotWest())  {
+			return setRobotXY(x,y);
+		}
+		return true;
+	}
 
-	//	// a test client
-	//	public static void main(String[] args) {
-	//		int N = 5;
-	//		int SEED = 1000;
-	//		if(args.length==1) N = Integer.parseInt(args[0]);
-	//		if(args.length==2){
-	//			N = Integer.parseInt(args[0]);
-	//			SEED = Integer.parseInt(args[1]);
-	//		}
-	//		
-	//		//StdRandom.setSeed(SEED);
-	//		Maze maze = new Maze(N);
-	//		//StdDraw.show(0);
-	//		//maze.draw();
-	//		maze.solve();
-	//
-	//		try {
-	//			String fname = "test";
-	//			//StdDraw.save(fname+".png");
-	//			RobotUtils.getInstance().saveTopoMap(maze.getRobot(), new File(fname+"_topomap.jff"));
-	//			RobotUtils.getInstance().createHomingTree(maze.getRobot());
-	//			//RobotUtils.getInstance().saveSyncTree(maze.getRobot(), new File(fname+"_syncTree.jff"));
-	//			RobotUtils.getInstance().saveSyncTreeAsDot(maze.getRobot(), new File(fname+"_syncTree.dot"));
-	//			System.exit(0);
-	//		} catch (Exception e) {
-	//			e.printStackTrace();
-	//			System.exit(1);
-	//		}
-	//	}
+	public boolean checkRobotNorth(){
+		int x = getRobotX();
+		int y = getRobotY();
+		return (north[x][y]);
+	}
+	
+	public boolean checkRobotEast(){
+		int x = getRobotX();
+		int y = getRobotY();
+		return (east[x][y]);
+	}
+	
+	public boolean checkRobotSouth(){
+		int x = getRobotX();
+		int y = getRobotY();
+		return (south[x][y]);
+	}
+	
+	public boolean checkRobotWest(){
+		int x = getRobotX();
+		int y = getRobotY();
+		return (west[x][y]);
+	}
 
 	public boolean[][] getNorth() {
 		return north;
@@ -355,6 +438,20 @@ public class Maze {
 	
 	public Font getTinyFont() {
 		return tinyFont;
+	}
+
+	public boolean runCommand(String input) {
+		if(input.equals(Commands.CHECK_NORTH.toString())) 	return checkRobotNorth();
+		if(input.equals(Commands.CHECK_EAST.toString())) 	return checkRobotEast();
+		if(input.equals(Commands.CHECK_SOUTH.toString())) 	return checkRobotSouth();
+		if(input.equals(Commands.CHECK_WEST.toString())) 	return checkRobotWest();
+		
+		if(input.equals(Commands.MOVE_NORTH.toString())) 	return moveRobotNorth();
+		if(input.equals(Commands.MOVE_EAST.toString())) 	return moveRobotEast();
+		if(input.equals(Commands.MOVE_SOUTH.toString())) 	return moveRobotSouth();
+		if(input.equals(Commands.MOVE_WEST.toString())) 	return moveRobotWest();
+		
+		return false;
 	}
 }
 

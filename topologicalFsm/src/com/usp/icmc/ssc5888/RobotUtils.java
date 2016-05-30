@@ -1,4 +1,4 @@
-package com.usp.icmc.labes.fsm;
+package com.usp.icmc.ssc5888;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -16,15 +16,21 @@ import java.util.Queue;
 import java.util.Set;
 import java.util.concurrent.LinkedBlockingQueue;
 
-import com.usp.icmc.ssc5888.Maze;
-import com.usp.icmc.ssc5888.Robot;
+import com.usp.icmc.labes.fsm.CurrentStateUncertainty;
+import com.usp.icmc.labes.fsm.CurrentStateUncertaintyHomingTree;
+import com.usp.icmc.labes.fsm.FsmModel;
+import com.usp.icmc.labes.fsm.FsmState;
+import com.usp.icmc.labes.fsm.FsmTransition;
+import com.usp.icmc.labes.fsm.HomingTree;
+import com.usp.icmc.labes.fsm.SynchronizingTree;
 import com.usp.icmc.ssc5888.Robot.Commands;
-import com.usp.icmc.ssc5888.TopologicalMap;
 
 public class RobotUtils {
 
 	private static RobotUtils instance;
 
+	private boolean onlySingletons = true;
+	
 	private RobotUtils(){ }
 
 	public static RobotUtils getInstance() {
@@ -291,7 +297,7 @@ public class RobotUtils {
 					next.add(stUncert);
 				}
 
-				if(anySingleton(trUncert.getTo())) {
+				if(criteria3a(trUncert.getTo())) {
 					allSingletonCurr.putIfAbsent(stUncert.getId(), stUncert);
 				}
 			}
@@ -302,7 +308,6 @@ public class RobotUtils {
 				nextAboveLevel.clear();
 			}
 		}
-		boolean onlySingletons = false;
 		if(onlySingletons){
 			Set<FsmTransition> allSingletonTr = new HashSet<FsmTransition>();
 			Map<String,FsmState> allSingletonStates = new HashMap<>();
@@ -310,8 +315,11 @@ public class RobotUtils {
 				FsmState s = allSingletonCurr.get(curId);
 				allSingletonStates.putIfAbsent(s.getId(),s);
 				while (s.getIn().size()!=0) {
-					allSingletonTr.add(s.getIn().get(0));
-					s = s.getIn().get(0).getFrom();
+					FsmTransition trSingl = s.getIn().get(0);
+					allSingletonTr.add(trSingl);
+					s = trSingl.getFrom();
+					s.getOut().clear();
+					s.getOut().add(trSingl);
 					allSingletonStates.putIfAbsent(s.getId(),s);
 				}
 			}
@@ -342,8 +350,8 @@ public class RobotUtils {
 
 		CurrentStateUncertaintyHomingTree uncert = new CurrentStateUncertaintyHomingTree("0");
 		for (FsmState s : mz.getRobot().getTopoMap().getStates())  {
-			uncert.getUncertaintyMap().putIfAbsent("EMPTY",new HashSet<FsmState>());
-			uncert.getUncertaintyMap().get("EMPTY").add(s);
+			uncert.getUncertaintyMap().putIfAbsent("",new HashSet<FsmState>());
+			uncert.getUncertaintyMap().get("").add(s);
 			uncert.getUncertaintySet().add(s);
 		}
 
@@ -394,7 +402,7 @@ public class RobotUtils {
 					for (FsmState s : state.getUncertaintyMap().get(key)) {
 						tr = getTransition(s, in);
 						output = tr.getOutput();
-						String kout = key+","+output;
+						String kout = (key.length()==0)?output:key+","+output;
 						stUncert.getUncertaintyMap().putIfAbsent(kout,new HashSet<FsmState>());
 						stUncert.getUncertaintyMap().get(kout).add(tr.getTo());
 						stUncert.getUncertaintySet().add(tr.getTo());
@@ -408,7 +416,7 @@ public class RobotUtils {
 					next.add(stUncert);
 				}
 
-				if(anySingleton(trUncert.getTo())) {
+				if(criteria3a(trUncert.getTo())) {
 					allSingletonCurr.putIfAbsent(stUncert.getId(), stUncert);
 				}
 			}
@@ -420,7 +428,6 @@ public class RobotUtils {
 			}
 		}
 		
-		boolean onlySingletons = false;
 		if(onlySingletons){
 			Set<FsmTransition> allSingletonTr = new HashSet<FsmTransition>();
 			Map<String,FsmState> allSingletonStates = new HashMap<>();
@@ -428,8 +435,11 @@ public class RobotUtils {
 				FsmState s = allSingletonCurr.get(curId);
 				allSingletonStates.putIfAbsent(s.getId(),s);
 				while (s.getIn().size()!=0) {
-					allSingletonTr.add(s.getIn().get(0));
-					s = s.getIn().get(0).getFrom();
+					FsmTransition trSingl = s.getIn().get(0);
+					allSingletonTr.add(trSingl);
+					s = trSingl.getFrom();
+					s.getOut().clear();
+					s.getOut().add(trSingl);
 					allSingletonStates.putIfAbsent(s.getId(),s);
 				}
 			}
@@ -604,5 +614,13 @@ public class RobotUtils {
 		}
 		return false;
 	}
+	
+	public void setOnlySingletons(boolean onlySingletons) {
+		this.onlySingletons = onlySingletons;
+	}
 
+	public boolean isOnlySingletons() {
+		return onlySingletons;
+	}
+	
 }

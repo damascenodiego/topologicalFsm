@@ -1,12 +1,11 @@
-package com.usp.icmc.labes.fsm;
+package com.usp.icmc.ssc5888;
 
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 
-import com.usp.icmc.ssc5888.Maze;
-import com.usp.icmc.ssc5888.TopologicalMap;
+import com.usp.icmc.labes.fsm.FsmModel;
 
 public class MazeUtils {
 
