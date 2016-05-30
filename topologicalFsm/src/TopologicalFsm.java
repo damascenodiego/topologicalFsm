@@ -100,7 +100,6 @@ public class TopologicalFsm {
 			maze = new Maze(N,x,y);
 			maze.solve();
 
-			String fname = "topoMap_SEED_"+SEED+"_N_"+N;
 
 			Date di = new Date();
 			if(cmd.hasOption(HOMING_PARAMETER)){
@@ -119,11 +118,14 @@ public class TopologicalFsm {
 
 			if(cmd.hasOption(SAVE_PARAMETER)){
 				String tStamp = new SimpleDateFormat("yyyyMMddhhmm").format(new Date());
-				File folder = new File(new File("topologicalFsm"),fname+"_"+tStamp+"/");
+				File folder = new File(new File("topologicalFsm"),"topoMap_"+"_N_"+N+"/");
 				folder.mkdirs();
+				String fname = "topoMap"+"_N_"+N+"_"+tStamp+"_SEED_"+SEED;
 				if(DrawUtils.getInstance().getShowWindow()) {
 					StdDraw.show(0);
 					maze.draw();
+					maze.fillCurrent();
+					StdDraw.show(1000);
 					StdDraw.save(new File(folder,fname+".png").getAbsolutePath());
 				}
 				RobotUtils.getInstance().saveTopoMap(maze, new File(folder,fname+".jff"));
