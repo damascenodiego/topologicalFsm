@@ -271,6 +271,7 @@ public class RobotUtils {
 		FsmTransition tr = null;
 		boolean criteria3a,criteria3b;
 
+		aboveLevel.add(uncert.getUncertaintySet());
 
 		while (!uncertLst.isEmpty()) {
 			state = ((CurrentStateUncertainty)uncertLst.remove());
@@ -384,6 +385,7 @@ public class RobotUtils {
 		String output = null;
 		boolean criteria3a,criteria3b;
 
+		aboveLevel.add(uncert.getUncertaintySet());
 
 		while (!uncertLst.isEmpty()) {
 			state = ((CurrentStateUncertaintyHomingTree)uncertLst.remove());
