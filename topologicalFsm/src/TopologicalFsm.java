@@ -74,6 +74,15 @@ public class TopologicalFsm {
 			if(cmd.hasOption(N_PARAMETER)) {
 				N = Integer.valueOf(cmd.getOptionValue(N_PARAMETER));
 			}
+
+			if(cmd.hasOption(SEED_PARAMETER)) {
+				SEED = Long.valueOf(cmd.getOptionValue(SEED_PARAMETER));
+				StdRandom.setSeed(SEED);
+				System.out.println("Seed:\t"+StdRandom.getSeed());
+			}else{
+				System.out.println("Seed:\t"+StdRandom.getSeed());
+			}
+			
 			if(cmd.hasOption(POS_PARAMETER)) {
 				String coords[] = cmd.getOptionValue(POS_PARAMETER).split(",");
 				x = Integer.valueOf(coords[0]); 
@@ -86,15 +95,9 @@ public class TopologicalFsm {
 				y = StdRandom.uniform(N)+1;
 			}
 
-			if(cmd.hasOption(SEED_PARAMETER)) {
-				SEED = Long.valueOf(cmd.getOptionValue(SEED_PARAMETER));
-				StdRandom.setSeed(SEED);
-			}
-
 			if(!cmd.hasOption(SHOW_WINDOW_PARAMETER)) {
 				DrawUtils.getInstance().setShowWindow(false);
 			}
-			System.out.println("Seed:\t"+StdRandom.getSeed());
 			System.out.println("RobotPosition:\t("+x+","+y+")");
 			System.out.println("N:\t"+N);
 			maze = new Maze(N,x,y);
@@ -117,10 +120,10 @@ public class TopologicalFsm {
 			System.out.println("Time:\t"+(df.getTime()-di.getTime()));
 
 			if(cmd.hasOption(SAVE_PARAMETER)){
-				String tStamp = new SimpleDateFormat("yyyyMMddhhmm").format(new Date());
+//				String tStamp = new SimpleDateFormat("yyyyMMddhhmm").format(new Date());
 				File folder = new File(new File("topologicalFsm"),"topoMap"+"_N_"+N+"/");
 				folder.mkdirs();
-				String fname = "topoMap"+"_N_"+N+"_"+tStamp+"_SEED_"+SEED;
+				String fname = "topoMap"+"_N_"+N+"_SEED_"+SEED;
 				if(DrawUtils.getInstance().getShowWindow()) {
 					StdDraw.show(0);
 					maze.draw();
