@@ -294,8 +294,9 @@ public class RobotUtils {
 				allTransitions.add(trUncert);
 				criteria3a = criteria3a(stUncert);
 				criteria3b = criteria3bSyncTree(aboveLevel,stUncert);
-				if(!(criteria3a || criteria3b)) {
+				if(!criteria3a && !criteria3b) {
 					next.add(stUncert);
+					nextAboveLevel.add(stUncert.getUncertaintySet());
 				}
 
 				if(criteria3a(trUncert.getTo())) {
@@ -309,6 +310,7 @@ public class RobotUtils {
 				nextAboveLevel.clear();
 			}
 		}
+		
 		if(onlySingletons){
 			Set<FsmTransition> allSingletonTr = new HashSet<FsmTransition>();
 			Map<String,FsmState> allSingletonStates = new HashMap<>();
@@ -414,8 +416,9 @@ public class RobotUtils {
 				allTransitions.add(trUncert);
 				criteria3a = criteria3a(stUncert);
 				criteria3b = criteria3bHomingTree(aboveLevel,stUncert);
-				if(!(criteria3a || criteria3b)) {
+				if(!criteria3a && !criteria3b) {
 					next.add(stUncert);
+					nextAboveLevel.add(stUncert.getUncertaintySet());
 				}
 
 				if(criteria3a(trUncert.getTo())) {
