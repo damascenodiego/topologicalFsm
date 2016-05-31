@@ -1,0 +1,16 @@
+ClosestSingleton:
+	[2,1, 2,2, 1,1, 1,2]
+	MOVE_NORTH -> [2,2, 1,2]
+	MOVE_WEST -> [1,2]
+FarestSingleton:
+	[2,1, 2,2, 1,1, 1,2]
+	MOVE_NORTH -> [2,2, 1,2]
+	MOVE_WEST -> [1,2]
+ClosestAllSingleton:
+	[2,1, 2,2, 1,1, 1,2]
+	MOVE_NORTH -> [2,2, 1,2]
+	MOVE_WEST -> [1,2]
+FarestAllSingleton:
+	[2,1, 2,2, 1,1, 1,2]
+	MOVE_NORTH -> [2,2, 1,2]
+	MOVE_WEST -> [1,2]
