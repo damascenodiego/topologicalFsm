@@ -1,0 +1,544 @@
+\documentclass[12pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{subfigure}
+\usepackage{hyperref}
+\usepackage{multirow}
+
+\include{defs}
+
+
+\usepackage{lipsum}
+
+%%%%%%%%%%%%%%%
+% Title Page
+\title{Topological Localization using FSM-Based Testing Sequences \newline -- Technical Report -- }
+\author{Carlos Diego N. Damasceno \newline
+\href{mailto:damascenodiego@usp.br}{\color{white}{damascenodiego@usp.br}} \newline
+USP - ICMC / \href{http://wiki.icmc.usp.br/index.php/SSC-5888-2016(fosorio)}{\color{white}{SSC5888 @ 2016}}}
+\date{\today}
+%%%%%%%%%%%%%%%
+
+\hypersetup{
+     	pagebackref=true,
+		pdftitle={Topological Localization using FSM-Based Testing Sequences - Technical Report}, 
+		pdfauthor={Carlos Damasceno},
+	    pdfcreator={Carlos Damasceno},
+		colorlinks=true,       		% false: boxed links; true: colored links
+    	linkcolor=blue,          	% color of internal links
+    	citecolor=blue,        		% color of links to bibliography
+    	filecolor=magenta,      	% color of file links
+		urlcolor=blue,
+		bookmarksdepth=4
+}
+
+
+\begin{document}
+\maketitle
+
+\tableofcontents
+\clearpage
+
+\section{Introduction}
+
+
+This technical report presents the final project developed in the course {\textit{SSC5888 - Rob\^os M\'oveis Aut\^onomos}} at the Institute of Mathematical and Computer Sciences (ICMC) of the University of S\~ao Paulo (USP).
+This project was developed by Carlos Diego Nascimento Damasceno, PhD candidate at the ICMC-USP, and the course was taught by Fernando Os\'orio.
+More information about the course can be found in 
+\href{http://wiki.icmc.usp.br/index.php/SSC-5888-2016(fosorio)}{http://wiki.icmc.usp.br/index.php/SSC-5888-2016(fosorio)}
+
+\subsection{Project description}
+
+The project developed consists of an experiment investigating the usage of Finite State Machine (FSM) based testing methods \cite{Broy2005MTR} for robot localization (Figure \ref{fig:robotLocalization}) in topological maps.
+
+Topological maps describe environments as a graph that connects specific locations in the world, represented by vertices, with edges expressing their accessibility \cite{Dudek:2000:CPM:331954}.
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=0.6\linewidth]{images/robotLocalization.png}
+    \caption{General schematic for mobile robot localization \cite{Siegwart:2004:IAM:983690}}
+    \label{fig:robotLocalization}
+\end{figure}
+
+At the same time, in FSM-Based Testing, the current state uncertainty is a data structure used for solving one of the most basic problems in this domain which consists of identifying the current state of an FSM using input (and possibly output) symbols \cite{Broy2005MTR}.
+
+
+In this sense, the robot location problem in topological maps can be modeled as the problem of reducing the current state uncertainty until identifying an unique current state (or position) in this map. 
+Thus, two common solutions for solving the current state uncertainty were applied on topological maps of random mazes specified as FSM models:
+
+\begin{itemize}
+ \item \textit{Synchronizing tree}, and 
+ \item \textit{Homing tree}
+\end{itemize}
+
+A tool called \textit{\href{https://github.com/damascenodiego/topologicalFsm}{topologicalFsm}} 
+was implemented to support this investigation of this approach.
+The \textit{topologicalFsm} tool was implemented using a software which randomly generates mazes to simulate a robotic environment.
+Given a maze, the \textit{topologicalFsm} tool can generate its respective topological map. 
+Afterwards, it can generate synchronizing and homing trees to support the identification of the state actually occupied by a robot by means of reducing the current state uncertainty.
+
+%
+The topological maps are modelled as \textit{mealy machines} and used for generating synchronizing and homing trees for solving the current state uncertainty problem.
+Predefined sequences of operations can be extracted from these trees to support the localization of a robot randomly placed on mazes.
+
+\section{Materials and Methods}
+
+\subsection{FSM-Based Testing}
+
+A mealy machine, or simply an FSM, is an hypothetical machine ${M}$ composed by states and transitions \cite{Broy2005MTR}.
+In \cite{Gill62ITFS}, an FSM is formally defined as a tuple ${M}=<S,s_0,I,O,D,\delta,\lambda>$ where 
+\begin{itemize}
+  \item $S$ is a finite set of states,
+  \item $s_{0} \in S$ is the initial state,
+  \item $I$ is the finite set of input symbols,
+  \item $O$ is the finite set of output symbols,
+  \item $D \subseteq S \times I $ is the specification domain,
+  \item $\delta	 :D \to S$ is the transition function, and
+  \item $\lambda :D \to O$ is the output function.
+\end{itemize}
+An example of FSM is presented in Figure \ref{fig:exampleFsm}.
+
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=0.3\linewidth]{images/fsmExample.png}
+    \caption{Example of FSM}
+    \label{fig:exampleFsm}
+\end{figure}
+
+An FSM always has has one single current state $s_i\in S$ which  changes to $s_j\in S$ when a defined input symbol $x\in I$ is applied in the transition function, $\delta(s_i,x)=s_j$, and return an output $y=\lambda(s,x)$ such that $y\in O$.
+An input $x$ is defined for $s$ if in state $s$ there is a \textit{defined transition} consuming input $x$.
+An FSM is said \textit{complete} if all inputs are defined for all the states, otherwise it is named \textit{partial}.
+A sequence $\alpha=x_1x_2...x_n\in I$ is an input sequence defined for state $s\in S$, if there exist states $s_1,s_2,...,s_{n+1}$ such that $s=s_1$ and $\delta(s_i,x_i)=s_{i+1}$, for all $1 \leq i \leq n$.
+A sequence $\alpha=x_1x_2...x_n\in I$ is a transfer sequence from $s$ to $s_{n+1}$ if $\delta(s,\alpha)=s_{n+1}$.
+We say that $s_{n+1}$ is reachable from $s$.
+When every state is reachable from $s_0$ the FSM is said \textit{initially connected}. When every state is reachable from any of the states of a machine, the FSM is named \textit{strongly connected}.
+
+The concatenation of two sequences $\alpha$ and $\omega$ is denoted as $\alpha\omega$.
+One sequence $\alpha$ is a prefix of another sequence $\beta$, if $\beta=\alpha\omega$, for some given sequence $\omega$.
+An empty sequence is denoted by $\epsilon$ such that for a state $s_i\in S$, $\delta(s_i,\epsilon)=s_i$, and $\lambda(s_i,\epsilon)=\epsilon$.
+Moreover, given a subset $Q$ of the finite set $S$, expressed as $Q \subseteq S$, and an input $x$ then 
+$\delta(Q,x) = \{\delta(s,x):s\in Q\}$, which defines the set of states reachable from all states $s\in Q$ by applying the input $x$.
+
+\subsection{Homing and Synchronizing Sequences}
+
+In FSM-based testing there is a category of problems where the initial state $s_0$ is not known \cite{Broy2005MTR}.
+For this problem, there are two types of sequences that can be used as solution: \textit{Synchronizing sequences} and  \textit{Homing sequences}.
+These sequences take an FSM to one unique state regardless its initial position.
+The homing sequences work based on the output symbols obtained given a sequence, while the synchronizing sequences are independent of outputs.
+These sequences are briefly described below.
+
+\subsubsection{Sychronizing sequences}
+
+A \textit{synchronizing sequence} is a sequence that takes an FSM to a unique final state regardless where it started.
+Thus, a sequence $x\in I*$ is synchronizing if $|\delta(S,x)|=1$, which means that $x$ belongs to the set of defined inputs $I*$ and the number of reached states after applying $x$ is equals to 1. 
+In words, regardless the initial state, there is only one state that can be reached after applying the input sequence $x$.
+Note that since synchronizing sequences only use the transition function $\delta$, they are independend of outputs.
+
+\subsubsection{Homing Sequences}
+
+A \textit{homing sequence} is a sequence such that the final state can be identified by looking at the output symbols obtained.
+Formally, it means that a sequence $x\in I*$ is homing if for every pair of states $s,t \in S$, if $\delta(s,x)\neq\delta(t,x)\Rightarrow\lambda(s,x)\neq\lambda(t,x)$.
+In words it means that given a sequence $x$, if any two different states of an FSM are taken then different output sequences are going to be obtained.
+
+
+
+\subsection{Current State Uncertainty}
+
+Given an FSM, if some input sequence is applied, some conclusion about it can be obtained.
+The \textit{current state uncertainty} describes what is known about the current (or final) state after applying a given sequence $x\in I*$.
+Formally, the current state uncertainty with respect to a given mealy machine after applying a sequence $x\in I*$ is expressed as $\sigma(x)=\{\delta(B_i,x):B_i\in \pi(x)\}$ where $\pi(x)$ describes a set of blocks $\{B_1,B_2,...,B_r\}$ such that two states $s,t\in S$ are in a same block $B_i$ if and only if $\lambda(s,x)=\lambda(t,x)$.
+In words, two states belong to one same block if a same output is obtained.
+An example is presented below:
+
+
+\noindent \textbf{Example:} Considering the FSM in Figure \ref{fig:exampleFsm}, the current uncertainty $\sigma(\epsilon)=\{\{s,t,u\}\}$.
+By applying the input $a$, the current state uncertainty $\sigma(a)=\{ \{s\}_1,\{s,u\}_0 \}$, which means that if the output $1$ is obtained when $a$ input is applied, there is only one possible state that the FSM is currently on, that is $s$.
+Otherwise, if $0$ is obtained, the FSM can be on $s$ or $u$ states.
+The current state uncertainty $\{s,u\}_0 \}$ can still be decreased if $a$ is applied again.
+Then, if $00$ is obtained given the input $aa$, then the state $s$ is reached at the end.
+If $01$ is obtained given $aa$, then only state $u$ can be reached.
+
+~
+
+\subsubsection{Synchronizing Tree}
+
+To compute the shortest synchronizing sequence, the \textit{synchronizing tree} can be used \cite{Broy2005MTR}.
+A synchronizing tree is a rooted tree where edges are labeled with input symbols and nodes with sets of states, satisfying the following conditions:
+
+\begin{enumerate}
+    \item Each non-leaf has exactly $|I|$ children, and the edges leading to them are labeled with different input symbols.
+    \item Each node is labeled with the set of states reached by the input sequence occurring as edge labels on the path from the root to the node, $\delta(S,x)$.
+    \item A node is a leaf iff:
+    \item \begin{enumerate}
+        \item either its label is a singleton set,
+        \item or it has the same label as a node of smaller depth in the tree.
+    \end{enumerate}
+\end{enumerate}
+
+The synchronizing tree of the FSM depicted in Figure \ref{fig:exampleFsm} is shown in Figure \ref{fig:syncTree}.
+
+\subsubsection{Homing Tree}
+
+To compute the shortest homing sequence, the \textit{homing tree} can be used \cite{Broy2005MTR}.
+A homing tree is a rooted tree where edges are labeled with input symbols and nodes with current state uncertainties, satisfying the following conditions:
+
+\begin{enumerate}
+    \item Each non-leaf has exactly $|I|$ outgoing edges, labeled with different input symbols.
+    \item Each node is labeled with the current state uncertainty given the input sequence $x$ occurring as edge labels on the path from the root to the node, $\sigma(x)$.
+    \item A node is a leaf iff:
+    \item \begin{enumerate}
+        \item either its label is a singleton set,
+        \item or it has the same label (e.g., set of reached states) as a node of smaller depth in the tree.
+    \end{enumerate}
+\end{enumerate}
+
+The homing tree of the FSM depicted in Figure \ref{fig:exampleFsm} is shown in Figure \ref{fig:homiTree}.
+
+
+\begin{figure}[ht] % Inicia o ambiente de figuras
+\centering
+  \subfigure[Synchronizing tree]{ % Começa a incluir a figura fig1.pdf
+    \includegraphics[height=3.5cm]{images/syncTree.png}
+    \label{fig:syncTree}
+  } % Termina de incluir a figura fig1.pdf
+  \subfigure[Homing tree]{ % Começa a incluir a figura fig2.pdf na mesma linha da figura fig1.pdf
+    \includegraphics[height=3.5cm]{images/homTree.png}
+    \label{fig:homiTree}
+  } % Termina de incluir a figura fig2.pdf
+  \caption{Synchronizing and Homing trees}
+\end{figure} % Fecha o ambiente de figuras
+
+
+
+\subsection{Topological Maps}
+
+Localization is the problem of using a map to interpret sensor data to determine the configuration (i.e., position) of the robot \cite{Choset_2005_5167}.
+In this experiment, we consider the problem of locating a robot placed in a maze using approaches to solve the \textit{current state uncertainty problem}, such as synchronizing and homing trees, based on topological maps expressed as mealy machines.
+Figures \ref{fig:realMap} and \ref{fig:topoMap} respectively depict the real map of an environment that a robot can move and the topological representation of this same map.
+
+
+\begin{figure}[ht] % Inicia o ambiente de figuras
+\centering
+  \subfigure[Real Map]{ % Começa a incluir a figura fig1.pdf
+    \includegraphics[height=4.0cm]{images/realMap.png}
+    \label{fig:realMap}
+  } % Termina de incluir a figura fig1.pdf
+  \subfigure[Topological Map]{ % Começa a incluir a figura fig2.pdf na mesma linha da figura fig1.pdf
+    \includegraphics[height=4.0cm]{images/topoMap.png}
+    \label{fig:topoMap}
+  } % Termina de incluir a figura fig2.pdf
+  \caption{Topological representation of a real map}
+\end{figure} % Fecha o ambiente de figuras
+
+A topological map consists of an abstraction of an environment where "something distinct", such as intersections and T-junctions, is represented as \textbf{v}ertices (nodes) and adjacency relationships between nodes are depicted as \textbf{e}dges. 
+These structures are expressed as a graph $G = (V , E)$ which can also have some embedded information or special labels in edges or vertices, e.g., the edges may have length \cite{Dudek:2000:CPM:331954}.
+
+\subsubsection{Topological maps as mealy machine}
+
+In this project, the topological maps of mazes are modelled as mealy machines. 
+Figure \ref{fig:mazeExample} shows an example of $2\times2$ maze where a robot, represented as a blue dot, is placed at the $(1,1)$ position.
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=0.25\linewidth]{images/mazeExample.png}
+    \caption{Example of Maze}
+    \label{fig:mazeExample}
+\end{figure}
+
+
+The topological maps of mazes are modelled as a mealy machine
+$M= <S, I, O, \delta,\lambda>$.
+The  finite set of states $S$ describes each position at the maze, e.g., there is a state to position $(1,1)$.
+The input domain $I$ describes the operations that the robot can perform.
+The operations considered are listed bellow:
+
+\begin{itemize}
+  \item \texttt{CHECK\_NORTH}: Verifies if there is an obstacle blocking \textbf{north} direction.
+  \item \texttt{CHECK\_EAST}: Verifies if there is an obstacle blocking \textbf{east} direction.
+  \item \texttt{CHECK\_SOUTH}: Verifies if there is an obstacle blocking \textbf{south} direction.
+  \item \texttt{CHECK\_WEST}: Verifies if there is an obstacle blocking \textbf{west} direction.
+  \item \texttt{MOVE\_NORTH}: If allowed, move the robot to \textit{north} direction.
+  \item \texttt{MOVE\_EAST}: If allowed, move the robot to \textit{east} direction.
+  \item \texttt{MOVE\_SOUTH}: If allowed, move the robot to \textit{south} direction.
+  \item \texttt{MOVE\_WEST}: If allowed, move the robot to \textit{west} direction.
+\end{itemize}
+
+The output domain $O$ contains the symbols \texttt{\{true,false\}}.
+The output function $\lambda$ work as follows: \texttt{CHECK\_XXX} operations return \texttt{false} if there is no obstacle blocking the direction \texttt{XXX}, otherwise the \texttt{true} symbol is returned.
+The state transition function $\delta$ essentially depicts the robot moving from a given state to a neighbor state where one of the coordinates of the position is incremented. 
+When a \texttt{MOVE\_XXX} operation is requested, the state transition function returns \texttt{false} if a move to the given  \texttt{XXX} direction allowed.
+Transitions expressing not allowed movements are depictedc as \textit{self-loops} and return \texttt{true}.
+\texttt{CHECK\_XXX} operations are also self-loops which return \texttt{true} if there is an obstacle, otherwise it returns \texttt{false}.
+Figures \ref{fig:mazeExample_topoMap} and \ref{fig:mazeExample_topoMap_noloop} respectively show an example of topological map with and without self-loop transitions to keep the figure uncluttered.
+
+
+\begin{figure}[ht] % Inicia o ambiente de figuras
+\centering
+  \subfigure[Topological Map]{ % Começa a incluir a figura fig2.pdf na mesma linha da figura fig1.pdf
+    \includegraphics[width=0.4\linewidth]{images/mazeExample_topoMap.png}
+    \label{fig:mazeExample_topoMap}
+  } % Termina de incluir a figura fig2.pdf
+    \subfigure[Topological Map without self-loops]{ % Começa a incluir a figura fig2.pdf na mesma linha da figura fig1.pdf
+    \includegraphics[width=0.4\linewidth]{images/mazeExample_topoMap_noloop.png}
+    \label{fig:mazeExample_topoMap_noloop}
+  } % Termina de incluir a figura fig2.pdf
+  \caption{Topological representation of a $2\times2$ maze}
+\end{figure} % Fecha o ambiente de figuras
+
+The topological maps presented in Figures \ref{fig:mazeExample_topoMap} and \ref{fig:mazeExample_topoMap_noloop} depict the $2\times2$ maze presented in Figure \ref{fig:mazeExample}.
+The map has four states representing each of the positions at the maze.
+Since the robot is placed at the position $(1,1)$, then the initial state is marked as the state with same label. 
+
+\subsubsection{Synchronizing and Homing Trees of Topological Maps}
+
+Given a topological map like the presented in Figure \ref{fig:mazeExample_topoMap}, synchronizing and homing trees can be generated to support the identification of the current state (in words, the location) of a robot in a topological map.
+Figures \ref{fig:mazeExample_synchrTree} and \ref{fig:mazeExample_homingTree} respectively show a part of a synchronizing tree and a homing tree obtained from the topological map presented in Figure \ref{fig:mazeExample_topoMap}.
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=1.0\linewidth]{images/mazeExample_synchrTree.png}
+    \caption{Example of synchronizing tree of a topological map}
+    \label{fig:mazeExample_synchrTree}
+\end{figure}
+
+In Figure \ref{fig:mazeExample_synchrTree}, the nodes of the synchronizing tree colored in yellow highlight two sequences of operations that when performed take a robot for two different states, regardless the initial state.
+The root of the synchronizing tree shows that the current state uncertainty includes all four states as possibly occupied by the robot.
+After applying the command \texttt{MOVE\_NORTH}, the robot uncertainty is reduced to two states, $\{(2,2),(1,2)\}$.
+At this stage, there are two operations that guarantee the localization of the robot:  \texttt{MOVE\_WEST} or  \texttt{MOVE\_EAST}.
+Both operations reduce the uncertainty to one single possibly current state, called \textit{singleton}.
+These states are respectively $(1,2)$ and $(2,2)$. 
+
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=1.0\linewidth]{images/mazeExample_homingTree.png}
+    \caption{Example of homing tree of a topological map}
+    \label{fig:mazeExample_homingTree}
+\end{figure}
+
+
+
+In Figure \ref{fig:mazeExample_homingTree}, the nodes of the homing tree colored in yellow highlight four sequences of operations that when performed can identify the final state that a robot ocuppies.
+The root of the synchronizing tree shows that the current state uncertainty includes all four states as possibly occupied by the robot given the empty sequence $\epsilon$.
+For example, if after applying the command \texttt{CHECK\_EAST}, the a \texttt{false} output symbol is obtained, there will be a single state/position that the robot can be occuppying: $(1,2)$.
+The command \texttt{MOVE\_NORTH}, on the other hand does not guarantee the a singleton, but reduces the current state uncertainty to two sets with two states $\{(2,2), (1,2)\}$, both if \texttt{true} or \texttt{false} are obtained.
+The inputs \texttt{CHECK\_EAST} and  \texttt{CHECK\_WEST}, at this point, can distinguish these two same states given one of the sequences of outputs shown. 
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Experiment}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+An experiment was performed for measuring the length of sequences of operations necessary for locating a simulated robot only using the synchronizing and homing trees.
+
+The experiment essentially was designed with the following four steps:
+\begin{itemize}
+    \item[(i)] Generation of random mazes
+    \item[(ii)]Topological map extraction
+    \item[(iii)] Generation of the \textit{Synchronizing} and \textit{Homing} trees
+    \item[(iv)] Verification of the length of the sequences for reaching singleton nodes
+\end{itemize}
+
+At the step (i), random mazes were generated using three configurations for the dimensions:
+$2\times2$, 
+$3\times3$, and 
+$4\times4$.
+Afterwards, in step (ii), the random mazes were traversed using a depth-first search (DFS) algorithm and each of the coordinates at the map were analyzed in order to generate and connect nodes of the topological map.
+The synchronizing and homing trees of each topological map were generated and four values were extracted from them:
+(i) The length of the \textit{shortest sequence} which \textit{can reach} one singleton;
+(ii) The length of the \textit{shortest sequence} which \textit{will reach} one singleton;
+(iii)  The length of the \textit{longest sequence} which \textit{can reach} one singleton; and
+(iv)  The length of the \textit{longest sequence} which \textit{will reach} one singleton.
+
+
+The difference between a sequence that \textit{can reach} to another that \textit{will reach} a singleton is the following: 
+In homing trees, there may exist some states where only one output guarantees that an unique state is reached, thus only this specific output guarantees that singleton.
+For example, in Figure \ref{fig:mazeExample_homingTree}, a singleton \textit{can be reached} if a \texttt{CHECK\_EAST} operation is performed and \texttt{false} is returned.
+If a \texttt{true} symbol is obtained as output, only one of four coordinates is eliminated. 
+On the other hand, if the sequence of operations \texttt{MOVE\_NORTH,CHECK\_EAST} is performed and one of the outputs presented in the state is obtained, there is the guarantee that an unique position ($(1,2)$ or $(2,2)$) is going to be reached.
+If synchronizing trees are used, there is no such distinction since output symbols are not considered.
+The presented approach was implemented in a tool named \textit{topologicalFsm}, presented in the next section.
+
+
+\subsection{topologicalFsm tool}
+
+The \textit{topologicalFsm} tool was implemented using the java programming language and its source code can be found at \url{https://github.com/damascenodiego/topologicalFsm}.
+The tool was designed based on the maze generator introduced by \cite{sedgewick2011}
+which can generate random mazes.
+A value $n$ defines the $n\times n$ area of the random mazes.
+Topological maps are also generated from these maps and used to obtain synchronizing or homing trees.
+A simulated robot can be placed in any valid coordinate for investigating the localization problem using the generated tree.
+A sequence of snapshots showing the current state uncertainty throughout the execution of the sequence \texttt{MOVE\_NORTH,MOVE\_EAST} is presented in Figures 
+\ref{fig:topoFsm01}, \ref{fig:topoFsm02}  and \ref{fig:topoFsm03}.
+
+\begin{figure}[ht] % Inicia o ambiente de figuras
+\centering
+  \subfigure[Any position is possible]{ % 
+    \includegraphics[width=0.3\linewidth]{images/topoMap_N_2_SEED_1464625857423_HomingTree_step_1.png}
+    \label{fig:topoFsm01}
+  } %
+  ~
+  \subfigure[Uncertainty after \texttt{MOVE\_NORTH}]{ % 
+    \includegraphics[width=0.3\linewidth]{images/topoMap_N_2_SEED_1464625857423_HomingTree_step_2.png}
+    \label{fig:topoFsm02}
+  } %
+  ~
+  \subfigure[\texttt{MOVE\_EAST} and singleton]{ % 
+    \includegraphics[width=0.3\linewidth]{images/topoMap_N_2_SEED_1464625857423_HomingTree_step_3.png}
+    \label{fig:topoFsm03}
+  } %
+  \caption{Example of robot localization in a $4\times 4$ maze}
+\end{figure} % Fecha o ambiente de figuras
+
+~
+
+At first, any of the four states are possibly occupied by the robot.
+After the \texttt{MOVE\_NORTH} operation, the uncertainty is reduced from four to two.
+At the end, the \texttt{MOVE\_EAST} operation reduces the uncertainty to a singleton.
+
+\subsubsection{Command line interface}
+
+The operation of the \textit{topologicalFsm} tool is made via command line interface (CLI).
+Essentially, there are four main parameters: 
+
+\begin{itemize}
+    \item[] \texttt{-n}: It defines the $n$ parameter used to define the dimensions of the $n\times n$ maze.
+    \item[] \texttt{-synchronizing}: Generates a synchronizing tree from a given maze.
+    
+    \item[] \texttt{-homing}: Generates the homing tree from a given maze.
+    
+    \item[] \texttt{-save}: It saves the 
+    topological map\footnote{Topological maps are saved in \textit{.jff} format. See JFLAP: \url{http://www.jflap.org/}} 
+    the maze\footnote{Mazes are saved as \textit{.png} and text file}, and 
+    the tree \footnote{Homing and synchronizing trees are saved as both \textit{.jff} and \textit{.dot} files.} generated.
+
+\end{itemize}
+
+By default, the tool generates synchronizing and homing trees with leaf nodes only containing singleton sets was also defined.
+Thus, any path from the root to leaf nodes guarantees that a singleton is reached.
+Figures \ref{fig:mazeExample_synchrTree_partial} and \ref{fig:mazeExample_homingTree_partial} respectively show examples of synchronizing and homing trees with leaf nodes only containing singletons.
+%
+To generate the complete tree the parameter \texttt{-complete} must be used.
+The \texttt{-window} parameter shows the visual presentation of the maze. 
+The \texttt{-save} parameter without \texttt{-complete} generates a sequence of frames showing the current state uncertainty until reaching a singleton.
+The \texttt{-pos} parameter setup the position of the robot in the map (e.g., \texttt{-pos 1,1}).
+The \texttt{-seed} and \texttt{-seedp} parameters can be used to control the random generation of mazes and the sequences of operations, respectively. 
+
+
+\begin{figure}[ht] %
+\centering
+  \subfigure[Synchronizing tree only with singletons]{ % 
+    \includegraphics[height=4.cm]{images/mazeExample_synchrTree_partial.png}
+    \label{fig:mazeExample_synchrTree_partial}
+  } %
+  \subfigure[Homing tree only with singletons]{ % 
+    \includegraphics[height=4.5cm]{images/mazeExample_homingTree_partial.png}
+    \label{fig:mazeExample_homingTree_partial}
+  } %
+  \caption{Synchronizing and Homing trees only with singleton leaves}
+\end{figure} %
+
+
+%\subsubsection{Source code}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Results and discussion}%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+In this section the results of the experiment are shown.
+The duration of the generation of the homing and synchronizing trees and the average length of the shortest and the longest paths that can and will reach singletons are presented. 
+
+
+\subsection{Time to generate trees}
+
+Figure \ref{fig:data_syncTree_time_n} and \ref{fig:data_homiTree _time_n} show the time necessary to generate the synchronizing and homing trees, respectively.
+The boxplots show that the time to generate homing trees was shorter compared to the time to generate synchronizing trees.
+Since homing sequences are usually shorter, homing trees also tend to often present a smaller height compared to synchronizing trees.
+Thus, it can be expected that homing trees may need a shorter time to be generated compared to synchronizing trees.
+
+
+
+\begin{figure}[ht] % Inicia o ambiente de figuras
+\centering
+  \subfigure[Synchronizing trees]{ % 
+    \includegraphics[width=0.45\linewidth]{images/data_syncTree_time_n.png}
+    \label{fig:data_syncTree_time_n}
+  } %
+  ~
+  \subfigure[Homing trees]{ % 
+    \includegraphics[width=0.45\linewidth]{images/data_homiTree_time_n.png}
+    \label{fig:data_homiTree _time_n}
+  } %
+  \caption{Average time to generate trees (seconds)}
+\end{figure} % Fecha o ambiente de figuras
+
+
+\subsection{Number of operations for localization}
+
+Tables \ref{tab:locSyncTree} and \ref{tab:locHomiTree} respectively show the average length of paths to singletons on synchronizing and homing trees.
+This average length essentially depicts the number of operations necessary for performing the location of a robot in a maze.
+
+The column named "\textit{Can reach a singleton}" presents the average length of the shortest and longest paths which reach a node with \textit{at least one singleton}.
+In words, paths that can reach a singleton point out a sequence of operations that, in case of conformance between obtained outputs and these specified on the singleton nodes, describe an single known position in the maze.
+On the other hand, the column named "\textit{Will reach a singleton}" shows the average length of the shortest and the longest paths \textit{able to reach a singleton}.
+Thus, these other paths regardless the obtained ouputs, the position of the robot will become known.
+
+\begin{table}[ht]
+\centering
+\caption{Paths to singletons on Synchronizing trees (Avg. length)}
+\label{tab:locSyncTree}
+\begin{tabular}{c|c|c|c|c}
+\hline
+\multirow{2}{*}{N} & \multicolumn{2}{c|}{Can reach a singleton} & \multicolumn{2}{c}{Will reach a singleton} \\ \cline{2-5} 
+                   & Shortest              & Longest              & Shortest              & Longest              \\ \hline
+2                  & 2                    & 2                   & 2                     & 2                   \\ \hline
+3                  & 5.45                 & 8.6                 & 5.45                  & 8.6                 \\ \hline
+4                  & 10.18                & 15.75               & 10.18                 & 15.75               \\ \hline
+\end{tabular}
+\end{table}
+
+In homing trees, the average length of the paths to singletons is significantly reduced.
+The shortest paths which can reach singletons decreased around three times.
+For mazes with $4\times4$, there was a significant reduction on the shortest paths to singletons.
+It is important to highlight that the two columns \textit{Can reach a singleton} and \textit{Will reach a singleton} do not change on \textit{synchronizing trees} since reaching singletons strictly depend on the input symbols.
+On the other hand, there may exist input sequences that can reach tree nodes where some specific output sequences do not point to singleton sets (e.g., in Figure \ref{fig:mazeExample_homingTree}, the \texttt{CHECK\_WEST} operation, when applied at the root node, returns a \texttt{false} output symbol and a singleton can be reached. However, in case of \texttt{true}, no singleton can be reached).
+
+
+\begin{table}[ht]
+\centering
+\caption{Paths to singletons on Homing trees (Avg. length)}
+\label{tab:locHomiTree}
+\begin{tabular}{c|c|c|c|c}
+\hline
+\multirow{2}{*}{N} & \multicolumn{2}{c|}{Can reach a singleton} & \multicolumn{2}{c}{Will reach a singleton} \\ \cline{2-5} 
+                   & Shortest              & Longest              & Shortest              & Longest              \\ \hline
+2                  & 1                    & 2                   & 2                     & 2                   \\ \hline
+3                  & 2                    & 7.5                 & 4                     & 7.2                 \\ \hline
+4                  & 2.4                  & 19.1                & 6.45                  & 18.8                 \\ \hline
+\end{tabular}
+\end{table}
+
+
+\section{Final Remarks}
+
+The data structure used to specify the current state uncertainty can be helpful for localization in topological maps.
+Synchronizing and homing trees generated from topological maps specified as mealy machines enabled to identify paths on the maze with half to twice the dimension of the mazes considered in this experiment.
+Homing trees also enabled to identify paths shorter than using synchronizing trees.
+As extensions for this experiment, optimizations on the topological mapping can be used (e.g., only corner nodes are modelled or \texttt{CHECK} operation evaluating all directions at once -- $360^o$ sensors) can be considered.
+All the data generated, source-code and scripts are available at \url{https://github.com/damascenodiego/topologicalFsm}.
+
+% ----------------------------------------------------------
+% Referências bibliográficas
+% ----------------------------------------------------------
+\pagebreak
+\addcontentsline{toc}{section}{References}
+\bibliographystyle{plain}
+\bibliography{references}
+
+
+\end{document}          
