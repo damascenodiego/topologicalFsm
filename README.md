@@ -1,4 +1,4 @@
-# topologicalFsm [v2.1](https://github.com/damascenodiego/topologicalFsm/releases/tag/v2.2)
+# topologicalFsm [v2.2](https://github.com/damascenodiego/topologicalFsm/releases/tag/v2.2)
 
 This repository contains the source code, the data generated in an experiment and the technical report describing a project developed at the [**SSC5888 - Autonomous Mobile Robotics (PG-CCMC)**](http://wiki.icmc.usp.br/index.php/SSC-5888-2016(fosorio)) class of 2016 at the University of Sao Paulo.
 
