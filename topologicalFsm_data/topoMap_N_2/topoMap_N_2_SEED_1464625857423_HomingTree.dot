@@ -1,0 +1,13 @@
+digraph rbac2Fsm {
+  5 -> 15 [ label ="MOVE_WEST"];
+  5 -> 12 [ label ="CHECK_EAST"];
+  5 -> 16 [ label ="MOVE_EAST"];
+  5 -> 11 [ label ="CHECK_WEST"];
+  0 -> 5 [ label ="MOVE_NORTH"];
+  11 [label="[1,2]_{true,true}\n[2,2]_{false,false}\n[2,2]_{true,false}\n[1,2]_{false,true}\n"];
+  0 [label="[2,1, 2,2, 1,1, 1,2]_{}\n"];
+  12 [label="[2,2]_{true,true}\n[1,2]_{false,false}\n[1,2]_{true,false}\n[2,2]_{false,true}\n"];
+  15 [label="[1,2]_{true,true}\n[1,2]_{false,false}\n[1,2]_{true,false}\n[1,2]_{false,true}\n"];
+  5 [label="[2,2, 1,2]_{false}\n[2,2, 1,2]_{true}\n"];
+  16 [label="[2,2]_{true,true}\n[2,2]_{false,false}\n[2,2]_{true,false}\n[2,2]_{false,true}\n"];
+}

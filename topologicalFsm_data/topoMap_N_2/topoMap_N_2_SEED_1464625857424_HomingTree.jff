@@ -1,0 +1,457 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><!--Created with JFLAP 6.4.--><structure>
+	<type>mealy</type>
+	<automaton>
+		<!--The list of states.-->
+		<state id="22" name="[2,1, 1,1]_{true,true}\n[2,1, 1,1]_{false,true}\n">
+			<x>0</x>
+			<y>0</y>
+
+		</state>
+		<state id="23" name="[2,1, 1,1]_{true,true}\n[2,1, 1,1]_{false,true}\n">
+			<x>0</x>
+			<y>0</y>
+
+		</state>
+		<state id="24" name="[2,1, 1,1]_{true,true}\n[2,1, 1,1]_{false,true}\n">
+			<x>0</x>
+			<y>0</y>
+
+		</state>
+		<state id="25" name="[1,2]_{true,true}\n[2,1, 1,1]_{true,false}\n[1,2]_{false,true}\n">
+			<x>0</x>
+			<y>0</y>
+
+		</state>
+		<state id="26" name="[2,1, 1,1]_{true,true}\n[1,2]_{false,false}\n[1,2]_{true,false}\n">
+			<x>0</x>
+			<y>0</y>
+
+		</state>
+		<state id="27" name="[2,1, 1,1, 1,2]_{true,true}\n[1,2]_{false,true}\n">
+			<x>0</x>
+			<y>0</y>
+
+		</state>
+		<state id="28" name="[2,1, 1,1]_{true,true}\n[1,2]_{false,false}\n[1,2]_{true,false}\n">
+			<x>0</x>
+			<y>0</y>
+
+		</state>
+		<state id="29" name="[1,2]_{true,true}\n[2,2, 1,2]_{true,false}\n[1,2]_{false,true}\n">
+			<x>0</x>
+			<y>0</y>
+
+		</state>
+		<state id="30" name="[2,1, 1,1]_{true,true}\n[1,1]_{false,false}\n[1,1]_{true,false}\n">
+			<x>0</x>
+			<y>0</y>
+
+		</state>
+		<state id="31" name="[2,1, 1,1, 1,2]_{true,true}\n[1,2]_{false,true}\n">
+			<x>0</x>
+			<y>0</y>
+
+		</state>
+		<state id="10" name="[2,2, 1,2]_{false,false}\n[2,2, 1,2]_{true,false}\n">
+			<x>0</x>
+			<y>0</y>
+
+		</state>
+		<state id="32" name="[2,1, 1,1]_{true,true}\n[2,2]_{false,false}\n[2,2]_{true,false}\n">
+			<x>0</x>
+			<y>0</y>
+
+		</state>
+		<state id="11" name="[1,2]_{true,true}\n[2,2]_{false,false}\n[2,2]_{true,false}\n[1,2]_{false,true}\n">
+			<x>0</x>
+			<y>0</y>
+
+		</state>
+		<state id="33" name="[2,2]_{true,true}\n[2,1, 1,1]_{true,false}\n[2,2]_{false,true}\n">
+			<x>0</x>
+			<y>0</y>
+
+		</state>
+		<state id="12" name="[2,2]_{true,true}\n[1,2]_{false,false}\n[1,2]_{true,false}\n[2,2]_{false,true}\n">
+			<x>0</x>
+			<y>0</y>
+
+		</state>
+		<state id="34" name="[2,1, 1,1]_{true,true}\n[2,2]_{false,false}\n[2,2]_{true,false}\n">
+			<x>0</x>
+			<y>0</y>
+
+		</state>
+		<state id="13" name="[2,2, 1,2]_{true,true}\n[2,2, 1,2]_{false,true}\n">
+			<x>0</x>
+			<y>0</y>
+
+		</state>
+		<state id="35" name="[2,1, 1,1]_{true,true}\n[2,2]_{false,false}\n[2,2]_{true,false}\n">
+			<x>0</x>
+			<y>0</y>
+
+		</state>
+		<state id="14" name="[2,1, 1,1]_{false,false}\n[2,1, 1,1]_{true,false}\n">
+			<x>0</x>
+			<y>0</y>
+
+		</state>
+		<state id="36" name="[2,1, 2,2, 1,1]_{true,true}\n[2,2]_{false,true}\n">
+			<x>0</x>
+			<y>0</y>
+
+		</state>
+		<state id="15" name="[1,2]_{true,true}\n[1,2]_{false,false}\n[1,2]_{true,false}\n[1,2]_{false,true}\n">
+			<x>0</x>
+			<y>0</y>
+
+		</state>
+		<state id="37" name="[2,2]_{true,true}\n[2,2, 1,2]_{true,false}\n[2,2]_{false,true}\n">
+			<x>0</x>
+			<y>0</y>
+
+		</state>
+		<state id="16" name="[2,2]_{true,true}\n[2,2]_{false,false}\n[2,2]_{true,false}\n[2,2]_{false,true}\n">
+			<x>0</x>
+			<y>0</y>
+
+		</state>
+		<state id="38" name="[2,1, 1,1]_{true,true}\n[2,1]_{false,false}\n[2,1]_{true,false}\n">
+			<x>0</x>
+			<y>0</y>
+
+		</state>
+		<state id="17" name="[2,1, 1,1]_{false,false}\n[2,1, 1,1]_{true,false}\n">
+			<x>0</x>
+			<y>0</y>
+
+		</state>
+		<state id="39" name="[2,1, 1,1]_{true,true}\n[1,2]_{false,false}\n[1,2]_{true,false}\n">
+			<x>0</x>
+			<y>0</y>
+
+		</state>
+		<state id="18" name="[2,1, 1,1]_{true,true}\n[2,1, 1,1]_{false,true}\n">
+			<x>0</x>
+			<y>0</y>
+
+		</state>
+		<state id="19" name="[2,1, 1,1]_{true,true}\n[2,1, 1,1]_{false,true}\n">
+			<x>0</x>
+			<y>0</y>
+
+		</state>
+		<state id="0" name="[2,1, 2,2, 1,1, 1,2]_{}\n">
+			<x>0</x>
+			<y>0</y>
+			<initial/>
+		</state>
+		<state id="1" name="[2,1, 1,1]_{false}\n[2,2, 1,2]_{true}\n">
+			<x>0</x>
+			<y>0</y>
+
+		</state>
+		<state id="2" name="[2,1, 1,1]_{true}\n[2,2, 1,2]_{false}\n">
+			<x>0</x>
+			<y>0</y>
+
+		</state>
+		<state id="3" name="[2,1, 1,1, 1,2]_{true}\n[2,2]_{false}\n">
+			<x>0</x>
+			<y>0</y>
+
+		</state>
+		<state id="4" name="[2,1, 2,2, 1,1]_{true}\n[1,2]_{false}\n">
+			<x>0</x>
+			<y>0</y>
+
+		</state>
+		<state id="5" name="[2,2, 1,2]_{false}\n[2,2, 1,2]_{true}\n">
+			<x>0</x>
+			<y>0</y>
+
+		</state>
+		<state id="6" name="[2,1, 1,1]_{true}\n[2,1, 1,1]_{false}\n">
+			<x>0</x>
+			<y>0</y>
+
+		</state>
+		<state id="7" name="[2,1, 1,1, 1,2]_{true}\n[1,2]_{false}\n">
+			<x>0</x>
+			<y>0</y>
+
+		</state>
+		<state id="8" name="[2,1, 2,2, 1,1]_{true}\n[2,2]_{false}\n">
+			<x>0</x>
+			<y>0</y>
+
+		</state>
+		<state id="9" name="[2,2, 1,2]_{true,true}\n[2,2, 1,2]_{false,true}\n">
+			<x>0</x>
+			<y>0</y>
+
+		</state>
+		<state id="40" name="[2,1, 2,2, 1,1]_{true,true}\n[2,2]_{false,true}\n">
+			<x>0</x>
+			<y>0</y>
+
+		</state>
+		<state id="20" name="[2,1, 1,1]_{true,true}\n[2,1, 1,1]_{false,true}\n">
+			<x>0</x>
+			<y>0</y>
+
+		</state>
+		<state id="21" name="[2,2, 1,2]_{false,false}\n[2,2, 1,2]_{true,false}\n">
+			<x>0</x>
+			<y>0</y>
+
+		</state>
+		<!--The list of transitions.-->
+		<transition>
+			<from>8</from>
+			<to>40</to>
+			<read>MOVE_EAST</read>
+			<transout></transout>
+		</transition>
+		<transition>
+			<from>7</from>
+			<to>32</to>
+			<read>MOVE_EAST</read>
+			<transout></transout>
+		</transition>
+		<transition>
+			<from>7</from>
+			<to>31</to>
+			<read>MOVE_WEST</read>
+			<transout></transout>
+		</transition>
+		<transition>
+			<from>5</from>
+			<to>10</to>
+			<read>CHECK_SOUTH</read>
+			<transout></transout>
+		</transition>
+		<transition>
+			<from>6</from>
+			<to>23</to>
+			<read>MOVE_WEST</read>
+			<transout></transout>
+		</transition>
+		<transition>
+			<from>6</from>
+			<to>24</to>
+			<read>MOVE_EAST</read>
+			<transout></transout>
+		</transition>
+		<transition>
+			<from>5</from>
+			<to>15</to>
+			<read>MOVE_WEST</read>
+			<transout></transout>
+		</transition>
+		<transition>
+			<from>5</from>
+			<to>12</to>
+			<read>CHECK_EAST</read>
+			<transout></transout>
+		</transition>
+		<transition>
+			<from>5</from>
+			<to>16</to>
+			<read>MOVE_EAST</read>
+			<transout></transout>
+		</transition>
+		<transition>
+			<from>8</from>
+			<to>38</to>
+			<read>MOVE_SOUTH</read>
+			<transout></transout>
+		</transition>
+		<transition>
+			<from>0</from>
+			<to>5</to>
+			<read>MOVE_NORTH</read>
+			<transout></transout>
+		</transition>
+		<transition>
+			<from>5</from>
+			<to>11</to>
+			<read>CHECK_WEST</read>
+			<transout></transout>
+		</transition>
+		<transition>
+			<from>0</from>
+			<to>3</to>
+			<read>CHECK_WEST</read>
+			<transout></transout>
+		</transition>
+		<transition>
+			<from>5</from>
+			<to>14</to>
+			<read>MOVE_SOUTH</read>
+			<transout></transout>
+		</transition>
+		<transition>
+			<from>8</from>
+			<to>37</to>
+			<read>MOVE_NORTH</read>
+			<transout></transout>
+		</transition>
+		<transition>
+			<from>6</from>
+			<to>22</to>
+			<read>MOVE_SOUTH</read>
+			<transout></transout>
+		</transition>
+		<transition>
+			<from>7</from>
+			<to>30</to>
+			<read>MOVE_SOUTH</read>
+			<transout></transout>
+		</transition>
+		<transition>
+			<from>0</from>
+			<to>6</to>
+			<read>MOVE_SOUTH</read>
+			<transout></transout>
+		</transition>
+		<transition>
+			<from>0</from>
+			<to>8</to>
+			<read>MOVE_EAST</read>
+			<transout></transout>
+		</transition>
+		<transition>
+			<from>7</from>
+			<to>29</to>
+			<read>MOVE_NORTH</read>
+			<transout></transout>
+		</transition>
+		<transition>
+			<from>6</from>
+			<to>18</to>
+			<read>CHECK_SOUTH</read>
+			<transout></transout>
+		</transition>
+		<transition>
+			<from>6</from>
+			<to>19</to>
+			<read>CHECK_WEST</read>
+			<transout></transout>
+		</transition>
+		<transition>
+			<from>7</from>
+			<to>27</to>
+			<read>CHECK_WEST</read>
+			<transout></transout>
+		</transition>
+		<transition>
+			<from>7</from>
+			<to>28</to>
+			<read>CHECK_EAST</read>
+			<transout></transout>
+		</transition>
+		<transition>
+			<from>8</from>
+			<to>34</to>
+			<read>CHECK_SOUTH</read>
+			<transout></transout>
+		</transition>
+		<transition>
+			<from>8</from>
+			<to>35</to>
+			<read>CHECK_WEST</read>
+			<transout></transout>
+		</transition>
+		<transition>
+			<from>0</from>
+			<to>1</to>
+			<read>CHECK_NORTH</read>
+			<transout></transout>
+		</transition>
+		<transition>
+			<from>7</from>
+			<to>26</to>
+			<read>CHECK_SOUTH</read>
+			<transout></transout>
+		</transition>
+		<transition>
+			<from>8</from>
+			<to>36</to>
+			<read>CHECK_EAST</read>
+			<transout></transout>
+		</transition>
+		<transition>
+			<from>8</from>
+			<to>39</to>
+			<read>MOVE_WEST</read>
+			<transout></transout>
+		</transition>
+		<transition>
+			<from>5</from>
+			<to>13</to>
+			<read>MOVE_NORTH</read>
+			<transout></transout>
+		</transition>
+		<transition>
+			<from>6</from>
+			<to>20</to>
+			<read>CHECK_EAST</read>
+			<transout></transout>
+		</transition>
+		<transition>
+			<from>0</from>
+			<to>4</to>
+			<read>CHECK_EAST</read>
+			<transout></transout>
+		</transition>
+		<transition>
+			<from>5</from>
+			<to>9</to>
+			<read>CHECK_NORTH</read>
+			<transout></transout>
+		</transition>
+		<transition>
+			<from>6</from>
+			<to>21</to>
+			<read>MOVE_NORTH</read>
+			<transout></transout>
+		</transition>
+		<transition>
+			<from>8</from>
+			<to>33</to>
+			<read>CHECK_NORTH</read>
+			<transout></transout>
+		</transition>
+		<transition>
+			<from>0</from>
+			<to>7</to>
+			<read>MOVE_WEST</read>
+			<transout></transout>
+		</transition>
+		<transition>
+			<from>7</from>
+			<to>25</to>
+			<read>CHECK_NORTH</read>
+			<transout></transout>
+		</transition>
+		<transition>
+			<from>0</from>
+			<to>2</to>
+			<read>CHECK_SOUTH</read>
+			<transout></transout>
+		</transition>
+		<transition>
+			<from>6</from>
+			<to>17</to>
+			<read>CHECK_NORTH</read>
+			<transout></transout>
+		</transition>
+		<note>
+			<text>HomingTree;seed=1464625857424';N=2</text>
+			<x>0</x>
+			<y>0</y>
+		</note>
+	</automaton>
+</structure>

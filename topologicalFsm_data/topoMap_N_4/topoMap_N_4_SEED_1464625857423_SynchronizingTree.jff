@@ -1,0 +1,963 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><!--Created with JFLAP 6.4.--><structure>
+	<type>mealy</type>
+	<automaton>
+		<!--The list of states.-->
+		<state id="15384" name="[4,4]">
+			<x>0</x>
+			<y>0</y>
+
+		</state>
+		<state id="9301" name="[4,4]">
+			<x>0</x>
+			<y>0</y>
+
+		</state>
+		<state id="11181" name="[2,4, 1,4]">
+			<x>0</x>
+			<y>0</y>
+
+		</state>
+		<state id="23805" name="[1,2]">
+			<x>0</x>
+			<y>0</y>
+
+		</state>
+		<state id="23806" name="[1,1]">
+			<x>0</x>
+			<y>0</y>
+
+		</state>
+		<state id="11183" name="[1,3, 1,4]">
+			<x>0</x>
+			<y>0</y>
+
+		</state>
+		<state id="9302" name="[4,2, 4,3]">
+			<x>0</x>
+			<y>0</y>
+
+		</state>
+		<state id="11021" name="[2,4, 1,4]">
+			<x>0</x>
+			<y>0</y>
+
+		</state>
+		<state id="9303" name="[3,4, 4,3]">
+			<x>0</x>
+			<y>0</y>
+
+		</state>
+		<state id="12471" name="[3,2, 4,3]">
+			<x>0</x>
+			<y>0</y>
+
+		</state>
+		<state id="22079" name="[1,1, 1,2]">
+			<x>0</x>
+			<y>0</y>
+
+		</state>
+		<state id="6591" name="[3,1, 4,3]">
+			<x>0</x>
+			<y>0</y>
+
+		</state>
+		<state id="6590" name="[4,2, 4,1]">
+			<x>0</x>
+			<y>0</y>
+
+		</state>
+		<state id="12519" name="[3,2, 4,3]">
+			<x>0</x>
+			<y>0</y>
+
+		</state>
+		<state id="11023" name="[1,3, 1,4]">
+			<x>0</x>
+			<y>0</y>
+
+		</state>
+		<state id="12477" name="[4,4, 3,4]">
+			<x>0</x>
+			<y>0</y>
+
+		</state>
+		<state id="6549" name="[4,4, 4,3]">
+			<x>0</x>
+			<y>0</y>
+
+		</state>
+		<state id="4208" name="[4,2, 4,4, 4,3]">
+			<x>0</x>
+			<y>0</y>
+
+		</state>
+		<state id="23614" name="[1,1]">
+			<x>0</x>
+			<y>0</y>
+
+		</state>
+		<state id="5471" name="[2,3, 3,4]">
+			<x>0</x>
+			<y>0</y>
+
+		</state>
+		<state id="8143" name="[1,3, 2,4]">
+			<x>0</x>
+			<y>0</y>
+
+		</state>
+		<state id="8023" name="[1,3, 2,4]">
+			<x>0</x>
+			<y>0</y>
+
+		</state>
+		<state id="16" name="[2,4, 2,2, 3,2, 4,2, 4,4, 3,3, 4,1, 3,4, 3,1, 4,3]">
+			<x>0</x>
+			<y>0</y>
+
+		</state>
+		<state id="22807" name="[1,1, 1,2]">
+			<x>0</x>
+			<y>0</y>
+
+		</state>
+		<state id="5391" name="[2,3, 3,4]">
+			<x>0</x>
+			<y>0</y>
+
+		</state>
+		<state id="23613" name="[1,2]">
+			<x>0</x>
+			<y>0</y>
+
+		</state>
+		<state id="0" name="[2,2, 3,2, 4,2, 4,4, 3,3, 4,1, 3,4, 2,4, 1,3, 1,4, 2,3, 2,1, 1,1, 4,3, 3,1, 1,2]">
+			<x>0</x>
+			<y>0</y>
+			<initial/>
+		</state>
+		<state id="5" name="[2,2, 3,2, 4,4, 4,2, 3,3, 3,4, 2,4, 1,4, 2,3, 2,1, 4,3, 3,1, 1,2]">
+			<x>0</x>
+			<y>0</y>
+
+		</state>
+		<state id="3125" name="[4,4, 3,3]">
+			<x>0</x>
+			<y>0</y>
+
+		</state>
+		<state id="7" name="[2,4, 1,3, 2,2, 3,2, 1,4, 2,3, 2,1, 3,4, 1,1, 3,1, 4,3, 1,2]">
+			<x>0</x>
+			<y>0</y>
+
+		</state>
+		<state id="645" name="[4,4, 4,2, 3,3, 4,3]">
+			<x>0</x>
+			<y>0</y>
+
+		</state>
+		<state id="12367" name="[3,2, 4,3]">
+			<x>0</x>
+			<y>0</y>
+
+		</state>
+		<state id="14223" name="[1,4]">
+			<x>0</x>
+			<y>0</y>
+
+		</state>
+		<state id="15510" name="[3,2, 4,2]">
+			<x>0</x>
+			<y>0</y>
+
+		</state>
+		<state id="19911" name="[2,2, 1,2]">
+			<x>0</x>
+			<y>0</y>
+
+		</state>
+		<state id="14229" name="[1,4]">
+			<x>0</x>
+			<y>0</y>
+
+		</state>
+		<state id="64" name="[3,2, 4,2, 4,4, 3,3, 4,1, 3,4, 4,3]">
+			<x>0</x>
+			<y>0</y>
+
+		</state>
+		<state id="18399" name="[2,1]">
+			<x>0</x>
+			<y>0</y>
+
+		</state>
+		<state id="14471" name="[1,4]">
+			<x>0</x>
+			<y>0</y>
+
+		</state>
+		<state id="4230" name="[4,1, 4,3]">
+			<x>0</x>
+			<y>0</y>
+
+		</state>
+		<state id="12373" name="[4,4, 3,4]">
+			<x>0</x>
+			<y>0</y>
+
+		</state>
+		<state id="15520" name="[4,4]">
+			<x>0</x>
+			<y>0</y>
+
+		</state>
+		<state id="20111" name="[2,2, 1,2]">
+			<x>0</x>
+			<y>0</y>
+
+		</state>
+		<state id="14230" name="[1,3]">
+			<x>0</x>
+			<y>0</y>
+
+		</state>
+		<state id="21087" name="[1,2]">
+			<x>0</x>
+			<y>0</y>
+
+		</state>
+		<state id="2253" name="[3,2, 4,4, 4,2, 3,4, 4,3]">
+			<x>0</x>
+			<y>0</y>
+
+		</state>
+		<state id="21607" name="[1,2]">
+			<x>0</x>
+			<y>0</y>
+
+		</state>
+		<state id="21606" name="[2,2, 1,1]">
+			<x>0</x>
+			<y>0</y>
+
+		</state>
+		<state id="20239" name="[2,2, 1,2]">
+			<x>0</x>
+			<y>0</y>
+
+		</state>
+		<state id="1557" name="[4,4, 3,3, 4,3]">
+			<x>0</x>
+			<y>0</y>
+
+		</state>
+		<state id="15608" name="[4,1]">
+			<x>0</x>
+			<y>0</y>
+
+		</state>
+		<state id="376" name="[2,4, 2,2, 3,2, 4,4, 3,4, 3,1]">
+			<x>0</x>
+			<y>0</y>
+
+		</state>
+		<state id="15607" name="[2,1, 3,1]">
+			<x>0</x>
+			<y>0</y>
+
+		</state>
+		<state id="23261" name="[1,2]">
+			<x>0</x>
+			<y>0</y>
+
+		</state>
+		<state id="23262" name="[1,1]">
+			<x>0</x>
+			<y>0</y>
+
+		</state>
+		<state id="21086" name="[2,2, 1,1]">
+			<x>0</x>
+			<y>0</y>
+
+		</state>
+		<state id="14478" name="[1,3]">
+			<x>0</x>
+			<y>0</y>
+
+		</state>
+		<state id="14477" name="[1,4]">
+			<x>0</x>
+			<y>0</y>
+
+		</state>
+		<state id="18359" name="[2,2, 3,2]">
+			<x>0</x>
+			<y>0</y>
+
+		</state>
+		<state id="4229" name="[4,4, 4,2, 4,3]">
+			<x>0</x>
+			<y>0</y>
+
+		</state>
+		<state id="18239" name="[2,2, 3,2]">
+			<x>0</x>
+			<y>0</y>
+
+		</state>
+		<state id="31" name="[1,3, 2,4, 2,2, 1,4, 2,1, 1,1, 4,3, 1,2]">
+			<x>0</x>
+			<y>0</y>
+
+		</state>
+		<state id="18047" name="[2,2, 3,2]">
+			<x>0</x>
+			<y>0</y>
+
+		</state>
+		<state id="6581" name="[4,4, 4,3]">
+			<x>0</x>
+			<y>0</y>
+
+		</state>
+		<state id="18048" name="[4,2]">
+			<x>0</x>
+			<y>0</y>
+
+		</state>
+		<state id="9375" name="[3,4, 4,3]">
+			<x>0</x>
+			<y>0</y>
+
+		</state>
+		<state id="9414" name="[4,2, 3,1]">
+			<x>0</x>
+			<y>0</y>
+
+		</state>
+		<state id="15574" name="[3,2, 4,2]">
+			<x>0</x>
+			<y>0</y>
+
+		</state>
+		<state id="15374" name="[3,2, 4,2]">
+			<x>0</x>
+			<y>0</y>
+
+		</state>
+		<state id="18360" name="[4,2]">
+			<x>0</x>
+			<y>0</y>
+
+		</state>
+		<state id="18240" name="[4,2]">
+			<x>0</x>
+			<y>0</y>
+
+		</state>
+		<state id="22543" name="[1,1, 1,2]">
+			<x>0</x>
+			<y>0</y>
+
+		</state>
+		<state id="9373" name="[4,4]">
+			<x>0</x>
+			<y>0</y>
+
+		</state>
+		<state id="9374" name="[4,2, 4,3]">
+			<x>0</x>
+			<y>0</y>
+
+		</state>
+		<state id="21415" name="[1,2]">
+			<x>0</x>
+			<y>0</y>
+
+		</state>
+		<state id="21414" name="[2,2, 1,1]">
+			<x>0</x>
+			<y>0</y>
+
+		</state>
+		<state id="1008" name="[3,2, 4,2, 4,4, 4,1, 3,4]">
+			<x>0</x>
+			<y>0</y>
+
+		</state>
+		<state id="1525" name="[4,4, 3,3, 4,3]">
+			<x>0</x>
+			<y>0</y>
+
+		</state>
+		<state id="221" name="[3,2, 4,4, 4,2, 3,3, 3,4, 4,3]">
+			<x>0</x>
+			<y>0</y>
+
+		</state>
+		<state id="224" name="[4,2, 4,4, 3,3, 4,1, 4,3]">
+			<x>0</x>
+			<y>0</y>
+
+		</state>
+		<state id="2256" name="[4,2, 4,4, 4,1]">
+			<x>0</x>
+			<y>0</y>
+
+		</state>
+		<state id="3069" name="[4,4, 3,3]">
+			<x>0</x>
+			<y>0</y>
+
+		</state>
+		<state id="12542" name="[4,1, 3,1]">
+			<x>0</x>
+			<y>0</y>
+
+		</state>
+		<state id="624" name="[4,2, 4,4, 3,3, 4,3]">
+			<x>0</x>
+			<y>0</y>
+
+		</state>
+		<state id="109" name="[2,4, 2,2, 4,4, 1,4, 2,1, 1,2]">
+			<x>0</x>
+			<y>0</y>
+
+		</state>
+		<state id="9405" name="[4,2, 4,3]">
+			<x>0</x>
+			<y>0</y>
+
+		</state>
+		<state id="9406" name="[4,1]">
+			<x>0</x>
+			<y>0</y>
+
+		</state>
+		<!--The list of transitions.-->
+		<transition>
+			<from>11183</from>
+			<to>14478</to>
+			<read>MOVE_SOUTH</read>
+			<transout></transout>
+		</transition>
+		<transition>
+			<from>16</from>
+			<to>64</to>
+			<read>MOVE_EAST</read>
+			<transout></transout>
+		</transition>
+		<transition>
+			<from>1525</from>
+			<to>3069</to>
+			<read>MOVE_NORTH</read>
+			<transout></transout>
+		</transition>
+		<transition>
+			<from>6549</from>
+			<to>9302</to>
+			<read>MOVE_SOUTH</read>
+			<transout></transout>
+		</transition>
+		<transition>
+			<from>21086</from>
+			<to>22079</to>
+			<read>MOVE_WEST</read>
+			<transout></transout>
+		</transition>
+		<transition>
+			<from>9375</from>
+			<to>12477</to>
+			<read>MOVE_NORTH</read>
+			<transout></transout>
+		</transition>
+		<transition>
+			<from>22079</from>
+			<to>23261</to>
+			<read>MOVE_NORTH</read>
+			<transout></transout>
+		</transition>
+		<transition>
+			<from>20111</from>
+			<to>21415</to>
+			<read>MOVE_WEST</read>
+			<transout></transout>
+		</transition>
+		<transition>
+			<from>12542</from>
+			<to>15607</to>
+			<read>MOVE_WEST</read>
+			<transout></transout>
+		</transition>
+		<transition>
+			<from>15607</from>
+			<to>18399</to>
+			<read>MOVE_WEST</read>
+			<transout></transout>
+		</transition>
+		<transition>
+			<from>5</from>
+			<to>16</to>
+			<read>MOVE_EAST</read>
+			<transout></transout>
+		</transition>
+		<transition>
+			<from>3069</from>
+			<to>5391</to>
+			<read>MOVE_WEST</read>
+			<transout></transout>
+		</transition>
+		<transition>
+			<from>221</from>
+			<to>624</to>
+			<read>MOVE_EAST</read>
+			<transout></transout>
+		</transition>
+		<transition>
+			<from>18239</from>
+			<to>20111</to>
+			<read>MOVE_WEST</read>
+			<transout></transout>
+		</transition>
+		<transition>
+			<from>6581</from>
+			<to>9373</to>
+			<read>MOVE_NORTH</read>
+			<transout></transout>
+		</transition>
+		<transition>
+			<from>9405</from>
+			<to>12519</to>
+			<read>MOVE_WEST</read>
+			<transout></transout>
+		</transition>
+		<transition>
+			<from>376</from>
+			<to>1008</to>
+			<read>MOVE_EAST</read>
+			<transout></transout>
+		</transition>
+		<transition>
+			<from>12477</from>
+			<to>15520</to>
+			<read>MOVE_EAST</read>
+			<transout></transout>
+		</transition>
+		<transition>
+			<from>15574</from>
+			<to>18360</to>
+			<read>MOVE_EAST</read>
+			<transout></transout>
+		</transition>
+		<transition>
+			<from>6549</from>
+			<to>9301</to>
+			<read>MOVE_NORTH</read>
+			<transout></transout>
+		</transition>
+		<transition>
+			<from>22079</from>
+			<to>23262</to>
+			<read>MOVE_SOUTH</read>
+			<transout></transout>
+		</transition>
+		<transition>
+			<from>15374</from>
+			<to>18047</to>
+			<read>MOVE_WEST</read>
+			<transout></transout>
+		</transition>
+		<transition>
+			<from>15374</from>
+			<to>18048</to>
+			<read>MOVE_EAST</read>
+			<transout></transout>
+		</transition>
+		<transition>
+			<from>20239</from>
+			<to>21607</to>
+			<read>MOVE_WEST</read>
+			<transout></transout>
+		</transition>
+		<transition>
+			<from>9303</from>
+			<to>12373</to>
+			<read>MOVE_NORTH</read>
+			<transout></transout>
+		</transition>
+		<transition>
+			<from>12367</from>
+			<to>15374</to>
+			<read>MOVE_SOUTH</read>
+			<transout></transout>
+		</transition>
+		<transition>
+			<from>11023</from>
+			<to>14230</to>
+			<read>MOVE_SOUTH</read>
+			<transout></transout>
+		</transition>
+		<transition>
+			<from>1557</from>
+			<to>3125</to>
+			<read>MOVE_NORTH</read>
+			<transout></transout>
+		</transition>
+		<transition>
+			<from>9374</from>
+			<to>12471</to>
+			<read>MOVE_WEST</read>
+			<transout></transout>
+		</transition>
+		<transition>
+			<from>2253</from>
+			<to>4208</to>
+			<read>MOVE_EAST</read>
+			<transout></transout>
+		</transition>
+		<transition>
+			<from>6549</from>
+			<to>9303</to>
+			<read>MOVE_WEST</read>
+			<transout></transout>
+		</transition>
+		<transition>
+			<from>4229</from>
+			<to>6581</to>
+			<read>MOVE_NORTH</read>
+			<transout></transout>
+		</transition>
+		<transition>
+			<from>9302</from>
+			<to>12367</to>
+			<read>MOVE_WEST</read>
+			<transout></transout>
+		</transition>
+		<transition>
+			<from>11023</from>
+			<to>14229</to>
+			<read>MOVE_NORTH</read>
+			<transout></transout>
+		</transition>
+		<transition>
+			<from>21606</from>
+			<to>22807</to>
+			<read>MOVE_WEST</read>
+			<transout></transout>
+		</transition>
+		<transition>
+			<from>20111</from>
+			<to>21414</to>
+			<read>MOVE_SOUTH</read>
+			<transout></transout>
+		</transition>
+		<transition>
+			<from>6581</from>
+			<to>9374</to>
+			<read>MOVE_SOUTH</read>
+			<transout></transout>
+		</transition>
+		<transition>
+			<from>2256</from>
+			<to>4230</to>
+			<read>MOVE_SOUTH</read>
+			<transout></transout>
+		</transition>
+		<transition>
+			<from>19911</from>
+			<to>21086</to>
+			<read>MOVE_SOUTH</read>
+			<transout></transout>
+		</transition>
+		<transition>
+			<from>0</from>
+			<to>7</to>
+			<read>MOVE_WEST</read>
+			<transout></transout>
+		</transition>
+		<transition>
+			<from>4208</from>
+			<to>6549</to>
+			<read>MOVE_NORTH</read>
+			<transout></transout>
+		</transition>
+		<transition>
+			<from>2256</from>
+			<to>4229</to>
+			<read>MOVE_NORTH</read>
+			<transout></transout>
+		</transition>
+		<transition>
+			<from>12471</from>
+			<to>15510</to>
+			<read>MOVE_SOUTH</read>
+			<transout></transout>
+		</transition>
+		<transition>
+			<from>15510</from>
+			<to>18240</to>
+			<read>MOVE_EAST</read>
+			<transout></transout>
+		</transition>
+		<transition>
+			<from>22807</from>
+			<to>23805</to>
+			<read>MOVE_NORTH</read>
+			<transout></transout>
+		</transition>
+		<transition>
+			<from>4230</from>
+			<to>6590</to>
+			<read>MOVE_SOUTH</read>
+			<transout></transout>
+		</transition>
+		<transition>
+			<from>64</from>
+			<to>221</to>
+			<read>MOVE_NORTH</read>
+			<transout></transout>
+		</transition>
+		<transition>
+			<from>7</from>
+			<to>31</to>
+			<read>MOVE_WEST</read>
+			<transout></transout>
+		</transition>
+		<transition>
+			<from>64</from>
+			<to>224</to>
+			<read>MOVE_EAST</read>
+			<transout></transout>
+		</transition>
+		<transition>
+			<from>18047</from>
+			<to>19911</to>
+			<read>MOVE_WEST</read>
+			<transout></transout>
+		</transition>
+		<transition>
+			<from>18359</from>
+			<to>20239</to>
+			<read>MOVE_WEST</read>
+			<transout></transout>
+		</transition>
+		<transition>
+			<from>0</from>
+			<to>5</to>
+			<read>MOVE_NORTH</read>
+			<transout></transout>
+		</transition>
+		<transition>
+			<from>6581</from>
+			<to>9375</to>
+			<read>MOVE_WEST</read>
+			<transout></transout>
+		</transition>
+		<transition>
+			<from>12542</from>
+			<to>15608</to>
+			<read>MOVE_EAST</read>
+			<transout></transout>
+		</transition>
+		<transition>
+			<from>6590</from>
+			<to>9406</to>
+			<read>MOVE_SOUTH</read>
+			<transout></transout>
+		</transition>
+		<transition>
+			<from>624</from>
+			<to>1525</to>
+			<read>MOVE_NORTH</read>
+			<transout></transout>
+		</transition>
+		<transition>
+			<from>31</from>
+			<to>109</to>
+			<read>MOVE_NORTH</read>
+			<transout></transout>
+		</transition>
+		<transition>
+			<from>19911</from>
+			<to>21087</to>
+			<read>MOVE_WEST</read>
+			<transout></transout>
+		</transition>
+		<transition>
+			<from>11181</from>
+			<to>14471</to>
+			<read>MOVE_WEST</read>
+			<transout></transout>
+		</transition>
+		<transition>
+			<from>6591</from>
+			<to>9414</to>
+			<read>MOVE_SOUTH</read>
+			<transout></transout>
+		</transition>
+		<transition>
+			<from>5471</from>
+			<to>8143</to>
+			<read>MOVE_WEST</read>
+			<transout></transout>
+		</transition>
+		<transition>
+			<from>8143</from>
+			<to>11181</to>
+			<read>MOVE_NORTH</read>
+			<transout></transout>
+		</transition>
+		<transition>
+			<from>22807</from>
+			<to>23806</to>
+			<read>MOVE_SOUTH</read>
+			<transout></transout>
+		</transition>
+		<transition>
+			<from>11183</from>
+			<to>14477</to>
+			<read>MOVE_NORTH</read>
+			<transout></transout>
+		</transition>
+		<transition>
+			<from>11021</from>
+			<to>14223</to>
+			<read>MOVE_WEST</read>
+			<transout></transout>
+		</transition>
+		<transition>
+			<from>1008</from>
+			<to>2253</to>
+			<read>MOVE_NORTH</read>
+			<transout></transout>
+		</transition>
+		<transition>
+			<from>3125</from>
+			<to>5471</to>
+			<read>MOVE_WEST</read>
+			<transout></transout>
+		</transition>
+		<transition>
+			<from>4230</from>
+			<to>6591</to>
+			<read>MOVE_WEST</read>
+			<transout></transout>
+		</transition>
+		<transition>
+			<from>645</from>
+			<to>1557</to>
+			<read>MOVE_NORTH</read>
+			<transout></transout>
+		</transition>
+		<transition>
+			<from>15574</from>
+			<to>18359</to>
+			<read>MOVE_WEST</read>
+			<transout></transout>
+		</transition>
+		<transition>
+			<from>21414</from>
+			<to>22543</to>
+			<read>MOVE_WEST</read>
+			<transout></transout>
+		</transition>
+		<transition>
+			<from>8023</from>
+			<to>11021</to>
+			<read>MOVE_NORTH</read>
+			<transout></transout>
+		</transition>
+		<transition>
+			<from>15510</from>
+			<to>18239</to>
+			<read>MOVE_WEST</read>
+			<transout></transout>
+		</transition>
+		<transition>
+			<from>9414</from>
+			<to>12542</to>
+			<read>MOVE_SOUTH</read>
+			<transout></transout>
+		</transition>
+		<transition>
+			<from>1008</from>
+			<to>2256</to>
+			<read>MOVE_EAST</read>
+			<transout></transout>
+		</transition>
+		<transition>
+			<from>5391</from>
+			<to>8023</to>
+			<read>MOVE_WEST</read>
+			<transout></transout>
+		</transition>
+		<transition>
+			<from>6590</from>
+			<to>9405</to>
+			<read>MOVE_NORTH</read>
+			<transout></transout>
+		</transition>
+		<transition>
+			<from>12373</from>
+			<to>15384</to>
+			<read>MOVE_EAST</read>
+			<transout></transout>
+		</transition>
+		<transition>
+			<from>109</from>
+			<to>376</to>
+			<read>MOVE_EAST</read>
+			<transout></transout>
+		</transition>
+		<transition>
+			<from>12519</from>
+			<to>15574</to>
+			<read>MOVE_SOUTH</read>
+			<transout></transout>
+		</transition>
+		<transition>
+			<from>8143</from>
+			<to>11183</to>
+			<read>MOVE_WEST</read>
+			<transout></transout>
+		</transition>
+		<transition>
+			<from>22543</from>
+			<to>23614</to>
+			<read>MOVE_SOUTH</read>
+			<transout></transout>
+		</transition>
+		<transition>
+			<from>224</from>
+			<to>645</to>
+			<read>MOVE_NORTH</read>
+			<transout></transout>
+		</transition>
+		<transition>
+			<from>22543</from>
+			<to>23613</to>
+			<read>MOVE_NORTH</read>
+			<transout></transout>
+		</transition>
+		<transition>
+			<from>8023</from>
+			<to>11023</to>
+			<read>MOVE_WEST</read>
+			<transout></transout>
+		</transition>
+		<transition>
+			<from>20239</from>
+			<to>21606</to>
+			<read>MOVE_SOUTH</read>
+			<transout></transout>
+		</transition>
+		<note>
+			<text>SynchronizingTree;seed=1464625857423';N=4</text>
+			<x>0</x>
+			<y>0</y>
+		</note>
+	</automaton>
+</structure>
