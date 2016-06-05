@@ -1,5 +1,5 @@
 #TeXlipse project settings
-#Sat Jun 04 22:04:50 BRT 2016
+#Sat Jun 04 22:56:03 BRT 2016
 markTmpDer=true
 builderNum=8
 outputDir=out/
@@ -8,7 +8,7 @@ bibrefDir=
 outputFormat=pdf
 tempDir=tmp
 mainTexFile=report.tex
-outputFile=report.pdf
+outputFile=Topological Localization using FSM-Based Testing Sequences.pdf
 langSpell=en
 markDer=true
 srcDir=
