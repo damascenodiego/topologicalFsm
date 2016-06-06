@@ -1,3 +1,10 @@
 /out/
 /tmp/
 *.gz
+/defs.aux
+/report.aux
+/report.bbl
+/report.blg
+/report.log
+/report.out
+/report.toc
